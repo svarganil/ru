@@ -3,105 +3,45 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Стикер — демо</title>
+  <title>СМБА</title>
   <style>
+    /* ==== Page: dark and simple ==== */
+    html, body { height: 100%; }
     body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #000;
+      margin: 0; background: #0a0a0a; color: #fff; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       overflow: hidden;
     }
-
-    /* ====== User-provided CSS (unchanged) ====== */
-    :root {
-      --sticker-rotate: 0deg;
-      --sticker-p: 10px;
-      --sticker-peelback-hover: 30%;
-      --sticker-peelback-active: 40%;
-      --sticker-peel-easing: power3.out;
-      --sticker-peel-hover-easing: power2.out;
-      --sticker-start: calc(-1 * var(--sticker-p));
-      --sticker-end: calc(100% + var(--sticker-p));
-      --sticker-shadow-opacity: 0.6;
-      --sticker-lighting-constant: 0.1;
-      --peel-direction: 0deg;
+    .stage { position: relative; height: 100%; }
+    .center-text {
+      position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
+      font-weight: 700; font-size: clamp(28px, 6vw, 56px); letter-spacing: .2px; pointer-events: none;
     }
 
-    .sticker-container {
-      position: relative;
-      transform: rotate(var(--peel-direction));
-      transform-origin: center;
-    }
-
-    .sticker-main {
-      clip-path: polygon(var(--sticker-start) var(--sticker-start),
-          var(--sticker-end) var(--sticker-start),
-          var(--sticker-end) var(--sticker-end),
-          var(--sticker-start) var(--sticker-end));
-      transition: clip-path 0.6s ease-out;
-      filter: url(#dropShadow);
-    }
-
+    /* ==== Your sticker CSS (as provided) ==== */
+    :root { --sticker-rotate: 30deg; --sticker-p: 10px; --sticker-peelback-hover: 30%; --sticker-peelback-active: 40%; --sticker-peel-easing: power3.out; --sticker-peel-hover-easing: power2.out; --sticker-start: calc(-1 * var(--sticker-p)); --sticker-end: calc(100% + var(--sticker-p)); --sticker-shadow-opacity: 0.6; --sticker-lighting-constant: 0.1; --peel-direction: 0deg; }
+    .sticker-container { position: relative; transform: rotate(var(--peel-direction)); transform-origin: center; }
+    .sticker-container * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+    .sticker-main { clip-path: polygon(var(--sticker-start) var(--sticker-start), var(--sticker-end) var(--sticker-start), var(--sticker-end) var(--sticker-end), var(--sticker-start) var(--sticker-end)); transition: clip-path 0.6s ease-out; filter: url(#dropShadow); }
     .sticker-main > * { transform: rotate(calc(-1 * var(--peel-direction))); }
-
     .sticker-lighting { filter: url(#pointLight); }
-
-    .sticker-container:hover .sticker-main,
-    .sticker-container.touch-active .sticker-main {
-      clip-path: polygon(var(--sticker-start) var(--sticker-peelback-hover),
-          var(--sticker-end) var(--sticker-peelback-hover),
-          var(--sticker-end) var(--sticker-end),
-          var(--sticker-start) var(--sticker-end));
-    }
-
-    .sticker-container:active .sticker-main {
-      clip-path: polygon(var(--sticker-start) var(--sticker-peelback-active),
-          var(--sticker-end) var(--sticker-peelback-active),
-          var(--sticker-end) var(--sticker-end),
-          var(--sticker-start) var(--sticker-end));
-    }
-
-    .sticker-image { transform: rotate(var(--sticker-rotate)); width: 300px; }
-
-    .flap {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: calc(-100% - var(--sticker-p) - var(--sticker-p));
-      clip-path: polygon(var(--sticker-start) var(--sticker-start),
-          var(--sticker-end) var(--sticker-start),
-          var(--sticker-end) var(--sticker-start),
-          var(--sticker-start) var(--sticker-start));
-      transform: scaleY(-1);
-      transition: all 0.6s ease-out;
-    }
-
+    .sticker-container:hover .sticker-main, .sticker-container.touch-active .sticker-main { clip-path: polygon(var(--sticker-start) var(--sticker-peelback-hover), var(--sticker-end) var(--sticker-peelback-hover), var(--sticker-end) var(--sticker-end), var(--sticker-start) var(--sticker-end)); }
+    .sticker-container:active .sticker-main { clip-path: polygon(var(--sticker-start) var(--sticker-peelback-active), var(--sticker-end) var(--sticker-peelback-active), var(--sticker-end) var(--sticker-end), var(--sticker-start) var(--sticker-end)); }
+    .sticker-image { transform: rotate(var(--sticker-rotate)); }
+    .flap { position: absolute; width: 100%; height: 100%; left: 0; top: calc(-100% - var(--sticker-p) - var(--sticker-p)); clip-path: polygon(var(--sticker-start) var(--sticker-start), var(--sticker-end) var(--sticker-start), var(--sticker-end) var(--sticker-start), var(--sticker-start) var(--sticker-start)); transform: scaleY(-1); transition: all 0.6s ease-out; }
     .flap > * { transform: rotate(calc(-1 * var(--peel-direction))); }
-
-    .sticker-container:hover .flap,
-    .sticker-container.touch-active .flap {
-      clip-path: polygon(var(--sticker-start) var(--sticker-start),
-          var(--sticker-end) var(--sticker-start),
-          var(--sticker-end) var(--sticker-peelback-hover),
-          var(--sticker-start) var(--sticker-peelback-hover));
-      top: calc(-100% + 2 * var(--sticker-peelback-hover) - 1px);
-    }
-
-    .sticker-container:active .flap {
-      clip-path: polygon(var(--sticker-start) var(--sticker-start),
-          var(--sticker-end) var(--sticker-start),
-          var(--sticker-end) var(--sticker-peelback-active),
-          var(--sticker-start) var(--sticker-peelback-active));
-      top: calc(-100% + 2 * var(--sticker-peelback-active) - 1px);
-    }
-
+    .sticker-container:hover .flap, .sticker-container.touch-active .flap { clip-path: polygon(var(--sticker-start) var(--sticker-start), var(--sticker-end) var(--sticker-start), var(--sticker-end) var(--sticker-peelback-hover), var(--sticker-start) var(--sticker-peelback-hover)); top: calc(-100% + 2 * var(--sticker-peelback-hover) - 1px); }
+    .sticker-container:active .flap { clip-path: polygon(var(--sticker-start) var(--sticker-start), var(--sticker-end) var(--sticker-start), var(--sticker-end) var(--sticker-peelback-active), var(--sticker-start) var(--sticker-peelback-active)); top: calc(-100% + 2 * var(--sticker-peelback-active) - 1px); }
     .flap-lighting { filter: url(#pointLightFlipped); }
+    .flap-image { transform: rotate(var(--sticker-rotate)); filter: url(#expandAndFill); }
+    .draggable { position: absolute; cursor: grab; -webkit-transform: translateZ(0); transform: translateZ(0); }
+    .draggable:active { cursor: grabbing; }
+    @media (hover: none) and (pointer: coarse) { .draggable { cursor: default; } .sticker-container { touch-action: none; } }
+    .sticker-image, .flap-image { width: var(--sticker-width, 220px); display: block; }
+    .sticker-main, .flap { will-change: clip-path, transform; }
+    .sticker-ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.6); pointer-events: none; z-index: 10; }
 
-    .flap-image { transform: rotate(var(--sticker-rotate)); filter: url(#expandAndFill); width: 300px; }
+    /* Board bounds so you can "re-stick" anywhere */
+    .board { position: absolute; inset: 0; }
   </style>
 
   <!-- SVG filter defs referenced by your CSS -->
@@ -111,21 +51,18 @@
         <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000" flood-opacity="0.35" />
         <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.15" />
       </filter>
-
       <filter id="pointLight" x="-50%" y="-50%" width="200%" height="200%">
         <feDiffuseLighting lighting-color="#fff" surfaceScale="1" result="light">
           <fePointLight x="-80" y="-120" z="120" />
         </feDiffuseLighting>
         <feComposite in="SourceGraphic" in2="light" operator="arithmetic" k1="0" k2="1" k3="0.5" k4="0" />
       </filter>
-
       <filter id="pointLightFlipped" x="-50%" y="-50%" width="200%" height="200%">
         <feDiffuseLighting lighting-color="#fff" surfaceScale="1" result="light">
           <fePointLight x="-80" y="140" z="120" />
         </feDiffuseLighting>
         <feComposite in="SourceGraphic" in2="light" operator="arithmetic" k1="0" k2="1" k3="0.5" k4="0" />
       </filter>
-
       <filter id="expandAndFill" x="-20%" y="-20%" width="140%" height="140%">
         <feMorphology operator="dilate" radius="0.6"/>
         <feGaussianBlur stdDeviation="0.4"/>
@@ -135,17 +72,70 @@
   </svg>
 </head>
 <body>
-  <div class="sticker-container" style="--sticker-width: 300px;">
-    <div class="sticker-main">
-      <div class="sticker-lighting">
-        <img class="sticker-image" alt="Sticker" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='387' viewBox='0 0 512 387'><path d='M256.501 0C429.339 0 502.481 67.3481 512 177.417H312.11C307.601 160.831 293.072 145.753 256 145.753C216.423 145.753 197.886 164.852 197.886 191.49V195.51C197.886 222.148 216.423 241.247 256 241.247C293.072 241.247 307.601 226.169 312.11 209.583H512C502.481 319.652 429.339 387 256.501 387C79.6556 387 0 307.087 0 203.049V193.5C38.1312 193.5 69.6421 165.119 74.6096 128.303C83.8511 133.033 94.3202 135.701 105.412 135.701C142.837 135.701 173.176 105.324 173.176 67.8506C173.176 63.6164 172.789 59.4727 172.045 55.4554C179.324 58.581 187.343 60.3117 195.765 60.3117C228.699 60.3117 255.46 33.8466 255.992 0.997364L256 0.00251299L256.501 0Z' fill='%23C2242E'/></svg>" />
-      </div>
-    </div>
-    <div class="flap">
-      <div class="flap-lighting">
-        <img class="flap-image" alt="Sticker flap" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='387' viewBox='0 0 512 387'><path d='M256.501 0C429.339 0 502.481 67.3481 512 177.417H312.11C307.601 160.831 293.072 145.753 256 145.753C216.423 145.753 197.886 164.852 197.886 191.49V195.51C197.886 222.148 216.423 241.247 256 241.247C293.072 241.247 307.601 226.169 312.11 209.583H512C502.481 319.652 429.339 387 256.501 387C79.6556 387 0 307.087 0 203.049V193.5C38.1312 193.5 69.6421 165.119 74.6096 128.303C83.8511 133.033 94.3202 135.701 105.412 135.701C142.837 135.701 173.176 105.324 173.176 67.8506C173.176 63.6164 172.789 59.4727 172.045 55.4554C179.324 58.581 187.343 60.3117 195.765 60.3117C228.699 60.3117 255.46 33.8466 255.992 0.997364L256 0.00251299L256.501 0Z' fill='%23C2242E'/></svg>" />
+  <div class="stage">
+    <div class="center-text">Снэк май бич ап</div>
+    <div class="board" id="board">
+      <!-- Single sticker (draggable + peelable) -->
+      <div class="draggable sticker-container" id="sticker" style="--sticker-width: 260px; --peel-direction: 0deg; left: calc(50% - 130px); top: calc(50% + 80px);">
+        <div class="sticker-main">
+          <div class="sticker-lighting">
+            <img class="sticker-image" alt="Sticker" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='387' viewBox='0 0 512 387'><path d='M256.501 0C429.339 0 502.481 67.3481 512 177.417H312.11C307.601 160.831 293.072 145.753 256 145.753C216.423 145.753 197.886 164.852 197.886 191.49V195.51C197.886 222.148 216.423 241.247 256 241.247C293.072 241.247 307.601 226.169 312.11 209.583H512C502.481 319.652 429.339 387 256.501 387C79.6556 387 0 307.087 0 203.049V193.5C38.1312 193.5 69.6421 165.119 74.6096 128.303C83.8511 133.033 94.3202 135.701 105.412 135.701C142.837 135.701 173.176 105.324 173.176 67.8506C173.176 63.6164 172.789 59.4727 172.045 55.4554C179.324 58.581 187.343 60.3117 195.765 60.3117C228.699 60.3117 255.46 33.8466 255.992 0.997364L256 0.00251299L256.501 0Z' fill='%23C2242E'/></svg>" />
+          </div>
+        </div>
+        <div class="flap">
+          <div class="flap-lighting">
+            <img class="flap-image" alt="Sticker flap" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='387' viewBox='0 0 512 387'><path d='M256.501 0C429.339 0 502.481 67.3481 512 177.417H312.11C307.601 160.831 293.072 145.753 256 145.753C216.423 145.753 197.886 164.852 197.886 191.49V195.51C197.886 222.148 216.423 241.247 256 241.247C293.072 241.247 307.601 226.169 312.11 209.583H512C502.481 319.652 429.339 387 256.501 387C79.6556 387 0 307.087 0 203.049V193.5C38.1312 193.5 69.6421 165.119 74.6096 128.303C83.8511 133.033 94.3202 135.701 105.412 135.701C142.837 135.701 173.176 105.324 173.176 67.8506C173.176 63.6164 172.789 59.4727 172.045 55.4554C179.324 58.581 187.343 60.3117 195.765 60.3117C228.699 60.3117 255.46 33.8466 255.992 0.997364L256 0.00251299L256.501 0Z' fill='%23C2242E'/></svg>" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <script>
+    // Drag to "re-stick" anywhere on the page
+    const board = document.getElementById('board');
+    const sticker = document.getElementById('sticker');
+
+    let startX=0, startY=0, startLeft=0, startTop=0, dragging=false;
+
+    const onPointerDown = (e) => {
+      dragging = true;
+      sticker.classList.add('touch-active');
+      const rect = board.getBoundingClientRect();
+      startX = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      startY = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+      const style = getComputedStyle(sticker);
+      startLeft = parseFloat(style.left);
+      startTop = parseFloat(style.top);
+      document.addEventListener('mousemove', onPointerMove);
+      document.addEventListener('touchmove', onPointerMove, {passive:false});
+      document.addEventListener('mouseup', onPointerUp);
+      document.addEventListener('touchend', onPointerUp);
+    };
+
+    const onPointerMove = (e) => {
+      if (!dragging) return;
+      const rect = board.getBoundingClientRect();
+      if (e.cancelable) e.preventDefault();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+      const nx = startLeft + (x - startX);
+      const ny = startTop + (y - startY);
+      sticker.style.left = Math.max(0, Math.min(rect.width - sticker.offsetWidth, nx)) + 'px';
+      sticker.style.top  = Math.max(0, Math.min(rect.height - sticker.offsetHeight, ny)) + 'px';
+    };
+
+    const onPointerUp = () => {
+      dragging = false;
+      sticker.classList.remove('touch-active');
+      document.removeEventListener('mousemove', onPointerMove);
+      document.removeEventListener('touchmove', onPointerMove);
+      document.removeEventListener('mouseup', onPointerUp);
+      document.removeEventListener('touchend', onPointerUp);
+    };
+
+    sticker.addEventListener('mousedown', onPointerDown);
+    sticker.addEventListener('touchstart', onPointerDown, {passive:true});
+  </script>
 </body>
 </html>
