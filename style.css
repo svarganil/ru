@@ -85,6 +85,16 @@
   transform: rotateX(86deg) translateY(4vh) translateZ(0.1vh);
 }
 
+.lid-underside svg {
+  width: 33.33%;
+  height: 33.33%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scaleY(-1);
+  fill: currentColor;
+}
+
 .lid span {
   border: 2vh #C2242E solid;
   padding: 0 2vh;
