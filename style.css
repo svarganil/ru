@@ -1,11 +1,11 @@
 svg#piehole {
-  position: absolute;
-  z-index: 100;
-  width: 70%;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  fill: white;
+  position: absolute
+  z-index: 100
+  width: 50%
+  top: 50%
+  left: 50%
+  transform: translateX(-50%) translateY(-50%)
+  fill: #C2242E
 }
 
 .pie {
@@ -255,11 +255,9 @@ body {
 }
 
 .container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 600px;
-  height: 600px;
-  overflow: hidden;
-  transform: translateX(-50%) translateY(-50%);
-}
+  position: fixed
+  top: 0
+  left: 0
+  width: 100vw
+  height: 100vh
+  overflow: hidden
