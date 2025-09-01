@@ -86,8 +86,8 @@
 }
 
 .lid-underside svg {
-  width: 33.33%;
-  height: 33.33%;
+  width: 66.66%; /* Adjust SVG size for mobile */
+  height: 66.66%; /* Adjust SVG size for mobile */
   position: absolute;
   left: 50%;
   top: 50%;
@@ -290,10 +290,10 @@
 .telegram-link a {
   color: #C2242E;
   text-decoration: none;
-  font-size: 5vh;
+  font-size: 3vh; /* Smaller font for mobile */
   font-weight: bold;
   background-color: white;
-  padding: 2vh 4vh;
+  padding: 1.5vh 3vh; /* Smaller padding for mobile */
   border-radius: 1vh;
 }
 
@@ -329,4 +329,71 @@
   50% { transform: rotateZ(180deg) translateZ(40vh) translateY(-20vh) translateX(0); }
   75% { transform: rotateZ(270deg) translateZ(40vh) translateY(-20vh) translateX(0); }
   100% { transform: rotateZ(360deg) translateZ(40vh) translateY(-20vh) translateX(0); }
+}
+
+@media (max-width: 768px) {
+  .contain {
+    padding-top: 20vh; /* Reduce top padding for smaller screens */
+  }
+
+  .pizza-box,
+  .lid-underside,
+  .lid {
+    height: 40vh; /* Smaller pizza box and lid height */
+    width: 40vh; /* Smaller pizza box and lid width */
+  }
+
+  .lid span {
+    font-size: 10vh; /* Smaller font for PIZZA text */
+  }
+
+  .pizza-box-side {
+    height: 3vh; /* Smaller side height */
+    width: 40vh; /* Match pizza-box width */
+  }
+
+  .front-side {
+    transform: translateY(-18.5vh) rotateX(90deg); /* Adjust vertical position */
+  }
+
+  .left-side {
+    transform: rotateX(90deg) rotateY(90deg) rotateZ(0deg) translateX(-18.5vh); /* Adjust horizontal position */
+  }
+
+  .right-side {
+    transform: rotateX(90deg) rotateY(90deg) rotateZ(0deg) translateX(18.5vh); /* Adjust horizontal position */
+  }
+
+  .pizza {
+    height: 35vh; /* Smaller pizza height */
+    width: 35vh; /* Smaller pizza width */
+    padding: 3vh; /* Adjust padding */
+  }
+
+  .sauce {
+    transform: translateZ(1.5vh); /* Adjust sauce depth */
+  }
+
+  .toppings {
+    height: 32vh; /* Smaller toppings area */
+    width: 32vh; /* Smaller toppings area */
+    padding: 1.5vh; /* Adjust padding */
+  }
+
+  .basil,
+  .mozzarella,
+  .mushroom {
+    height: 6vh; /* Smaller topping size */
+    width: 6vh; /* Smaller topping size */
+  }
+
+  .mushroom {
+    margin: 1.5vh 3vh; /* Adjust mushroom margin */
+  }
+
+  .mushroom:before {
+    height: 4vh; /* Smaller mushroom stem */
+    width: 8vh; /* Smaller mushroom top */
+    margin-left: -2.5vh;
+  }
 }
