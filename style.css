@@ -109,11 +109,19 @@
   padding: 0 2vh;
 }
 
-.pizza-box:hover .lid {
+.pizza-box:not(.open) .lid {
+  transform: rotateX(86deg) translateY(3.9vh) translateZ(0.2vh);
+}
+
+.pizza-box.open .lid {
   transform: rotateX(0deg) translateY(0) translateZ(4vh);
 }
 
-.pizza-box:hover .lid-underside {
+.pizza-box:not(.open) .lid-underside {
+  transform: rotateX(86deg) translateY(4vh) translateZ(0.1vh);
+}
+
+.pizza-box.open .lid-underside {
   transform: rotateX(0deg) translateY(0) translateZ(3.9vh);
 }
 
@@ -291,8 +299,8 @@
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
-.pizza-box:hover .telegram-link {
-  opacity: 0; /* Disappear when hovered (lid open) */
+.pizza-box.open .telegram-link {
+  opacity: 0; /* Disappear when open (lid open) */
   transform: translateZ(0vh) scale(0.1); /* Fly into box */
 }
 
@@ -310,10 +318,10 @@
   animation: flyAround1 12s infinite linear;
 }
 .telegram-link-2 {
-  animation: flyAround2 10s infinite linear 2s;
+  animation: flyAround2 10s infinite linear;
 }
 .telegram-link-3 {
-  animation: flyAround3 14s infinite linear 4s;
+  animation: flyAround3 14s infinite linear;
 }
 
 @keyframes flyAround1 {
@@ -341,10 +349,10 @@
 }
 
 .telegram-link-4 {
-  animation: flyAround4 11s infinite linear 1s;
+  animation: flyAround4 11s infinite linear;
 }
 .telegram-link-5 {
-  animation: flyAround5 13s infinite linear 3s;
+  animation: flyAround5 13s infinite linear;
 }
 
 @keyframes flyAround4 {
