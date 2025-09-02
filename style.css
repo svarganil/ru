@@ -50,7 +50,9 @@
 
 .pizza-box {
   animation: spin 4.5s infinite linear;
-  background: #fff;
+  background-image: url('assets/box.png');
+  background-position: center;
+  background-size: cover;
   box-shadow: 0 0 6vh 2vh rgba(0, 0, 0, 0.4) inset;
   display: flex;
   justify-content: center;
@@ -65,7 +67,9 @@
 .lid {
   align-items: center;
   color: #C2242E;
-  background-color: #f6f6f6;
+  background-image: url('assets/box.png');
+  background-position: center;
+  background-size: cover;
   box-shadow: 0 0 4vh 1vh rgba(0, 0, 0, 0.2) inset;
   display: flex;
   font-size: 14vh;
@@ -91,7 +95,9 @@
 }
 
 .lid-underside {
-  background-color: #dedede;
+  background-image: url('assets/box.png');
+  background-position: center;
+  background-size: cover;
   transform: rotateX(86deg) translateY(4vh) translateZ(0.1vh);
 }
 
@@ -159,7 +165,9 @@
 }
 
 .pizza {
-  background-color: #ffd161;
+  background-image: url('assets/dough.png');
+  background-position: center;
+  background-size: cover;
   border-radius: 50%;
   box-shadow: 0 0 1.8vh 1.5vh #ad7551 inset;
   display: block;
@@ -170,7 +178,9 @@
 }
 
 .sauce {
-  background-color: #ed423b;
+  background-image: url('assets/sauce.png');
+  background-position: center;
+  background-size: cover;
   box-shadow: 0 0 1.5vh 1.3vh #bd4b00 inset;
   border-radius: 50%;
   position: absolute;
@@ -311,6 +321,9 @@
   font-weight: bold;
   font-family: 'Marck Script', cursive;
   background-color: white;
+  background-image: url('assets/box.png');
+  background-position: center;
+  background-size: cover;
   padding: 2vh 4vh;
   border-radius: 1vh;
   box-shadow: 0 0 2vh 1vh rgba(0, 0, 0, 0.2) inset;
