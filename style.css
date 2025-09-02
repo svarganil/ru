@@ -178,7 +178,7 @@
 }
 
 .sauce {
-  background-image: url('assets/sauce.png');
+  background-image: url('assets/cheese.png');
   background-position: center;
   background-size: cover;
   box-shadow: 0 0 1.5vh 1.3vh #bd4b00 inset;
@@ -199,7 +199,7 @@
   width: 46vh;
 }
 
-.basil {
+.topping-1 {
   background-image: url('assets/salami.png');
   background-position: center;
   background-size: cover;
@@ -208,7 +208,7 @@
   width: 8vh;
 }
 
-.mozzarella {
+.topping-2 {
   background-image: url('assets/pepperoni.png');
   background-position: center;
   background-size: cover;
@@ -217,7 +217,7 @@
   width: 8vh;
 }
 
-.mushroom {
+.topping-3 {
   background-image: url('assets/pepperoni.png');
   background-position: center;
   background-size: cover;
@@ -293,14 +293,14 @@
 .link {
   position: absolute;
   transform-style: preserve-3d;
-  opacity: 1; /* Visible by default (lid closed) */
-  transform: none; /* Let animations define transform */
+  opacity: 1;
+  transform: none;
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
 .pizza-box.open .link {
-  opacity: 0; /* Disappear when open (lid open) */
-  transform: translateZ(0vh) scale(0.1); /* Fly into box */
+  opacity: 0;
+  transform: translateZ(0vh) scale(0.1);
 }
 
 .link a {
