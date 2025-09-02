@@ -69,8 +69,18 @@
 
   <script>
     document.querySelector('.pizza-box').addEventListener('click', function() {
-      this.classList.toggle('open');
+      const isOpen = this.classList.toggle('open');
+      const openSound = document.getElementById('openSound');
+      const closeSound = document.getElementById('closeSound');
+
+      if (isOpen) {
+        openSound.play();
+      } else {
+        closeSound.play();
+      }
     });
   </script>
+  <audio id="openSound" src="assets/open.mp3" preload="auto"></audio>
+  <audio id="closeSound" src="assets/close.mp3" preload="auto"></audio>
 </body>
 </html>
