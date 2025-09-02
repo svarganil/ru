@@ -291,7 +291,7 @@
   transform: rotateZ(261deg);
 }
 
-.telegram-link {
+.link {
   position: absolute;
   transform-style: preserve-3d;
   opacity: 1; /* Visible by default (lid closed) */
@@ -299,29 +299,31 @@
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
-.pizza-box.open .telegram-link {
+.pizza-box.open .link {
   opacity: 0; /* Disappear when open (lid open) */
   transform: translateZ(0vh) scale(0.1); /* Fly into box */
 }
 
-.telegram-link a {
+.link a {
   color: #C2242E;
   text-decoration: none;
   font-size: 5vh;
   font-weight: bold;
+  font-family: 'Marck Script', cursive;
   background-color: white;
   padding: 2vh 4vh;
   border-radius: 1vh;
+  box-shadow: 0 0 2vh 1vh rgba(0, 0, 0, 0.2) inset;
 }
 
-.telegram-link-1 {
+.link-1 {
   animation: flyAround1 12s infinite linear;
 }
-.telegram-link-2 {
+.link-2 {
   animation: flyAround2 10s infinite linear;
 }
-.telegram-link-3 {
-  animation: flyAround3 14s infinite linear;
+.link-3 {
+  animation: flyAround2 11s infinite linear;
 }
 
 @keyframes flyAround1 {
@@ -348,11 +350,14 @@
   100% { transform: rotateZ(360deg) translateZ(40vh) translateY(-20vh) translateX(0); }
 }
 
-.telegram-link-4 {
+.link-4 {
   animation: flyAround4 11s infinite linear;
 }
-.telegram-link-5 {
+.link-5 {
   animation: flyAround5 13s infinite linear;
+}
+.link-6 {
+  animation: flyAround2 15s infinite linear;
 }
 
 @keyframes flyAround4 {
