@@ -204,8 +204,8 @@
   background-position: center;
   background-size: cover;
   border-radius: 50%;
-  height: 8vh;
-  width: 8vh;
+  height: 10vh;
+  width: 10vh;
 }
 
 .topping-2 {
@@ -213,8 +213,8 @@
   background-position: center;
   background-size: cover;
   border-radius: 50%;
-  height: 8vh;
-  width: 8vh;
+  height: 10vh;
+  width: 10vh;
 }
 
 .topping-3 {
@@ -222,8 +222,8 @@
   background-position: center;
   background-size: cover;
   border-radius: 50%;
-  height: 8vh;
-  width: 8vh;
+  height: 10vh;
+  width: 10vh;
 }
 
 .toppings * {
