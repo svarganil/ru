@@ -35,40 +35,16 @@
 
 <script>
   const radio = document.getElementById("jungletrain-bg");
-  radio.volume = 0;
+  radio.volume = 0.3;
 
   const startRadio = () => {
-    if (radio.paused) {
-      radio.play().catch(() => {});
-    }
+    radio.play().catch(() => {});
   };
 
-  let volumeFadeFrame = null;
+  startRadio();
 
-  const fadeVolumeTo = (targetVolume, duration = 200) => {
-    const startVolume = radio.volume;
-    const startTime = performance.now();
-    const clampedTarget = Math.max(0, Math.min(1, targetVolume));
-
-    if (volumeFadeFrame !== null) {
-      cancelAnimationFrame(volumeFadeFrame);
-    }
-
-    const step = (now) => {
-      const progress = Math.min(1, (now - startTime) / duration);
-      const nextVolume = startVolume + (clampedTarget - startVolume) * progress;
-      radio.volume = nextVolume;
-
-      if (progress < 1) {
-        volumeFadeFrame = requestAnimationFrame(step);
-      } else {
-        radio.volume = clampedTarget;
-        volumeFadeFrame = null;
-      }
-    };
-
-    volumeFadeFrame = requestAnimationFrame(step);
-  };
+  document.addEventListener("click", startRadio, { once: true });
+  document.addEventListener("touchstart", startRadio, { once: true });
 </script>
 
 <article class="contain">
@@ -101,29 +77,19 @@
 </article>
 
   <script>
-    const pizzaBox = document.querySelector('.pizza-box');
-
-    const togglePizzaBox = function() {
+    document.querySelector('.pizza-box').addEventListener('click', function() {
       const isOpen = this.classList.toggle('open');
       const openSound = document.getElementById('openSound');
       const closeSound = document.getElementById('closeSound');
 
-      // Стартуем радио только по жесту на коробке
-      startRadio();
-
       if (isOpen) {
         openSound.play();
-        // Быстрый fade in до 0.3 при открытии коробки
-        fadeVolumeTo(0.3, 350);
+        radio.volume = 0.3;
       } else {
         closeSound.play();
-        // Быстрый fade out до 0 при закрытии коробки
-        fadeVolumeTo(0, 350);
+        radio.volume = 0;
       }
-    };
-
-    pizzaBox.addEventListener('click', togglePizzaBox);
-    pizzaBox.addEventListener('touchstart', togglePizzaBox);
+    });
   </script>
   <audio id="openSound" src="assets/open.mp3" preload="auto"></audio>
   <audio id="closeSound" src="assets/close.mp3" preload="auto"></audio>
