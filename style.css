@@ -1,6 +1,6 @@
 .contain {
   align-items: center;
-  background: repeating-conic-gradient(#FFFFFF 0% 25%, #C2242E 0% 50%) 0 0 / 100px 100px;
+  background: repeating-conic-gradient(#FCFDFA 0% 25%, #C2242E 0% 50%) 0 0 / 100px 100px;
   bottom: 0;
   display: flex;
   justify-content: center;
@@ -200,7 +200,7 @@
 }
 
 .topping-1 {
-  background-image: url('assets/salami.png');
+  background-image: url('assets/pepperoni.png');
   background-position: center;
   background-size: cover;
   border-radius: 50%;

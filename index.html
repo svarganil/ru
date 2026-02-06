@@ -29,8 +29,25 @@
 
 <body>
 
+<audio id="jungletrain-bg" preload="none" playsinline>
+  <source src="https://chat.jungletrain.net/streamtest/;stream/1" type="audio/mpeg">
+</audio>
+
+<script>
+  const radio = document.getElementById("jungletrain-bg");
+  radio.volume = 0.3;
+
+  const startRadio = () => {
+    radio.play().catch(() => {});
+  };
+
+  startRadio();
+
+  document.addEventListener("click", startRadio, { once: true });
+  document.addEventListener("touchstart", startRadio, { once: true });
+</script>
+
 <article class="contain">
-  
   <section class="pizza-hover">
     <div class="pizza-box">
       <div class="pizza-box-side left-side"></div>
@@ -47,24 +64,7 @@
         <path d="M256.501 0C429.339 0 502.481 67.3481 512 177.417H312.11C307.601 160.831 293.072 145.753 256 145.753C216.423 145.753 197.886 164.852 197.886 191.49V195.51C197.886 222.148 216.423 241.247 256 241.247C293.072 241.247 307.601 226.169 312.11 209.583H512C502.481 319.652 429.339 387 256.501 387C79.6556 387 0 307.087 0 203.049V193.5C38.1312 193.5 69.6421 165.119 74.6096 128.303C83.8511 133.033 94.3202 135.701 105.412 135.701C142.837 135.701 173.176 105.324 173.176 67.8506C173.176 63.6164 172.789 59.4727 172.045 55.4554C179.324 58.581 187.343 60.3117 195.765 60.3117C228.699 60.3117 255.46 33.8466 255.992 0.997364L256 0.00251299L256.501 0Z"/>
         </svg>
       </div>
-      <div class="link link-1">
-        <a href="https://t.me/slappetizer" target="_blank">Telegram</a>
-      </div>
-      <div class="link link-2">
-        <a href="https://vk.com/slappetizer" target="_blank">VK</a>
-      </div>
-      <div class="link link-3">
-        <a href="https://instagram.com/slappetizer" target="_blank">Instagram</a>
-      </div>
-      <div class="link link-4">
-        <a href="https://www.youtube.com/@slappetizer" target="_blank">YouTube</a>
-      </div>
-      <div class="link link-5">
-        <a href="https://dzen.ru/slappetizer" target="_blank">Дзен</a>
-      </div>
-      <div class="link link-6">
-        <a href="mailto:a@svarganil.ru" target="_blank">Почта</a>
-      </div>
+      
       <div class="pizza">
         <div class="sauce">
           <div class="toppings">
