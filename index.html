@@ -38,6 +38,7 @@
   radio.volume = 0.3;
 
   let radioStarted = false;
+  let radioVolumeFadeToken = 0;
 
   const startRadio = () => {
     if (radioStarted) return;
@@ -46,6 +47,28 @@
         radioStarted = true;
       })
       .catch(() => {});
+  };
+
+  const fadeRadioVolumeTo = (targetVolume, durationMs = 350) => {
+    const token = ++radioVolumeFadeToken;
+    const from = radio.volume;
+    const to = Math.min(1, Math.max(0, targetVolume));
+
+    if (durationMs <= 0) {
+      radio.volume = to;
+      return;
+    }
+
+    const startAt = performance.now();
+    const step = (now) => {
+      if (token !== radioVolumeFadeToken) return; // cancelled by a newer fade
+      const t = Math.min(1, (now - startAt) / durationMs);
+      const eased = t * t * (3 - 2 * t); // smoothstep
+      radio.volume = from + (to - from) * eased;
+      if (t < 1) requestAnimationFrame(step);
+    };
+
+    requestAnimationFrame(step);
   };
 </script>
 
@@ -79,6 +102,8 @@
 </article>
 
   <script>
+    let boxWasOpenedOnce = false;
+
     document.querySelector('.pizza-box').addEventListener('click', function() {
       const isOpen = this.classList.toggle('open');
       const openSound = document.getElementById('openSound');
@@ -87,10 +112,20 @@
       if (isOpen) {
         startRadio();
         openSound.play();
-        radio.volume = 0.3;
+        if (!boxWasOpenedOnce) {
+          // самое первое открытие (которое включает радио) — без fade
+          radio.volume = 0.3;
+          boxWasOpenedOnce = true;
+        } else {
+          fadeRadioVolumeTo(0.3, 350);
+        }
       } else {
         closeSound.play();
-        radio.volume = 0;
+        if (boxWasOpenedOnce) {
+          fadeRadioVolumeTo(0, 350);
+        } else {
+          radio.volume = 0;
+        }
       }
     });
   </script>
