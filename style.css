@@ -77,7 +77,7 @@
   justify-content: center;
   position: absolute;
   text-align: center;
-  transform: rotateX(86deg) translateY(3.9vh) translateZ(0.2vh);
+  transform: rotateX(0deg) translateY(0) translateZ(4vh);
   transform-origin: top center;
   transition: transform 0.3s ease-in;
   width: 60vh;
@@ -98,7 +98,7 @@
   background-image: url('assets/box.png');
   background-position: center;
   background-size: cover;
-  transform: rotateX(86deg) translateY(4vh) translateZ(0.1vh);
+  transform: rotateX(0deg) translateY(0) translateZ(3.9vh);
 }
 
 .lid-underside svg {
@@ -116,19 +116,19 @@
 }
 
 .pizza-box:not(.open) .lid {
-  transform: rotateX(86deg) translateY(3.9vh) translateZ(0.2vh);
-}
-
-.pizza-box.open .lid {
   transform: rotateX(0deg) translateY(0) translateZ(4vh);
 }
 
+.pizza-box.open .lid {
+  transform: rotateX(86deg) translateY(3.9vh) translateZ(0.2vh);
+}
+
 .pizza-box:not(.open) .lid-underside {
-  transform: rotateX(86deg) translateY(4vh) translateZ(0.1vh);
+  transform: rotateX(0deg) translateY(0) translateZ(3.9vh);
 }
 
 .pizza-box.open .lid-underside {
-  transform: rotateX(0deg) translateY(0) translateZ(3.9vh);
+  transform: rotateX(86deg) translateY(4vh) translateZ(0.1vh);
 }
 
 .pizza-box-side {
@@ -173,6 +173,7 @@
   display: block;
   height: 50vh;
   padding: 4vh;
+  position: relative;
   transform-style: preserve-3d;
   width: 50vh;
 }
@@ -183,17 +184,15 @@
   background-size: cover;
   box-shadow: 0 0 1.5vh 1.3vh #bd4b00 inset;
   border-radius: 50%;
+  inset: 4vh;
   position: absolute;
   transform: translateZ(2vh);
   transform-origin: center;
 }
-
 .toppings {
-  display: grid;
-  grid-gap: 0;
-  grid-template-columns: repeat(4, 25%);
-  grid-template-rows: repeat(4, 25%);
-  grid-template-areas: ". a b ." "c d e f" "g h i j" ". k l .";
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 46vh;
   padding: 2vh;
   width: 46vh;
@@ -204,183 +203,10 @@
   background-position: center;
   background-size: cover;
   border-radius: 50%;
-  height: 10vh;
-  width: 10vh;
-}
-
-.topping-2 {
-  background-image: url('assets/pepperoni.png');
-  background-position: center;
-  background-size: cover;
-  border-radius: 50%;
-  height: 10vh;
-  width: 10vh;
-}
-
-.topping-3 {
-  background-image: url('assets/pepperoni.png');
-  background-position: center;
-  background-size: cover;
-  border-radius: 50%;
-  height: 10vh;
-  width: 10vh;
+  height: 15vh;
+  width: 15vh;
 }
 
 .toppings * {
   place-self: center;
-}
-
-.toppings *:nth-child(1) {
-  grid-area: a;
-  transform: rotateZ(20deg);
-}
-
-.toppings *:nth-child(2) {
-  grid-area: b;
-  transform: rotateZ(40deg);
-}
-
-.toppings *:nth-child(3) {
-  grid-area: c;
-  transform: rotateZ(330deg);
-}
-
-.toppings *:nth-child(4) {
-  grid-area: d;
-  transform: rotateZ(96deg);
-}
-
-.toppings *:nth-child(5) {
-  grid-area: e;
-  transform: rotateZ(213deg);
-}
-
-.toppings *:nth-child(6) {
-  grid-area: f;
-  transform: rotateZ(247deg);
-}
-
-.toppings *:nth-child(7) {
-  grid-area: g;
-  transform: rotateZ(145deg);
-}
-
-.toppings *:nth-child(8) {
-  grid-area: h;
-  transform: rotateZ(50deg);
-}
-
-.toppings *:nth-child(9) {
-  grid-area: i;
-  transform: rotateZ(114deg);
-}
-
-.toppings *:nth-child(10) {
-  grid-area: j;
-  transform: rotateZ(7deg);
-}
-
-.toppings *:nth-child(11) {
-  grid-area: k;
-  transform: rotateZ(161deg);
-}
-
-.toppings *:nth-child(12) {
-  grid-area: l;
-  transform: rotateZ(261deg);
-}
-
-.link {
-  position: absolute;
-  transform-style: preserve-3d;
-  opacity: 1;
-  transform: none;
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-}
-
-.pizza-box.open .link {
-  opacity: 0;
-  transform: translateZ(0vh) scale(0.1);
-}
-
-.link a {
-  color: #C2242E;
-  text-decoration: none;
-  font-size: 5vh;
-  font-weight: bold;
-  font-family: 'Marck Script', cursive;
-  background-color: white;
-  background-image: url('assets/box.png');
-  background-position: center;
-  background-size: cover;
-  padding: 2vh 4vh;
-  border-radius: 1vh;
-  box-shadow: 0 0 2vh 1vh rgba(0, 0, 0, 0.2) inset;
-}
-
-.link-1 {
-  animation: flyAround1 12s infinite linear;
-}
-.link-2 {
-  animation: flyAround2 10s infinite linear;
-}
-.link-3 {
-  animation: flyAround3 14s infinite linear;
-}
-.link-4 {
-  animation: flyAround4 11s infinite linear;
-}
-.link-5 {
-  animation: flyAround5 13s infinite linear;
-}
-.link-6 {
-  animation: flyAround6 16s infinite linear;
-}
-
-@keyframes flyAround1 {
-  0% { transform: rotateY(0deg) translateZ(35vh) translateY(-10vh) translateX(0); }
-  25% { transform: rotateY(90deg) translateZ(35vh) translateY(-10vh) translateX(0); }
-  50% { transform: rotateY(180deg) translateZ(35vh) translateY(-10vh) translateX(0); }
-  75% { transform: rotateY(270deg) translateZ(35vh) translateY(-10vh) translateX(0); }
-  100% { transform: rotateY(360deg) translateZ(35vh) translateY(-10vh) translateX(0); }
-}
-
-@keyframes flyAround2 {
-  0% { transform: rotateX(0deg) translateZ(30vh) translateY(5vh) translateX(0); }
-  25% { transform: rotateX(90deg) translateZ(30vh) translateY(5vh) translateX(0); }
-  50% { transform: rotateX(180deg) translateZ(30vh) translateY(5vh) translateX(0); }
-  75% { transform: rotateX(270deg) translateZ(30vh) translateY(5vh) translateX(0); }
-  100% { transform: rotateX(360deg) translateZ(30vh) translateY(5vh) translateX(0); }
-}
-
-@keyframes flyAround3 {
-  0% { transform: rotateY(0deg) translateZ(45vh) translateY(-25vh) translateX(0); }
-  25% { transform: rotateY(90deg) translateZ(40vh) translateY(0vh) translateX(5vh); }
-  50% { transform: rotateY(180deg) translateZ(45vh) translateY(-25vh) translateX(0); }
-  75% { transform: rotateY(270deg) translateZ(40vh) translateY(0vh) translateX(-5vh); }
-  100% { transform: rotateY(360deg) translateZ(45vh) translateY(-25vh) translateX(0); }
-}
-
-@keyframes flyAround4 {
-  0% { transform: rotateY(0deg) translateZ(32vh) translateY(15vh) translateX(0); }
-  25% { transform: rotateY(90deg) translateZ(32vh) translateY(15vh) translateX(0); }
-  50% { transform: rotateY(180deg) translateZ(32vh) translateY(15vh) translateX(0); }
-  75% { transform: rotateY(270deg) translateZ(32vh) translateY(15vh) translateX(0); }
-  100% { transform: rotateY(360deg) translateZ(32vh) translateY(15vh) translateX(0); }
-}
-
-@keyframes flyAround5 {
-  0% { transform: rotateX(0deg) translateZ(38vh) translateY(-5vh) translateX(0); }
-  25% { transform: rotateX(90deg) translateZ(38vh) translateY(-5vh) translateX(0); }
-  50% { transform: rotateX(180deg) translateZ(38vh) translateY(-5vh) translateX(0); }
-  75% { transform: rotateX(270deg) translateZ(38vh) translateY(-5vh) translateX(0); }
-  100% { transform: rotateX(360deg) translateZ(38vh) translateY(-5vh) translateX(0); }
-}
-
-@keyframes flyAround6 {
-  0% { transform: rotateY(0deg) translateZ(28vh) translateY(20vh) translateX(0); }
-  25% { transform: rotateY(90deg) translateZ(28vh) translateY(20vh) translateX(0); }
-  50% { transform: rotateY(180deg) translateZ(28vh) translateY(20vh) translateX(0); }
-  75% { transform: rotateY(270deg) translateZ(28vh) translateY(20vh) translateX(0); }
-  100% { transform: rotateY(360deg) translateZ(28vh) translateY(20vh) translateX(0); }
 }

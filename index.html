@@ -68,18 +68,7 @@
       <div class="pizza">
         <div class="sauce">
           <div class="toppings">
-            <div class="topping-2"></div>
-            <div class="topping-3"></div>
-            <div class="topping-2"></div>
             <div class="topping-1"></div>
-            <div class="topping-2"></div>
-            <div class="topping-1"></div>
-            <div class="topping-3"></div>
-            <div class="topping-2"></div>
-            <div class="topping-3"></div>
-            <div class="topping-2"></div>
-            <div class="topping-1"></div>
-            <div class="topping-2"></div>
           </div>
         </div>
       </div>
@@ -95,12 +84,16 @@
 
       if (isOpen) {
         openSound.play();
+        // Включаем радио при открытой коробке
+        radio.volume = 0.3;
       } else {
         closeSound.play();
+        // Выключаем радио при закрытой коробке
+        radio.volume = 0;
       }
     });
   </script>
-  <audio id="openSound" src="assets/close.mp3" preload="auto"></audio>
-  <audio id="closeSound" src="assets/open.mp3" preload="auto"></audio>
+  <audio id="openSound" src="assets/open.mp3" preload="auto"></audio>
+  <audio id="closeSound" src="assets/close.mp3" preload="auto"></audio>
 </body>
 </html>
