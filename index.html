@@ -37,14 +37,16 @@
   const radio = document.getElementById("jungletrain-bg");
   radio.volume = 0.3;
 
+  let radioStarted = false;
+
   const startRadio = () => {
-    radio.play().catch(() => {});
+    if (radioStarted) return;
+    radio.play()
+      .then(() => {
+        radioStarted = true;
+      })
+      .catch(() => {});
   };
-
-  startRadio();
-
-  document.addEventListener("click", startRadio, { once: true });
-  document.addEventListener("touchstart", startRadio, { once: true });
 </script>
 
 <article class="contain">
@@ -83,6 +85,7 @@
       const closeSound = document.getElementById('closeSound');
 
       if (isOpen) {
+        startRadio();
         openSound.play();
         radio.volume = 0.3;
       } else {
