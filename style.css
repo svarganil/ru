@@ -184,6 +184,39 @@ body {
   margin: 8px 0;
 }
 
+.menu-marquee {
+  width: 100%;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.menu-marquee-track {
+  display: inline-flex;
+  gap: 0;
+  animation: marquee 26s linear infinite;
+  will-change: transform;
+}
+
+.menu-marquee-track span {
+  background: #C2242E;
+  color: #FCFDFA;
+  border: 1px solid #C2242E;
+  padding: 6px 12px;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .menu-footer {
   margin-top: 24px;
   display: flex;
