@@ -109,6 +109,11 @@
   </div>
 </div>
 
+  <audio id="openSound" src="assets/open.mp3" preload="auto"></audio>
+  <audio id="closeSound" src="assets/close.mp3" preload="auto"></audio>
+  <audio id="menuOpenSound" src="assets/in.mp3" preload="auto"></audio>
+  <audio id="menuCloseSound" src="assets/out.mp3" preload="auto"></audio>
+
   <script>
     let boxWasOpenedOnce = false;
 
@@ -149,6 +154,11 @@
       const isOpen = menuSheet.classList.toggle('open');
       menuSheet.setAttribute('aria-hidden', String(!isOpen));
       updateMenuLabel(isOpen);
+      const sound = document.getElementById(isOpen ? 'menuOpenSound' : 'menuCloseSound');
+      if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+      }
     };
 
     if (menuLabel) {
@@ -162,7 +172,5 @@
       link.addEventListener('click', (event) => event.stopPropagation());
     });
   </script>
-  <audio id="openSound" src="assets/open.mp3" preload="auto"></audio>
-  <audio id="closeSound" src="assets/close.mp3" preload="auto"></audio>
 </body>
 </html>
