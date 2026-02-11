@@ -101,6 +101,14 @@
   </section>
 </article>
 
+<div class="menu-shell" id="menu-sheet" aria-hidden="true">
+  <div class="menu-label" id="menu-label">Меню</div>
+  <div class="menu-footer">
+    <span>Музыка на сайте ‣ <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
+    <span class="menu-copyright">© 2026 Сварганил</span>
+  </div>
+</div>
+
   <script>
     let boxWasOpenedOnce = false;
 
@@ -127,6 +135,31 @@
           radio.volume = 0;
         }
       }
+    });
+
+    const menuSheet = document.getElementById('menu-sheet');
+    const menuLabel = document.getElementById('menu-label');
+
+    const updateMenuLabel = (isOpen) => {
+      if (!menuLabel) return;
+      menuLabel.textContent = isOpen ? '✕' : 'Меню';
+    };
+
+    const toggleMenu = () => {
+      const isOpen = menuSheet.classList.toggle('open');
+      menuSheet.setAttribute('aria-hidden', String(!isOpen));
+      updateMenuLabel(isOpen);
+    };
+
+    if (menuLabel) {
+      menuLabel.addEventListener('click', (event) => {
+        event.stopPropagation();
+        toggleMenu();
+      });
+    }
+
+    menuSheet.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', (event) => event.stopPropagation());
     });
   </script>
   <audio id="openSound" src="assets/open.mp3" preload="auto"></audio>

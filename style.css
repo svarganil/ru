@@ -1,3 +1,15 @@
+@font-face {
+  font-family: 'HouseFont';
+  src: url('assets/font.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: 'HouseFont', sans-serif;
+}
+
 .contain {
   align-items: center;
   background: repeating-conic-gradient(#FCFDFA 0% 25%, #C2242E 0% 50%) 0 0 / 100px 100px;
@@ -10,6 +22,84 @@
   position: absolute;
   right: 0;
   top: 0;
+}
+
+.menu-shell {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, calc(100% - 90px));
+  width: min(100vw, 720px);
+  height: 100vh;
+  background: #FCFDFA;
+  border-radius: 0;
+  box-shadow: 0 -18px 48px rgba(0, 0, 0, 0.25);
+  transition: transform 0.35s cubic-bezier(0.28, 0.82, 0.25, 1);
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 0;
+}
+
+.menu-shell.open {
+  transform: translate(-50%, 0);
+}
+
+.menu-label {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #C2242E;
+  text-transform: uppercase;
+  pointer-events: auto;
+  user-select: none;
+  line-height: 1.1;
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  transform: none;
+  cursor: pointer;
+}
+
+.menu-footer {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.menu-footer a {
+  color: #C2242E;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.menu-footer span {
+  color: #111;
+}
+
+.menu-footer .menu-copyright {
+  color: #C2242E;
+  font-weight: 700;
+}
+
+.menu-footer span:first-child {
+  color: #C2242E;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .menu-shell {
+    width: 100vw;
+  }
 }
 
 @keyframes still {
