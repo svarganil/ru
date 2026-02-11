@@ -8,6 +8,12 @@
 
 body {
   font-family: 'HouseFont', sans-serif;
+  cursor: url('assets/cursor.png') 8 8, auto;
+}
+
+::selection {
+  color: #FCFDFA;
+  background: #C2242E;
 }
 
 .contain {
@@ -60,7 +66,15 @@ body {
   top: 14px;
   left: 16px;
   transform: none;
-  cursor: pointer;
+  cursor: url('assets/hover.png') 8 8, pointer;
+  padding: 4px 6px;
+  border-radius: 0;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.menu-label:hover {
+  color: #FCFDFA;
+  background: #C2242E;
 }
 
 .menu-footer {
