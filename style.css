@@ -64,7 +64,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  width: 100%;
+  flex-wrap: wrap;
 }
 
 .menu-shell.open {
@@ -98,8 +98,6 @@ body {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  justify-content: flex-end;
-  margin-left: auto;
 }
 
 .menu-links a {
@@ -132,8 +130,9 @@ body {
   pointer-events: none;
   user-select: none;
   line-height: 1;
-  text-align: center;
+  text-align: left;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .menu-footer {
