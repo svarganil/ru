@@ -119,6 +119,10 @@ body {
   background: #C2242E;
 }
 
+.menu-links .link-short {
+  display: none;
+}
+
 .menu-divider {
   width: 100%;
   color: #C2242E;
@@ -169,6 +173,14 @@ body {
 @media (max-width: 768px) {
   .menu-shell {
     width: 100vw;
+  }
+
+  .menu-links .link-full {
+    display: none;
+  }
+
+  .menu-links .link-short {
+    display: inline;
   }
 }
 
