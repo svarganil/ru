@@ -174,6 +174,11 @@ body {
     width: 100vw;
   }
 
+  .menu-links a {
+    font-size: 18px;
+    letter-spacing: 0.06em;
+  }
+
   .menu-links .link-full {
     display: none;
   }
