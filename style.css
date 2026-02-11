@@ -49,6 +49,15 @@ body {
   padding-top: 0;
 }
 
+.menu-top {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .menu-shell.open {
   transform: translate(-50%, 0);
 }
@@ -62,9 +71,7 @@ body {
   pointer-events: auto;
   user-select: none;
   line-height: 1.1;
-  position: absolute;
-  top: 14px;
-  left: 16px;
+  position: static;
   transform: none;
   cursor: url('assets/hover.png') 8 8, pointer;
   padding: 4px 6px;
@@ -73,6 +80,29 @@ body {
 }
 
 .menu-label:hover {
+  color: #FCFDFA;
+  background: #C2242E;
+}
+
+.menu-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-links a {
+  color: #C2242E;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 3px 6px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  cursor: url('assets/hover.png') 8 8, pointer;
+}
+
+.menu-links a:hover {
   color: #FCFDFA;
   background: #C2242E;
 }
