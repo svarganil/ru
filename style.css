@@ -135,6 +135,27 @@ body {
   box-sizing: border-box;
 }
 
+.menu-subtitle {
+  width: 100%;
+  text-align: center;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #C2242E;
+  user-select: none;
+  pointer-events: none;
+  margin-top: 2px;
+}
+
+.menu-bio {
+  width: 100%;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #C2242E;
+  letter-spacing: 0.01em;
+  user-select: text;
+}
+
 .menu-footer {
   position: absolute;
   bottom: 18px;
@@ -145,7 +166,7 @@ body {
   gap: 6px;
   align-items: center;
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.35;
 }
 
