@@ -161,6 +161,46 @@ body {
   margin: 8px 0;
 }
 
+.menu-divider-dash {
+  width: 100%;
+  border-bottom: 2px dashed rgba(194, 36, 46, 0.4);
+  height: 0;
+  margin: 8px 0;
+  pointer-events: none;
+  user-select: none;
+  font-size: 0;
+  line-height: 0;
+  box-sizing: border-box;
+}
+
+.menu-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #C2242E;
+}
+
+.menu-meta-left {
+  text-align: left;
+}
+
+.menu-meta-right {
+  text-align: right;
+}
+
+.menu-icon-row {
+  display: flex;
+  align-items: center;
+  margin: 4px 0 8px;
+}
+
+.menu-icon-row img {
+  width: 16px;
+  height: 16px;
+}
+
 .menu-subtitle {
   width: 100%;
   text-align: center;
