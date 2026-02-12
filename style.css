@@ -194,6 +194,7 @@ body {
   display: flex;
   align-items: center;
   margin: 4px 0 8px;
+  gap: 3px;
 }
 
 .menu-icon-row img {
