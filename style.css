@@ -184,6 +184,36 @@ body {
   margin: 8px 0;
 }
 
+.menu-note {
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.menu-action {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.menu-button {
+  background: #C2242E;
+  color: #FCFDFA;
+  text-decoration: none;
+  padding: 10px 18px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border: 1px solid #C2242E;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: url('assets/hover.png') 8 8, pointer;
+}
+
+.menu-button:hover {
+  background: #FCFDFA;
+  color: #C2242E;
+}
+
 .menu-marquee {
   width: 100%;
   overflow: hidden;
