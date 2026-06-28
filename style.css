@@ -267,7 +267,7 @@ body {
   --marquee-offset: -50%;
   display: flex;
   gap: 0;
-  animation: marquee 5s linear infinite;
+  animation: marquee 26s linear infinite;
   will-change: transform;
   width: max-content;
 }
@@ -341,6 +341,11 @@ body {
     font-size: clamp(12px, 3.8vw, 16px);
     letter-spacing: 0.02em;
     padding: 3px 2px;
+  }
+
+  .menu-marquee {
+    margin-left: -16px;
+    width: calc(100% + 32px);
   }
 
 }
