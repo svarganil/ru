@@ -264,14 +264,15 @@ body {
 }
 
 .menu-marquee-track {
+  --marquee-offset: -50%;
   display: flex;
   gap: 0;
-  animation: marquee 26s linear infinite;
+  animation: marquee 5s linear infinite;
   will-change: transform;
   width: max-content;
 }
 
-.menu-marquee-track span {
+.menu-marquee-copy {
   flex: 0 0 auto;
   padding: 6px 0;
   font-size: 36px;
@@ -286,7 +287,7 @@ body {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(var(--marquee-offset), 0, 0);
   }
 }
 
@@ -331,9 +332,15 @@ body {
     width: 100vw;
   }
 
+  .menu-links {
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
   .menu-links a {
-    font-size: 18px;
-    letter-spacing: 0.06em;
+    font-size: clamp(12px, 3.8vw, 16px);
+    letter-spacing: 0.02em;
+    padding: 3px 2px;
   }
 
 }

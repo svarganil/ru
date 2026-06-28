@@ -192,9 +192,13 @@
     </div>
     <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
     <div class="menu-marquee" aria-hidden="true">
-      <div class="menu-marquee-track">
-        <span>* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
-        <span aria-hidden="true">* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
+      <div class="menu-marquee-track" id="wip-marquee-track">
+        <span class="menu-marquee-copy">* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
+        <span class="menu-marquee-copy">* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
+        <span class="menu-marquee-copy">* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
+        <span class="menu-marquee-copy">* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
+        <span class="menu-marquee-copy">* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
+        <span class="menu-marquee-copy">* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
       </div>
     </div>
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
@@ -250,9 +254,24 @@
     const menuSheet = document.getElementById('menu-sheet');
     const menuLabel = document.getElementById('menu-label');
     const currentYear = document.getElementById('current-year');
+    const marqueeTrack = document.getElementById('wip-marquee-track');
 
     if (currentYear) {
       currentYear.textContent = new Date().getFullYear();
+    }
+
+    const syncMarqueeDistance = () => {
+      if (!marqueeTrack) return;
+      const marqueeCopy = marqueeTrack.querySelector('.menu-marquee-copy');
+      if (!marqueeCopy) return;
+      marqueeTrack.style.setProperty('--marquee-offset', `-${marqueeCopy.getBoundingClientRect().width}px`);
+    };
+
+    syncMarqueeDistance();
+    window.addEventListener('resize', syncMarqueeDistance);
+
+    if (document.fonts) {
+      document.fonts.ready.then(syncMarqueeDistance);
     }
 
     const updateMenuLabel = (isOpen) => {
