@@ -193,8 +193,7 @@
     <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
     <div class="menu-marquee" aria-hidden="true">
       <div class="menu-marquee-track" id="wip-marquee-track">
-        <span class="menu-marquee-copy">* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
-        <span class="menu-marquee-copy" aria-hidden="true">* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
+        <span class="menu-marquee-copy">* РАЗДЕЛ В РАБОТЕ * WIP&nbsp;</span>
       </div>
     </div>
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
@@ -250,24 +249,87 @@
     const menuSheet = document.getElementById('menu-sheet');
     const menuLabel = document.getElementById('menu-label');
     const currentYear = document.getElementById('current-year');
+    const marquee = document.querySelector('.menu-marquee');
     const marqueeTrack = document.getElementById('wip-marquee-track');
 
     if (currentYear) {
       currentYear.textContent = new Date().getFullYear();
     }
 
-    const syncMarqueeDistance = () => {
-      if (!marqueeTrack) return;
-      const marqueeCopy = marqueeTrack.querySelector('.menu-marquee-copy');
-      if (!marqueeCopy) return;
-      marqueeTrack.style.setProperty('--marquee-offset', `-${marqueeCopy.getBoundingClientRect().width}px`);
+    const marqueeText = '* РАЗДЕЛ В РАБОТЕ * WIP\u00a0';
+    let marqueeTileWidth = 0;
+    let marqueeOffset = 0;
+    let marqueeLastFrame = null;
+    let marqueeSpeed = 0;
+
+    const getMarqueeSpeed = () => {
+      if (!marquee) return 0;
+      const rawSpeed = getComputedStyle(marquee).getPropertyValue('--marquee-speed');
+      return Number.parseFloat(rawSpeed) || 0;
     };
 
-    syncMarqueeDistance();
-    window.addEventListener('resize', syncMarqueeDistance);
+    const createMarqueeCopy = () => {
+      const copy = document.createElement('span');
+      copy.className = 'menu-marquee-copy';
+      copy.textContent = marqueeText;
+      return copy;
+    };
+
+    const setupMarquee = () => {
+      if (!marquee || !marqueeTrack) return;
+
+      marqueeSpeed = getMarqueeSpeed();
+      marqueeTrack.textContent = '';
+      marqueeTrack.appendChild(createMarqueeCopy());
+
+      const firstCopy = marqueeTrack.querySelector('.menu-marquee-copy');
+      if (!firstCopy) return;
+
+      marqueeTileWidth = firstCopy.getBoundingClientRect().width;
+      if (!marqueeTileWidth) return;
+
+      const visibleWidth = marquee.getBoundingClientRect().width;
+      const copyCount = Math.max(8, Math.ceil(visibleWidth / marqueeTileWidth) + 4);
+
+      for (let i = 1; i < copyCount; i += 1) {
+        marqueeTrack.appendChild(createMarqueeCopy());
+      }
+
+      marqueeOffset %= marqueeTileWidth;
+      marqueeTrack.style.transform = `translate3d(${-marqueeOffset}px, 0, 0)`;
+    };
+
+    const animateMarquee = (timestamp) => {
+      if (marqueeTrack && marqueeTileWidth && marqueeSpeed) {
+        if (marqueeLastFrame === null) marqueeLastFrame = timestamp;
+        const elapsed = Math.min((timestamp - marqueeLastFrame) / 1000, 0.1);
+        marqueeLastFrame = timestamp;
+        marqueeOffset = (marqueeOffset + elapsed * marqueeSpeed) % marqueeTileWidth;
+        marqueeTrack.style.transform = `translate3d(${-marqueeOffset}px, 0, 0)`;
+      } else {
+        marqueeLastFrame = timestamp;
+      }
+
+      requestAnimationFrame(animateMarquee);
+    };
+
+    setupMarquee();
+    requestAnimationFrame(animateMarquee);
+    window.addEventListener('resize', () => {
+      setupMarquee();
+      marqueeLastFrame = null;
+    });
+
+    window.addEventListener('load', () => {
+      setupMarquee();
+      marqueeLastFrame = null;
+    });
 
     if (document.fonts) {
-      document.fonts.ready.then(syncMarqueeDistance);
+      document.fonts.ready.then(() => {
+        setupMarquee();
+        marqueeLastFrame = null;
+      });
     }
 
     const updateMenuLabel = (isOpen) => {

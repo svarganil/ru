@@ -256,6 +256,7 @@ body {
 }
 
 .menu-marquee {
+  --marquee-speed: 110;
   width: 100%;
   overflow: hidden;
   margin: 8px 0;
@@ -264,10 +265,9 @@ body {
 }
 
 .menu-marquee-track {
-  --marquee-offset: -50%;
   display: flex;
   gap: 0;
-  animation: marquee 26s linear infinite;
+  transform: translate3d(0, 0, 0);
   will-change: transform;
   width: max-content;
 }
@@ -280,15 +280,6 @@ body {
   letter-spacing: 0.04em;
   line-height: 1;
   white-space: nowrap;
-}
-
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translate3d(var(--marquee-offset), 0, 0);
-  }
 }
 
 .menu-footer {
@@ -344,6 +335,7 @@ body {
   }
 
   .menu-marquee {
+    --marquee-speed: 34;
     margin-left: -16px;
     width: calc(100% + 32px);
   }
