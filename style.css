@@ -259,23 +259,25 @@ body {
   width: 100%;
   overflow: hidden;
   margin: 8px 0;
+  background: #C2242E;
+  color: #FCFDFA;
 }
 
 .menu-marquee-track {
-  display: inline-flex;
+  display: flex;
   gap: 0;
   animation: marquee 26s linear infinite;
   will-change: transform;
+  width: max-content;
 }
 
 .menu-marquee-track span {
-  background: #C2242E;
-  color: #FCFDFA;
-  border: 1px solid #C2242E;
-  padding: 6px 12px;
+  flex: 0 0 auto;
+  padding: 6px 0;
   font-size: 36px;
   font-weight: 700;
   letter-spacing: 0.04em;
+  line-height: 1;
   white-space: nowrap;
 }
 
@@ -314,7 +316,12 @@ body {
   font-weight: 700;
 }
 
-.menu-footer span:first-child {
+.menu-footer .menu-disclaimer {
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.menu-footer .menu-music-credit {
   color: #C2242E;
   font-weight: 700;
 }
@@ -329,13 +336,6 @@ body {
     letter-spacing: 0.06em;
   }
 
-  .menu-links .link-full {
-    display: none;
-  }
-
-  .menu-links .link-short {
-    display: inline;
-  }
 }
 
 @keyframes still {
