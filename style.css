@@ -26,7 +26,8 @@ body {
 
 .menu-top .menu-ripple-target,
 .menu-shell.open .menu-ripple-target,
-.menu-shell::before {
+.menu-shell::before,
+.pizza-hover {
   -webkit-animation: menu-squiggly-anim 0.4s infinite;
   animation: menu-squiggly-anim 0.4s infinite;
 }
@@ -92,7 +93,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .menu-top .menu-ripple-target,
   .menu-shell.open .menu-ripple-target,
-  .menu-shell::before {
+  .menu-shell::before,
+  .pizza-hover {
     -webkit-animation: none;
     animation: none;
     -webkit-filter: none;
