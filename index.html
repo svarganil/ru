@@ -237,6 +237,7 @@
   <audio id="menuOpenSound" src="assets/in.mp3" preload="auto"></audio>
   <audio id="menuCloseSound" src="assets/out.mp3" preload="auto"></audio>
 
+  <script src="menu-ripple.js"></script>
   <script>
     let boxWasOpenedOnce = false;
 
@@ -275,7 +276,11 @@
 
     const updateMenuLabel = (isOpen) => {
       if (!menuLabel) return;
-      menuLabel.textContent = isOpen ? '✕' : '☰';
+      if (window.menuRipple) {
+        window.menuRipple.setText(menuLabel, isOpen ? '✕' : '☰');
+      } else {
+        menuLabel.textContent = isOpen ? '✕' : '☰';
+      }
     };
 
     const toggleMenu = () => {

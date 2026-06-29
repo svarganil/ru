@@ -16,6 +16,88 @@ body {
   background: #C2242E;
 }
 
+.menu-ripple-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.menu-top .menu-ripple-target,
+.menu-shell.open .menu-ripple-target {
+  -webkit-animation: menu-squiggly-anim 0.4s infinite;
+  animation: menu-squiggly-anim 0.4s infinite;
+}
+
+.menu-shell.open .menu-marquee-track.menu-ripple-target {
+  -webkit-animation: marquee var(--marquee-duration) linear infinite, menu-squiggly-anim 0.4s infinite;
+  animation: marquee var(--marquee-duration) linear infinite, menu-squiggly-anim 0.4s infinite;
+}
+
+.menu-shell:not(.open) .menu-content .menu-ripple-target {
+  -webkit-animation: none;
+  animation: none;
+  -webkit-filter: none;
+  filter: none;
+}
+
+@-webkit-keyframes menu-squiggly-anim {
+  0% {
+    -webkit-filter: url("#menu-squiggly-0");
+    filter: url("#menu-squiggly-0");
+  }
+  25% {
+    -webkit-filter: url("#menu-squiggly-1");
+    filter: url("#menu-squiggly-1");
+  }
+  50% {
+    -webkit-filter: url("#menu-squiggly-2");
+    filter: url("#menu-squiggly-2");
+  }
+  75% {
+    -webkit-filter: url("#menu-squiggly-3");
+    filter: url("#menu-squiggly-3");
+  }
+  100% {
+    -webkit-filter: url("#menu-squiggly-4");
+    filter: url("#menu-squiggly-4");
+  }
+}
+
+@keyframes menu-squiggly-anim {
+  0% {
+    -webkit-filter: url("#menu-squiggly-0");
+    filter: url("#menu-squiggly-0");
+  }
+  25% {
+    -webkit-filter: url("#menu-squiggly-1");
+    filter: url("#menu-squiggly-1");
+  }
+  50% {
+    -webkit-filter: url("#menu-squiggly-2");
+    filter: url("#menu-squiggly-2");
+  }
+  75% {
+    -webkit-filter: url("#menu-squiggly-3");
+    filter: url("#menu-squiggly-3");
+  }
+  100% {
+    -webkit-filter: url("#menu-squiggly-4");
+    filter: url("#menu-squiggly-4");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-top .menu-ripple-target,
+  .menu-shell.open .menu-ripple-target {
+    -webkit-animation: none;
+    animation: none;
+    -webkit-filter: none;
+    filter: none;
+  }
+}
+
 .contain {
   align-items: center;
   background: repeating-conic-gradient(#FCFDFA 0% 25%, #C2242E 0% 50%) 0 0 / 100px 100px;
