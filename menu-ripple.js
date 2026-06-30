@@ -20,23 +20,23 @@
     document.body.insertAdjacentHTML('afterbegin', `
 <svg id="${filterId}" class="menu-ripple-filters" width="0" height="0" aria-hidden="true" focusable="false">
   <defs>
-    <filter id="menu-squiggly-0">
+    <filter id="menu-squiggly-0" x="-100%" y="-100%" width="300%" height="300%">
       <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="0"></feTurbulence>
       <feDisplacementMap in="SourceGraphic" in2="noise" scale="2"></feDisplacementMap>
     </filter>
-    <filter id="menu-squiggly-1">
+    <filter id="menu-squiggly-1" x="-100%" y="-100%" width="300%" height="300%">
       <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="1"></feTurbulence>
       <feDisplacementMap in="SourceGraphic" in2="noise" scale="3"></feDisplacementMap>
     </filter>
-    <filter id="menu-squiggly-2">
+    <filter id="menu-squiggly-2" x="-100%" y="-100%" width="300%" height="300%">
       <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="2"></feTurbulence>
       <feDisplacementMap in="SourceGraphic" in2="noise" scale="2"></feDisplacementMap>
     </filter>
-    <filter id="menu-squiggly-3">
+    <filter id="menu-squiggly-3" x="-100%" y="-100%" width="300%" height="300%">
       <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="3"></feTurbulence>
       <feDisplacementMap in="SourceGraphic" in2="noise" scale="3"></feDisplacementMap>
     </filter>
-    <filter id="menu-squiggly-4">
+    <filter id="menu-squiggly-4" x="-100%" y="-100%" width="300%" height="300%">
       <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="4"></feTurbulence>
       <feDisplacementMap in="SourceGraphic" in2="noise" scale="1"></feDisplacementMap>
     </filter>
