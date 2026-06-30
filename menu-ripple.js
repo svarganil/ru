@@ -18,7 +18,7 @@
     if (document.getElementById(filterId)) return;
 
     document.body.insertAdjacentHTML('afterbegin', `
-<svg id="${filterId}" class="menu-ripple-filters" width="0" height="0" aria-hidden="true" focusable="false">
+<svg id="${filterId}" class="menu-ripple-filters" width="1" height="1" aria-hidden="true" focusable="false">
   <defs>
     <filter id="menu-squiggly-0" x="-100%" y="-100%" width="300%" height="300%">
       <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="0"></feTurbulence>

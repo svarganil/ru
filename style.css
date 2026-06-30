@@ -18,9 +18,11 @@ body {
 
 .menu-ripple-filters {
   position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
   pointer-events: none;
 }
 
@@ -123,7 +125,7 @@ body {
   transform: translate(-50%, calc(100% - 90px));
   width: min(100vw, 720px);
   height: 100vh;
-  background: transparent;
+  background: #FCFDFA;
   border-radius: 0;
   transition: transform 0.55s cubic-bezier(0.22, 0.76, 0.2, 1);
   will-change: transform;
@@ -135,6 +137,12 @@ body {
   box-sizing: border-box;
   overflow: visible;
   isolation: isolate;
+}
+
+@supports (height: 100dvh) {
+  .menu-shell {
+    height: 100dvh;
+  }
 }
 
 .menu-shell::before {
@@ -149,7 +157,7 @@ body {
 
 .menu-shell > * {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .menu-top {
@@ -468,6 +476,40 @@ body {
     width: calc(100% + 32px);
   }
 
+}
+
+@supports (-webkit-touch-callout: none) {
+  .menu-shell::before,
+  .pizza-hover {
+    -webkit-animation: none;
+    animation: none;
+    -webkit-filter: none;
+    filter: none;
+  }
+
+  .lid,
+  .lid-underside,
+  .pizza-box-side,
+  .pizza,
+  .sauce,
+  .topping-1 {
+    -webkit-animation: menu-squiggly-anim 0.4s infinite;
+    animation: menu-squiggly-anim 0.4s infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lid,
+  .lid-underside,
+  .pizza-box-side,
+  .pizza,
+  .sauce,
+  .topping-1 {
+    -webkit-animation: none;
+    animation: none;
+    -webkit-filter: none;
+    filter: none;
+  }
 }
 
 @keyframes still {
