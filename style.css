@@ -18,11 +18,9 @@ body {
 
 .menu-ripple-filters {
   position: absolute;
-  left: -9999px;
-  top: -9999px;
-  width: 1px;
-  height: 1px;
-  overflow: visible;
+  width: 0;
+  height: 0;
+  overflow: hidden;
   pointer-events: none;
 }
 
@@ -125,7 +123,7 @@ body {
   transform: translate(-50%, calc(100% - 90px));
   width: min(100vw, 720px);
   height: 100vh;
-  background: #FCFDFA;
+  background: transparent;
   border-radius: 0;
   transition: transform 0.55s cubic-bezier(0.22, 0.76, 0.2, 1);
   will-change: transform;
@@ -137,12 +135,6 @@ body {
   box-sizing: border-box;
   overflow: visible;
   isolation: isolate;
-}
-
-@supports (height: 100dvh) {
-  .menu-shell {
-    height: 100dvh;
-  }
 }
 
 .menu-shell::before {
@@ -157,7 +149,7 @@ body {
 
 .menu-shell > * {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 .menu-top {
@@ -476,183 +468,6 @@ body {
     width: calc(100% + 32px);
   }
 
-}
-
-html.ios-webkit .menu-shell::before,
-html.ios-webkit .pizza-hover {
-  -webkit-animation: none;
-  animation: none;
-  -webkit-filter: none;
-  filter: none;
-}
-
-html.ios-webkit .menu-shell::after,
-html.ios-webkit .menu-top::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    repeating-radial-gradient(ellipse at 50% 50%, rgba(194, 36, 46, 0.16) 0 1px, transparent 2px 11px),
-    repeating-linear-gradient(102deg, transparent 0 12px, rgba(194, 36, 46, 0.1) 13px 14px, transparent 15px 28px);
-  opacity: 0.28;
-  -webkit-animation: ios-overlay-ripple 0.45s steps(4) infinite;
-  animation: ios-overlay-ripple 0.45s steps(4) infinite;
-}
-
-html.ios-webkit .menu-top > * {
-  position: relative;
-  z-index: 2;
-}
-
-html.ios-webkit .lid,
-html.ios-webkit .lid-underside,
-html.ios-webkit .pizza-box-side,
-html.ios-webkit .pizza,
-html.ios-webkit .sauce,
-html.ios-webkit .topping-1 {
-  -webkit-animation: ios-texture-ripple 0.45s steps(4) infinite;
-  animation: ios-texture-ripple 0.45s steps(4) infinite;
-}
-
-html.ios-webkit .topping-1 {
-  position: relative;
-}
-
-html.ios-webkit .lid::after,
-html.ios-webkit .lid-underside::after,
-html.ios-webkit .pizza-box-side::after,
-html.ios-webkit .pizza::after,
-html.ios-webkit .sauce::after,
-html.ios-webkit .topping-1::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  border-radius: inherit;
-  background:
-    repeating-radial-gradient(ellipse at 50% 50%, rgba(252, 253, 250, 0.24) 0 1px, transparent 2px 10px),
-    repeating-linear-gradient(104deg, transparent 0 9px, rgba(194, 36, 46, 0.18) 10px 11px, transparent 12px 22px);
-  opacity: 0.3;
-  -webkit-animation: ios-overlay-ripple 0.45s steps(4) infinite;
-  animation: ios-overlay-ripple 0.45s steps(4) infinite;
-}
-
-@-webkit-keyframes ios-overlay-ripple {
-  0% {
-    -webkit-transform: translate3d(0, 0, 0) skewX(0deg);
-    transform: translate3d(0, 0, 0) skewX(0deg);
-  }
-  25% {
-    -webkit-transform: translate3d(-3px, 2px, 0) skewX(-1deg);
-    transform: translate3d(-3px, 2px, 0) skewX(-1deg);
-  }
-  50% {
-    -webkit-transform: translate3d(3px, -2px, 0) skewX(1deg);
-    transform: translate3d(3px, -2px, 0) skewX(1deg);
-  }
-  75% {
-    -webkit-transform: translate3d(-1px, -3px, 0) skewX(-0.6deg);
-    transform: translate3d(-1px, -3px, 0) skewX(-0.6deg);
-  }
-  100% {
-    -webkit-transform: translate3d(0, 0, 0) skewX(0deg);
-    transform: translate3d(0, 0, 0) skewX(0deg);
-  }
-}
-
-@keyframes ios-overlay-ripple {
-  0% {
-    -webkit-transform: translate3d(0, 0, 0) skewX(0deg);
-    transform: translate3d(0, 0, 0) skewX(0deg);
-  }
-  25% {
-    -webkit-transform: translate3d(-3px, 2px, 0) skewX(-1deg);
-    transform: translate3d(-3px, 2px, 0) skewX(-1deg);
-  }
-  50% {
-    -webkit-transform: translate3d(3px, -2px, 0) skewX(1deg);
-    transform: translate3d(3px, -2px, 0) skewX(1deg);
-  }
-  75% {
-    -webkit-transform: translate3d(-1px, -3px, 0) skewX(-0.6deg);
-    transform: translate3d(-1px, -3px, 0) skewX(-0.6deg);
-  }
-  100% {
-    -webkit-transform: translate3d(0, 0, 0) skewX(0deg);
-    transform: translate3d(0, 0, 0) skewX(0deg);
-  }
-}
-
-@-webkit-keyframes ios-texture-ripple {
-  0% {
-    background-position: 50% 50%;
-  }
-  25% {
-    background-position: 47.5% 52.5%;
-  }
-  50% {
-    background-position: 52.5% 47.5%;
-  }
-  75% {
-    background-position: 48.5% 48.5%;
-  }
-  100% {
-    background-position: 50% 50%;
-  }
-}
-
-@keyframes ios-texture-ripple {
-  0% {
-    background-position: 50% 50%;
-  }
-  25% {
-    background-position: 47.5% 52.5%;
-  }
-  50% {
-    background-position: 52.5% 47.5%;
-  }
-  75% {
-    background-position: 48.5% 48.5%;
-  }
-  100% {
-    background-position: 50% 50%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .menu-shell::before,
-  .pizza-hover {
-    -webkit-animation: none;
-    animation: none;
-    -webkit-filter: none;
-    filter: none;
-  }
-
-  html.ios-webkit .lid,
-  html.ios-webkit .lid-underside,
-  html.ios-webkit .pizza-box-side,
-  html.ios-webkit .pizza,
-  html.ios-webkit .sauce,
-  html.ios-webkit .topping-1 {
-    -webkit-animation: none;
-    animation: none;
-  }
-
-  html.ios-webkit .menu-shell::after,
-  html.ios-webkit .menu-top::after,
-  html.ios-webkit .lid::after,
-  html.ios-webkit .lid-underside::after,
-  html.ios-webkit .pizza-box-side::after,
-  html.ios-webkit .pizza::after,
-  html.ios-webkit .sauce::after,
-  html.ios-webkit .topping-1::after {
-    -webkit-animation: none;
-    animation: none;
-    opacity: 0;
-  }
 }
 
 @keyframes still {

@@ -1,10 +1,5 @@
 (function () {
   const filterId = 'menu-ripple-filter-defs';
-  const isiOSWebKit = () => {
-    const ua = navigator.userAgent || '';
-    const platform = navigator.platform || '';
-    return /iPad|iPhone|iPod/.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  };
   const rippleTargets = [
     '#menu-label',
     '.menu-links a',
@@ -23,7 +18,7 @@
     if (document.getElementById(filterId)) return;
 
     document.body.insertAdjacentHTML('afterbegin', `
-<svg id="${filterId}" class="menu-ripple-filters" width="1" height="1" aria-hidden="true" focusable="false">
+<svg id="${filterId}" class="menu-ripple-filters" width="0" height="0" aria-hidden="true" focusable="false">
   <defs>
     <filter id="menu-squiggly-0" x="-100%" y="-100%" width="300%" height="300%">
       <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="0"></feTurbulence>
@@ -50,10 +45,6 @@
   };
 
   const init = (root = document) => {
-    if (isiOSWebKit()) {
-      document.documentElement.classList.add('ios-webkit');
-    }
-
     injectFilters();
     root.querySelectorAll(rippleTargets.join(',')).forEach((element) => {
       element.classList.add('menu-ripple-target');
