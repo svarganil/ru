@@ -478,7 +478,60 @@ body {
 
 }
 
-@supports (-webkit-touch-callout: none) {
+html.ios-webkit .menu-shell::before,
+html.ios-webkit .pizza-hover {
+  -webkit-animation: none;
+  animation: none;
+  -webkit-filter: none;
+  filter: none;
+}
+
+html.ios-webkit .lid,
+html.ios-webkit .lid-underside,
+html.ios-webkit .pizza,
+html.ios-webkit .sauce,
+html.ios-webkit .topping-1 {
+  -webkit-animation: ios-texture-ripple 0.45s steps(4) infinite;
+  animation: ios-texture-ripple 0.45s steps(4) infinite;
+}
+
+@-webkit-keyframes ios-texture-ripple {
+  0% {
+    background-position: 50% 50%;
+  }
+  25% {
+    background-position: 49.4% 50.6%;
+  }
+  50% {
+    background-position: 50.6% 49.4%;
+  }
+  75% {
+    background-position: 49.8% 49.8%;
+  }
+  100% {
+    background-position: 50% 50%;
+  }
+}
+
+@keyframes ios-texture-ripple {
+  0% {
+    background-position: 50% 50%;
+  }
+  25% {
+    background-position: 49.4% 50.6%;
+  }
+  50% {
+    background-position: 50.6% 49.4%;
+  }
+  75% {
+    background-position: 49.8% 49.8%;
+  }
+  100% {
+    background-position: 50% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
   .menu-shell::before,
   .pizza-hover {
     -webkit-animation: none;
@@ -487,28 +540,13 @@ body {
     filter: none;
   }
 
-  .lid,
-  .lid-underside,
-  .pizza-box-side,
-  .pizza,
-  .sauce,
-  .topping-1 {
-    -webkit-animation: menu-squiggly-anim 0.4s infinite;
-    animation: menu-squiggly-anim 0.4s infinite;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .lid,
-  .lid-underside,
-  .pizza-box-side,
-  .pizza,
-  .sauce,
-  .topping-1 {
+  html.ios-webkit .lid,
+  html.ios-webkit .lid-underside,
+  html.ios-webkit .pizza,
+  html.ios-webkit .sauce,
+  html.ios-webkit .topping-1 {
     -webkit-animation: none;
     animation: none;
-    -webkit-filter: none;
-    filter: none;
   }
 }
 

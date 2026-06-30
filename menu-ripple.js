@@ -1,5 +1,10 @@
 (function () {
   const filterId = 'menu-ripple-filter-defs';
+  const isiOSWebKit = () => {
+    const ua = navigator.userAgent || '';
+    const platform = navigator.platform || '';
+    return /iPad|iPhone|iPod/.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  };
   const rippleTargets = [
     '#menu-label',
     '.menu-links a',
@@ -45,6 +50,10 @@
   };
 
   const init = (root = document) => {
+    if (isiOSWebKit()) {
+      document.documentElement.classList.add('ios-webkit');
+    }
+
     injectFilters();
     root.querySelectorAll(rippleTargets.join(',')).forEach((element) => {
       element.classList.add('menu-ripple-target');
