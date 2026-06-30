@@ -101,8 +101,34 @@
   </section>
 </article>
 
+<svg class="menu-squiggly-filters" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="menu-squiggly-0" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="0"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="menu-squiggly-1" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="1"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="menu-squiggly-2" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="menu-squiggly-3" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="3"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="menu-squiggly-4" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="4"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
 <div class="menu-shell" id="menu-sheet" aria-hidden="true">
-  <div class="menu-top">
+  <div class="menu-squiggly">
+    <div class="menu-top">
     <div class="menu-top-row">
       <div class="menu-label" id="menu-label">☰</div>
       <div class="menu-links">
@@ -230,6 +256,7 @@
       <span class="menu-copyright">© <span id="current-year">2026</span> Сварганил</span>
     </div>
   </div>
+  </div>
 </div>
 
   <audio id="openSound" src="assets/open.mp3" preload="auto"></audio>
@@ -237,7 +264,6 @@
   <audio id="menuOpenSound" src="assets/in.mp3" preload="auto"></audio>
   <audio id="menuCloseSound" src="assets/out.mp3" preload="auto"></audio>
 
-  <script src="menu-ripple.js"></script>
   <script>
     let boxWasOpenedOnce = false;
 
@@ -276,11 +302,7 @@
 
     const updateMenuLabel = (isOpen) => {
       if (!menuLabel) return;
-      if (window.menuRipple) {
-        window.menuRipple.setText(menuLabel, isOpen ? '✕' : '☰');
-      } else {
-        menuLabel.textContent = isOpen ? '✕' : '☰';
-      }
+      menuLabel.textContent = isOpen ? '✕' : '☰';
     };
 
     const toggleMenu = () => {
