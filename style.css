@@ -202,6 +202,31 @@ body {
   height: 16px;
 }
 
+.menu-tag-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin: 8px 0 10px;
+  color: #C2242E;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.menu-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.menu-tag img {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+
 .menu-subtitle {
   width: 100%;
   text-align: center;
