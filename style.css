@@ -6,6 +6,12 @@
   font-display: swap;
 }
 
+html,
+body {
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
+
 body {
   font-family: 'HouseFont', sans-serif;
   cursor: url('assets/cursor.png') 8 8, auto;
@@ -72,12 +78,15 @@ body {
 
 .menu-content {
   flex: 1;
+  overflow-x: hidden;
   overflow-y: auto;
   padding-top: 8px;
   margin-top: -16px;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: none;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  touch-action: pan-y;
 }
 
 .menu-content::-webkit-scrollbar {
@@ -370,7 +379,15 @@ body {
 
 @media (max-width: 768px) {
   .menu-shell {
-    width: 100vw;
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+    transform: translateY(calc(100% - 90px));
+  }
+
+  .menu-shell.open {
+    transform: translateY(0);
   }
 
   .menu-links {
