@@ -14,7 +14,7 @@ body {
 
 body {
   font-family: 'HouseFont', sans-serif;
-  cursor: url('assets/cursor.png') 8 8, auto;
+  cursor: url('assets/cursor/cursor_normal.png') 8 8, auto;
 }
 
 ::selection {
@@ -110,7 +110,7 @@ body {
   line-height: 1.1;
   position: static;
   transform: none;
-  cursor: url('assets/hover.png') 8 8, pointer;
+  cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
   padding: 4px 6px;
   border-radius: 0;
   transition: color 0.2s ease, background-color 0.2s ease;
@@ -137,12 +137,52 @@ body {
   text-transform: uppercase;
   padding: 3px 6px;
   transition: color 0.2s ease, background-color 0.2s ease;
-  cursor: url('assets/hover.png') 8 8, pointer;
+  cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
 }
 
 .menu-links a:hover {
   color: #FCFDFA;
   background: #C2242E;
+}
+
+.menu-c-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: 1em;
+  padding: 0;
+  border: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  color: inherit;
+  font-size: 22px;
+  line-height: 1;
+  cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
+}
+
+.menu-c-button img {
+  display: block;
+  width: auto;
+  height: 1em;
+}
+
+.menu-c-button-hover {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+.menu-c-button:hover .menu-c-button-normal {
+  opacity: 0;
+}
+
+.menu-c-button:hover .menu-c-button-hover {
+  opacity: 1;
 }
 
 .menu-links .link-short {
@@ -279,7 +319,7 @@ body {
   letter-spacing: 0.06em;
   border: 1px solid #C2242E;
   transition: background-color 0.2s ease, color 0.2s ease;
-  cursor: url('assets/hover.png') 8 8, pointer;
+  cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
 }
 
 .menu-button:hover {
@@ -399,6 +439,10 @@ body {
     font-size: clamp(12px, 3.8vw, 16px);
     letter-spacing: 0.02em;
     padding: 3px 2px;
+  }
+
+  .menu-c-button {
+    display: none;
   }
 
   .menu-marquee {
