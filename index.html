@@ -489,10 +489,15 @@
     <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
     <div class="menu-meta-row sub-meta">
       <span class="menu-meta-left">
-        <a class="menu-project-link menu-project-link-koki" href="https://svarganil.github.io/koky/" target="_blank" rel="noopener">
-          КОКИ
-          <span class="menu-project-tooltip">Приложение для варки яиц с таймером, советами, рецептами и не самым умным помощником Клавой.</span>
-        </a>
+        <span class="menu-project-popover menu-project-popover-koki" data-project-popover>
+          <button class="menu-project-trigger" type="button" aria-expanded="false" aria-controls="koki-project-tooltip">КОКИ</button>
+          <span class="menu-project-tooltip" id="koki-project-tooltip">
+            <span class="menu-project-tooltip-text">
+              Приложение для варки яиц с таймером, советами, рецептами и не самым умным помощником Клавой.
+              <a class="menu-project-tooltip-link" href="https://svarganil.github.io/koky/" target="_blank" rel="noopener">Ссылка →</a>
+            </span>
+          </span>
+        </span>
       </span>
       <span class="menu-meta-right">2026</span>
     </div>
@@ -571,7 +576,7 @@
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
     <div class="menu-subtitle" aria-hidden="true">НА СВЯЗИ</div>
     <div class="menu-bio menu-note">
-      Я — движ-позитивен — то есть впишусь в любую блуду: коммерческую и не шибко.<br>Пиши — а там решим.
+      Я — движ-позитивен — то есть впишусь в любую блуду: коммерческую и не шибко.<br>Пиши — а там решим:
     </div>
     <div class="menu-action">
       <a class="menu-button" href="mailto:a@svarganil.ru?subject=%D0%99%D0%BE%21">НАПИСАТЬ</a>
@@ -630,6 +635,47 @@
       currentYear.textContent = new Date().getFullYear();
     }
 
+    const touchProjectQuery = window.matchMedia('(hover: none), (pointer: coarse)');
+    const projectPopovers = menuSheet.querySelectorAll('[data-project-popover]');
+
+    const setProjectPopoverOpen = (popover, isOpen) => {
+      popover.classList.toggle('is-open', isOpen);
+      const trigger = popover.querySelector('.menu-project-trigger');
+      if (trigger) {
+        trigger.setAttribute('aria-expanded', String(isOpen));
+      }
+    };
+
+    const closeProjectPopovers = () => {
+      projectPopovers.forEach(popover => setProjectPopoverOpen(popover, false));
+    };
+
+    projectPopovers.forEach(popover => {
+      const trigger = popover.querySelector('.menu-project-trigger');
+
+      if (trigger) {
+        trigger.addEventListener('click', (event) => {
+          event.stopPropagation();
+          if (!touchProjectQuery.matches) return;
+          const isOpen = popover.classList.contains('is-open');
+          closeProjectPopovers();
+          setProjectPopoverOpen(popover, !isOpen);
+        });
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!touchProjectQuery.matches) return;
+      if (event.target.closest('[data-project-popover] .menu-project-trigger')) return;
+      closeProjectPopovers();
+    }, true);
+
+    if (touchProjectQuery.addEventListener) {
+      touchProjectQuery.addEventListener('change', closeProjectPopovers);
+    } else if (touchProjectQuery.addListener) {
+      touchProjectQuery.addListener(closeProjectPopovers);
+    }
+
     const updateMenuLabel = (isOpen) => {
       if (!menuLabel) return;
       menuLabel.textContent = isOpen ? '✕' : '☰';
@@ -639,6 +685,9 @@
       const isOpen = menuSheet.classList.toggle('open');
       menuSheet.setAttribute('aria-hidden', String(!isOpen));
       updateMenuLabel(isOpen);
+      if (!isOpen) {
+        closeProjectPopovers();
+      }
       const sound = document.getElementById(isOpen ? 'menuOpenSound' : 'menuCloseSound');
       if (sound) {
         sound.currentTime = 0;
