@@ -5,8 +5,14 @@ Safari не принимает jungletrain напрямую, потому что
 
 ## Локальная проверка в Safari
 
-Если открыть `index.html` напрямую как `file://...`, серверный relay не запустится сам.
-Для проверки Safari локально запусти из корня проекта:
+Если открыть `index.html` напрямую как `file://...`, радио будет идти через
+Cloudflare Worker:
+
+```txt
+https://svarganil-radio.svarganil.workers.dev/radio
+```
+
+Если нужно проверить именно локальный relay, запусти из корня проекта:
 
 ```sh
 python3 tools/local-radio-server.py
@@ -17,10 +23,6 @@ python3 tools/local-radio-server.py
 ```txt
 http://127.0.0.1:8000/
 ```
-
-Если всё же открыть `index.html` как файл, код будет пробовать
-`http://127.0.0.1:8000/radio`, но для этого локальный сервер всё равно должен
-быть запущен.
 
 Проверка endpoint:
 

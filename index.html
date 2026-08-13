@@ -38,7 +38,7 @@
   const WORKER_RADIO_RELAY_SOURCE = "https://svarganil-radio.svarganil.workers.dev/radio";
   const LOCAL_RADIO_RELAY_SOURCE = "http://127.0.0.1:8000/radio";
   const localRadioHost = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
-  const RADIO_RELAY_SOURCE = window.location.protocol === "file:" || localRadioHost
+  const RADIO_RELAY_SOURCE = localRadioHost
     ? LOCAL_RADIO_RELAY_SOURCE
     : WORKER_RADIO_RELAY_SOURCE;
   const RADIO_DIRECT_SOURCE = "https://chat.jungletrain.net/streamtest/;stream/1";
@@ -53,6 +53,7 @@
   let radioShouldBePlaying = false;
   let radioSourceIndex = 0;
   let radioStartAttempt = 0;
+  let radioStopAttempt = 0;
   let radioVolumeFadeToken = 0;
 
   radio.src = radioSources[radioSourceIndex];
@@ -95,19 +96,41 @@
 
     if (durationMs <= 0) {
       radio.volume = to;
-      return;
+      return Promise.resolve();
     }
 
-    const startAt = performance.now();
-    const step = (now) => {
-      if (token !== radioVolumeFadeToken) return; // cancelled by a newer fade
-      const t = Math.min(1, (now - startAt) / durationMs);
-      const eased = t * t * (3 - 2 * t); // smoothstep
-      radio.volume = from + (to - from) * eased;
-      if (t < 1) requestAnimationFrame(step);
-    };
+    return new Promise((resolve) => {
+      const startAt = performance.now();
+      const step = (now) => {
+        if (token !== radioVolumeFadeToken) {
+          resolve();
+          return;
+        }
+        const t = Math.min(1, (now - startAt) / durationMs);
+        const eased = t * t * (3 - 2 * t); // smoothstep
+        radio.volume = from + (to - from) * eased;
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          resolve();
+        }
+      };
 
-    requestAnimationFrame(step);
+      requestAnimationFrame(step);
+    });
+  };
+
+  const stopRadio = (durationMs = 350) => {
+    const stopAttempt = ++radioStopAttempt;
+    radioShouldBePlaying = false;
+    radioStarted = false;
+    radioStartAttempt += 1;
+
+    return fadeRadioVolumeTo(0, durationMs).then(() => {
+      if (radioShouldBePlaying || stopAttempt !== radioStopAttempt) return;
+      radio.pause();
+      radio.currentTime = 0;
+    });
   };
 </script>
 
@@ -677,23 +700,27 @@
       const closeSound = document.getElementById('closeSound');
 
       if (isOpen) {
+        const wasOpenedBefore = boxWasOpenedOnce;
+        radioStopAttempt += 1;
         radioShouldBePlaying = true;
-        startRadio();
         openSound.play();
-        if (!boxWasOpenedOnce) {
+        if (!wasOpenedBefore) {
           // самое первое открытие (которое включает радио) — без fade
           radio.volume = 0.3;
           boxWasOpenedOnce = true;
         } else {
+          radio.volume = 0;
+        }
+        startRadio();
+        if (wasOpenedBefore) {
           fadeRadioVolumeTo(0.3, 350);
         }
       } else {
-        radioShouldBePlaying = false;
         closeSound.play();
         if (boxWasOpenedOnce) {
-          fadeRadioVolumeTo(0, 350);
+          stopRadio(350);
         } else {
-          radio.volume = 0;
+          stopRadio(0);
         }
       }
     });
