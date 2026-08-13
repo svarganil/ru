@@ -69,27 +69,14 @@ audio/mpeg
 
 Если основной домен остаётся на GitHub Pages без Cloudflare route:
 
-1. Задеплой Worker:
-
-```sh
-cd workers
-wrangler deploy
-```
-
-2. Cloudflare выдаст URL вида:
+Worker уже задеплоен:
 
 ```txt
-https://svarganil-radio.<account>.workers.dev
+https://svarganil-radio.svarganil.workers.dev/radio
 ```
 
-3. В `index.html` замени:
+Этот URL уже подключён в `index.html`:
 
 ```js
-const RADIO_RELAY_SOURCE = "/radio";
-```
-
-на:
-
-```js
-const RADIO_RELAY_SOURCE = "https://svarganil-radio.<account>.workers.dev/radio";
+const WORKER_RADIO_RELAY_SOURCE = "https://svarganil-radio.svarganil.workers.dev/radio";
 ```

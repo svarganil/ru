@@ -35,8 +35,12 @@
   const radio = document.getElementById("jungletrain-bg");
   radio.volume = 0.3;
 
+  const WORKER_RADIO_RELAY_SOURCE = "https://svarganil-radio.svarganil.workers.dev/radio";
   const LOCAL_RADIO_RELAY_SOURCE = "http://127.0.0.1:8000/radio";
-  const RADIO_RELAY_SOURCE = window.location.protocol === "file:" ? LOCAL_RADIO_RELAY_SOURCE : "/radio";
+  const localRadioHost = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
+  const RADIO_RELAY_SOURCE = window.location.protocol === "file:" || localRadioHost
+    ? LOCAL_RADIO_RELAY_SOURCE
+    : WORKER_RADIO_RELAY_SOURCE;
   const RADIO_DIRECT_SOURCE = "https://chat.jungletrain.net/streamtest/;stream/1";
   const appleTouchDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const desktopSafari = /Safari/.test(navigator.userAgent) && !/Chrome|Chromium|CriOS|FxiOS|Edg|OPR/.test(navigator.userAgent);
