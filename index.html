@@ -29,25 +29,60 @@
 
 <body>
 
-<audio id="jungletrain-bg" preload="none" playsinline>
-  <source src="https://chat.jungletrain.net/streamtest/;stream/1" type="audio/mpeg">
-</audio>
+<audio id="jungletrain-bg" preload="none" playsinline></audio>
 
 <script>
   const radio = document.getElementById("jungletrain-bg");
   radio.volume = 0.3;
 
+  const LOCAL_RADIO_RELAY_SOURCE = "http://127.0.0.1:8000/radio";
+  const RADIO_RELAY_SOURCE = window.location.protocol === "file:" ? LOCAL_RADIO_RELAY_SOURCE : "/radio";
+  const RADIO_DIRECT_SOURCE = "https://chat.jungletrain.net/streamtest/;stream/1";
+  const appleTouchDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const desktopSafari = /Safari/.test(navigator.userAgent) && !/Chrome|Chromium|CriOS|FxiOS|Edg|OPR/.test(navigator.userAgent);
+  const appleAudioStack = appleTouchDevice || desktopSafari;
+  const radioSources = appleAudioStack
+    ? [RADIO_RELAY_SOURCE, RADIO_DIRECT_SOURCE]
+    : [RADIO_DIRECT_SOURCE, RADIO_RELAY_SOURCE];
+
   let radioStarted = false;
+  let radioShouldBePlaying = false;
+  let radioSourceIndex = 0;
+  let radioStartAttempt = 0;
   let radioVolumeFadeToken = 0;
 
+  radio.src = radioSources[radioSourceIndex];
+
+  const useNextRadioSource = () => {
+    if (radioSourceIndex >= radioSources.length - 1) return false;
+    radioSourceIndex += 1;
+    radio.src = radioSources[radioSourceIndex];
+    radio.load();
+    return true;
+  };
+
   const startRadio = () => {
-    if (radioStarted) return;
-    radio.play()
+    if (radioStarted || !radioShouldBePlaying) return;
+    const attempt = ++radioStartAttempt;
+    const playCurrentSource = () => radio.play()
       .then(() => {
         radioStarted = true;
       })
-      .catch(() => {});
+      .catch(() => {
+        if (attempt !== radioStartAttempt || !radioShouldBePlaying) return;
+        if (useNextRadioSource()) {
+          playCurrentSource();
+        }
+      });
+
+    playCurrentSource();
   };
+
+  radio.addEventListener("error", () => {
+    radioStarted = false;
+    if (!radioShouldBePlaying || !useNextRadioSource()) return;
+    startRadio();
+  });
 
   const fadeRadioVolumeTo = (targetVolume, durationMs = 350) => {
     const token = ++radioVolumeFadeToken;
@@ -638,6 +673,7 @@
       const closeSound = document.getElementById('closeSound');
 
       if (isOpen) {
+        radioShouldBePlaying = true;
         startRadio();
         openSound.play();
         if (!boxWasOpenedOnce) {
@@ -648,6 +684,7 @@
           fadeRadioVolumeTo(0.3, 350);
         }
       } else {
+        radioShouldBePlaying = false;
         closeSound.play();
         if (boxWasOpenedOnce) {
           fadeRadioVolumeTo(0, 350);

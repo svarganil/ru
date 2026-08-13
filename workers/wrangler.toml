@@ -1,0 +1,11 @@
+name = "svarganil-radio"
+main = "radio-proxy.mjs"
+compatibility_date = "2026-08-13"
+workers_dev = true
+
+# If svarganil.ru is managed by Cloudflare DNS, uncomment this route
+# so Safari can use the same-origin /radio URL already configured in index.html.
+#
+# routes = [
+#   { pattern = "svarganil.ru/radio*", zone_name = "svarganil.ru" }
+# ]
