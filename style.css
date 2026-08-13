@@ -533,10 +533,6 @@ button,
     padding: 3px 2px;
   }
 
-  .menu-c-button {
-    display: none;
-  }
-
   .menu-marquee {
     --marquee-duration: 90s;
     margin-left: -16px;
