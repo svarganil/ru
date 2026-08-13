@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import socket
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from urllib.request import Request, urlopen
 
 
 STREAMS = (
@@ -13,6 +15,7 @@ STREAMS = (
     ("stream3.jungletrain.net", 8000),
 )
 
+STATS_SOURCE = "https://jungletrain.net/static/stats.json"
 HEADER_LIMIT_BYTES = 8192
 READ_SIZE_BYTES = 16384
 
@@ -23,11 +26,19 @@ class RadioRequestHandler(SimpleHTTPRequestHandler):
             self.send_radio_headers()
             return
 
+        if self.path.rstrip("/") == "/now-playing":
+            self.send_json_headers()
+            return
+
         super().do_HEAD()
 
     def do_GET(self) -> None:
         if self.path.rstrip("/") == "/radio":
             self.proxy_radio()
+            return
+
+        if self.path.rstrip("/") == "/now-playing":
+            self.proxy_now_playing()
             return
 
         super().do_GET()
@@ -43,6 +54,16 @@ class RadioRequestHandler(SimpleHTTPRequestHandler):
         self.send_header("Pragma", "no-cache")
         self.send_header("Expires", "0")
         self.send_header("Accept-Ranges", "none")
+        self.end_headers()
+
+    def send_json_headers(self, content_length: int | None = None) -> None:
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        if content_length is not None:
+            self.send_header("Content-Length", str(content_length))
         self.end_headers()
 
     def proxy_radio(self) -> None:
@@ -83,6 +104,18 @@ class RadioRequestHandler(SimpleHTTPRequestHandler):
 
         self.send_error(502, f"Radio stream unavailable: {last_error}")
 
+    def proxy_now_playing(self) -> None:
+        try:
+            request = Request(STATS_SOURCE, headers={"Accept": "application/json"})
+            with urlopen(request, timeout=7) as response:
+                stats = json.loads(response.read().decode("utf-8"))
+
+            body = json.dumps(build_now_playing(stats), ensure_ascii=False).encode("utf-8")
+            self.send_json_headers(len(body))
+            self.wfile.write(body)
+        except Exception as error:
+            self.send_error(502, f"Now playing unavailable: {error}")
+
 
 def build_stream_request(host: str, port: int) -> bytes:
     request = "\r\n".join(
@@ -116,6 +149,37 @@ def read_stream_header(stream: socket.socket) -> tuple[bytes, bytes]:
     return data[:header_end], data[header_end + 4 :]
 
 
+def build_now_playing(stats: dict) -> dict:
+    nowplaying = normalize_now_playing(stats.get("nowplaying"))
+    artist, track = split_now_playing(nowplaying)
+    listeners = stats.get("listeners")
+
+    return {
+        "nowplaying": nowplaying,
+        "artist": artist,
+        "track": track,
+        "listeners": listeners if isinstance(listeners, (int, float)) else None,
+        "source": "jungletrain.net",
+    }
+
+
+def normalize_now_playing(value: object) -> str:
+    if not isinstance(value, str):
+        return ""
+
+    return " ".join(value.split())
+
+
+def split_now_playing(nowplaying: str) -> tuple[str, str]:
+    separator = " - "
+
+    if separator not in nowplaying:
+        return "", nowplaying
+
+    artist, track = nowplaying.split(separator, 1)
+    return artist.strip(), track.strip()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Serve the site with a Safari-compatible /radio relay.")
     parser.add_argument("--host", default="127.0.0.1")
@@ -129,6 +193,7 @@ def main() -> None:
     print(f"Serving {root}")
     print(f"Open http://{args.host}:{args.port}/ in Safari")
     print(f"Radio relay: http://{args.host}:{args.port}/radio")
+    print(f"Now playing: http://{args.host}:{args.port}/now-playing")
     server.serve_forever()
 
 

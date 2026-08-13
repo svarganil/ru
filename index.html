@@ -36,11 +36,16 @@
   radio.volume = 0.3;
 
   const WORKER_RADIO_RELAY_SOURCE = "https://svarganil-radio.svarganil.workers.dev/radio";
+  const WORKER_NOW_PLAYING_SOURCE = "https://svarganil-radio.svarganil.workers.dev/now-playing";
   const LOCAL_RADIO_RELAY_SOURCE = "http://127.0.0.1:8000/radio";
+  const LOCAL_NOW_PLAYING_SOURCE = "http://127.0.0.1:8000/now-playing";
   const localRadioHost = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
   const RADIO_RELAY_SOURCE = localRadioHost
     ? LOCAL_RADIO_RELAY_SOURCE
     : WORKER_RADIO_RELAY_SOURCE;
+  const NOW_PLAYING_SOURCE = localRadioHost
+    ? LOCAL_NOW_PLAYING_SOURCE
+    : WORKER_NOW_PLAYING_SOURCE;
   const RADIO_DIRECT_SOURCE = "https://chat.jungletrain.net/streamtest/;stream/1";
   const appleTouchDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const desktopSafari = /Safari/.test(navigator.userAgent) && !/Chrome|Chromium|CriOS|FxiOS|Edg|OPR/.test(navigator.userAgent);
@@ -147,9 +152,10 @@
         </svg>
       </div>
       <div class="lid-underside">
-        <svg width="512" height="387" viewBox="0 0 512 387" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M256.501 0C429.339 0 502.481 67.3481 512 177.417H312.11C307.601 160.831 293.072 145.753 256 145.753C216.423 145.753 197.886 164.852 197.886 191.49V195.51C197.886 222.148 216.423 241.247 256 241.247C293.072 241.247 307.601 226.169 312.11 209.583H512C502.481 319.652 429.339 387 256.501 387C79.6556 387 0 307.087 0 203.049V193.5C38.1312 193.5 69.6421 165.119 74.6096 128.303C83.8511 133.033 94.3202 135.701 105.412 135.701C142.837 135.701 173.176 105.324 173.176 67.8506C173.176 63.6164 172.789 59.4727 172.045 55.4554C179.324 58.581 187.343 60.3117 195.765 60.3117C228.699 60.3117 255.46 33.8466 255.992 0.997364L256 0.00251299L256.501 0Z"/>
-        </svg>
+        <div class="lid-now-playing" aria-live="polite">
+          <span class="lid-now-playing-label">СЕЙЧАС ИГРАЕТ</span>
+          <span class="lid-now-playing-track" id="jungletrain-now-playing">загрузка...</span>
+        </div>
       </div>
       
       <div class="pizza">
@@ -731,6 +737,34 @@
 
     if (currentYear) {
       currentYear.textContent = new Date().getFullYear();
+    }
+
+    const nowPlayingText = document.getElementById('jungletrain-now-playing');
+    const NOW_PLAYING_REFRESH_MS = 60000;
+
+    const updateNowPlaying = async () => {
+      if (!nowPlayingText) return;
+
+      try {
+        const response = await fetch(NOW_PLAYING_SOURCE, { cache: 'no-store' });
+        if (!response.ok) throw new Error('Now playing is unavailable');
+
+        const data = await response.json();
+        const nowplaying = typeof data.nowplaying === 'string' ? data.nowplaying.trim() : '';
+        nowPlayingText.textContent = nowplaying || 'jungletrain.net';
+      } catch (error) {
+        nowPlayingText.textContent = 'jungletrain.net';
+      }
+    };
+
+    if (nowPlayingText) {
+      updateNowPlaying();
+      window.setInterval(updateNowPlaying, NOW_PLAYING_REFRESH_MS);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          updateNowPlaying();
+        }
+      });
     }
 
     const touchProjectQuery = window.matchMedia('(hover: none), (pointer: coarse)');

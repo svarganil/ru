@@ -6,12 +6,18 @@ const STREAMS = [
   { hostname: "stream3.jungletrain.net", port: 8000 },
 ];
 
+const STATS_SOURCE = "https://jungletrain.net/static/stats.json";
 const encoder = new TextEncoder();
 const HEADER_LIMIT_BYTES = 8192;
 const HEADER_TIMEOUT_MS = 7000;
 
-const radioHeaders = {
+const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+};
+
+const radioHeaders = {
+  ...corsHeaders,
   "Accept-Ranges": "none",
   "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
   "Content-Type": "audio/mpeg",
@@ -20,20 +26,31 @@ const radioHeaders = {
   "X-Content-Type-Options": "nosniff",
 };
 
+const nowPlayingHeaders = {
+  ...corsHeaders,
+  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+  "Content-Type": "application/json; charset=utf-8",
+  "Expires": "0",
+  "Pragma": "no-cache",
+  "X-Content-Type-Options": "nosniff",
+};
+
 export default {
   async fetch(request) {
     const url = new URL(request.url);
+    const pathname = url.pathname.replace(/\/$/, "") || "/";
 
     if (request.method === "OPTIONS") {
       return new Response(null, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
-        },
+        headers: corsHeaders,
       });
     }
 
-    if (url.pathname !== "/radio" && url.pathname !== "/radio/") {
+    if (pathname === "/now-playing") {
+      return handleNowPlaying(request);
+    }
+
+    if (pathname !== "/radio") {
       return new Response("Not found", { status: 404 });
     }
 
@@ -54,6 +71,59 @@ export default {
     return new Response(readable, { headers: radioHeaders });
   },
 };
+
+async function handleNowPlaying(request) {
+  if (request.method === "HEAD") {
+    return new Response(null, { headers: nowPlayingHeaders });
+  }
+
+  if (request.method !== "GET") {
+    return new Response("Method not allowed", {
+      status: 405,
+      headers: {
+        ...corsHeaders,
+        Allow: "GET, HEAD, OPTIONS",
+      },
+    });
+  }
+
+  try {
+    const response = await fetch(STATS_SOURCE, {
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`jungletrain stats returned ${response.status}`);
+    }
+
+    const stats = await response.json();
+    const nowplaying = normalizeNowPlaying(stats.nowplaying);
+    const { artist, track } = splitNowPlaying(nowplaying);
+    const listeners = Number(stats.listeners);
+
+    return jsonResponse({
+      nowplaying,
+      artist,
+      track,
+      listeners: Number.isFinite(listeners) ? listeners : null,
+      source: "jungletrain.net",
+      updatedAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    return jsonResponse({
+      nowplaying: "",
+      artist: "",
+      track: "",
+      listeners: null,
+      source: "jungletrain.net",
+      error: "unavailable",
+      updatedAt: new Date().toISOString(),
+    }, 502);
+  }
+}
 
 async function relayRadio(writable, signal) {
   const writer = writable.getWriter();
@@ -169,4 +239,32 @@ function findHeaderEnd(bytes) {
   }
 
   return -1;
+}
+
+function normalizeNowPlaying(value) {
+  return typeof value === "string" ? value.replace(/\s+/g, " ").trim() : "";
+}
+
+function splitNowPlaying(nowplaying) {
+  const separator = " - ";
+  const separatorIndex = nowplaying.indexOf(separator);
+
+  if (separatorIndex === -1) {
+    return {
+      artist: "",
+      track: nowplaying,
+    };
+  }
+
+  return {
+    artist: nowplaying.slice(0, separatorIndex).trim(),
+    track: nowplaying.slice(separatorIndex + separator.length).trim(),
+  };
+}
+
+function jsonResponse(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: nowPlayingHeaders,
+  });
 }

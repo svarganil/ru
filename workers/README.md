@@ -28,12 +28,14 @@ http://127.0.0.1:8000/
 
 ```sh
 curl -I http://127.0.0.1:8000/radio
+curl http://127.0.0.1:8000/now-playing
 ```
 
-Ожидаемый `Content-Type`:
+Ожидаемые `Content-Type`:
 
 ```txt
-audio/mpeg
+/radio: audio/mpeg
+/now-playing: application/json; charset=utf-8
 ```
 
 ## Продакшн
@@ -50,22 +52,25 @@ relay ещё не подключён к живому домену.
 
 ```sh
 cd workers
-wrangler deploy
+npx wrangler deploy
 ```
 
 3. Проверь endpoint:
 
 ```sh
 curl -I https://svarganil.ru/radio
+curl https://svarganil.ru/now-playing
 ```
 
-Ожидаемый `Content-Type`:
+Ожидаемые `Content-Type`:
 
 ```txt
-audio/mpeg
+/radio: audio/mpeg
+/now-playing: application/json; charset=utf-8
 ```
 
-После этого `index.html` уже готов: Safari/iOS/iPadOS сначала пробуют `/radio`.
+После этого `index.html` можно перевести на `/radio` и `/now-playing` на основном
+домене вместо `workers.dev`.
 
 ### Вариант 2: workers.dev без переноса DNS в Cloudflare
 
@@ -81,4 +86,8 @@ https://svarganil-radio.svarganil.workers.dev/radio
 
 ```js
 const WORKER_RADIO_RELAY_SOURCE = "https://svarganil-radio.svarganil.workers.dev/radio";
+const WORKER_NOW_PLAYING_SOURCE = "https://svarganil-radio.svarganil.workers.dev/now-playing";
 ```
+
+Текущий трек берётся из публичного `https://jungletrain.net/static/stats.json`,
+а Worker отдаёт его сайту через `/now-playing`, чтобы не зависеть от CORS.
