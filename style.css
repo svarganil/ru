@@ -51,6 +51,10 @@ button,
   top: 0;
 }
 
+.pizza-hover {
+  transform-origin: center center;
+}
+
 .menu-shell {
   position: fixed;
   left: 50%;
@@ -616,6 +620,12 @@ button,
     width: calc(100% + 32px);
   }
 
+}
+
+@media (max-width: 768px) and (orientation: portrait) {
+  .pizza-hover {
+    transform: scale(0.72);
+  }
 }
 
 @keyframes still {
