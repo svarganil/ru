@@ -29,6 +29,31 @@
 
 <body>
 
+<svg class="jitter-svg-filters" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="squiggly-0">
+      <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="0"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2"/>
+    </filter>
+    <filter id="squiggly-1">
+      <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="1"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3"/>
+    </filter>
+    <filter id="squiggly-2">
+      <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2"/>
+    </filter>
+    <filter id="squiggly-3">
+      <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="3"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3"/>
+    </filter>
+    <filter id="squiggly-4">
+      <feTurbulence baseFrequency="0.02" numOctaves="3" result="noise" seed="4"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1"/>
+    </filter>
+  </defs>
+</svg>
+
 <audio id="jungletrain-bg" preload="none" playsinline></audio>
 
 <script>
@@ -768,7 +793,7 @@
       <span class="menu-disclaimer">*Продукт компании Meta — признана экстремистской и запрещена в РФ.</span>
       <span class="menu-music-credit">Музыка на сайте ‣ <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
       <span class="menu-copyright">© <span id="current-year">2026</span> Сварганил</span>
-      <button class="menu-c-button" type="button" aria-label="Скоро">
+      <button class="menu-c-button" type="button" aria-label="Включить jitter" aria-pressed="false">
         <img class="menu-c-button-normal" src="assets/image/c_normal.png" alt="">
         <img class="menu-c-button-hover" src="assets/image/c_hover.png" alt="">
       </button>
@@ -818,9 +843,26 @@
     const menuSheet = document.getElementById('menu-sheet');
     const menuLabel = document.getElementById('menu-label');
     const currentYear = document.getElementById('current-year');
+    const jitterToggle = menuSheet.querySelector('.menu-c-button');
 
     if (currentYear) {
       currentYear.textContent = new Date().getFullYear();
+    }
+
+    const setJitterEnabled = (isEnabled) => {
+      menuSheet.classList.toggle('jitter-on', isEnabled);
+      if (!jitterToggle) return;
+      jitterToggle.classList.toggle('is-active', isEnabled);
+      jitterToggle.setAttribute('aria-pressed', String(isEnabled));
+      jitterToggle.setAttribute('aria-label', isEnabled ? 'Выключить jitter' : 'Включить jitter');
+    };
+
+    if (jitterToggle) {
+      setJitterEnabled(false);
+      jitterToggle.addEventListener('click', (event) => {
+        event.stopPropagation();
+        setJitterEnabled(!menuSheet.classList.contains('jitter-on'));
+      });
     }
 
     const nowPlayingText = document.getElementById('jungletrain-now-playing');

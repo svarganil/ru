@@ -17,6 +17,13 @@ body {
   cursor: url('assets/cursor/cursor_normal.png') 8 8, auto;
 }
 
+.jitter-svg-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 a,
 button,
 .pizza-box,
@@ -185,12 +192,76 @@ button,
   opacity: 0;
 }
 
-.menu-c-button:hover .menu-c-button-normal {
+.menu-c-button:hover .menu-c-button-normal,
+.menu-c-button.is-active .menu-c-button-normal {
   opacity: 0;
 }
 
-.menu-c-button:hover .menu-c-button-hover {
+.menu-c-button:hover .menu-c-button-hover,
+.menu-c-button.is-active .menu-c-button-hover {
   opacity: 1;
+}
+
+.menu-shell.jitter-on .menu-label,
+.menu-shell.jitter-on .menu-links a,
+.menu-shell.jitter-on .menu-subtitle,
+.menu-shell.jitter-on .menu-divider,
+.menu-shell.jitter-on .menu-bio,
+.menu-shell.jitter-on .menu-meta-row,
+.menu-shell.jitter-on .menu-icon-row img,
+.menu-shell.jitter-on .menu-tag,
+.menu-shell.jitter-on .menu-marquee-copy,
+.menu-shell.jitter-on .menu-button,
+.menu-shell.jitter-on .menu-footer span,
+.menu-shell.jitter-on .menu-c-button img {
+  -webkit-animation: squiggly-anim 0.4s infinite;
+  animation: squiggly-anim 0.4s infinite;
+}
+
+@-webkit-keyframes squiggly-anim {
+  0% {
+    -webkit-filter: url("#squiggly-0");
+    filter: url("#squiggly-0");
+  }
+  25% {
+    -webkit-filter: url("#squiggly-1");
+    filter: url("#squiggly-1");
+  }
+  50% {
+    -webkit-filter: url("#squiggly-2");
+    filter: url("#squiggly-2");
+  }
+  75% {
+    -webkit-filter: url("#squiggly-3");
+    filter: url("#squiggly-3");
+  }
+  100% {
+    -webkit-filter: url("#squiggly-4");
+    filter: url("#squiggly-4");
+  }
+}
+
+@keyframes squiggly-anim {
+  0% {
+    -webkit-filter: url("#squiggly-0");
+    filter: url("#squiggly-0");
+  }
+  25% {
+    -webkit-filter: url("#squiggly-1");
+    filter: url("#squiggly-1");
+  }
+  50% {
+    -webkit-filter: url("#squiggly-2");
+    filter: url("#squiggly-2");
+  }
+  75% {
+    -webkit-filter: url("#squiggly-3");
+    filter: url("#squiggly-3");
+  }
+  100% {
+    -webkit-filter: url("#squiggly-4");
+    filter: url("#squiggly-4");
+  }
 }
 
 .menu-links .link-short {
