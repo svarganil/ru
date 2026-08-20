@@ -585,6 +585,13 @@ button,
   line-height: 1.25;
 }
 
+.menu-footer .menu-disclaimer-symbol {
+  color: #C2242E;
+  font-size: 1.45em;
+  line-height: 0;
+  vertical-align: -0.08em;
+}
+
 .menu-footer .menu-music-credit {
   color: #C2242E;
   font-weight: 700;
