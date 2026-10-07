@@ -589,6 +589,10 @@ button,
   font-weight: 700;
 }
 
+.menu-footer .menu-music-credit #music-credit-symbol {
+  color: #C2242E;
+}
+
 @media (max-width: 768px) {
   .menu-shell {
     left: 0;

@@ -8,8 +8,11 @@ const STREAMS = [
 
 const STREAM_INFO_SOURCE = "https://jungletrain.net/api/v1/stream/info/";
 const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 const HEADER_LIMIT_BYTES = 8192;
 const HEADER_TIMEOUT_MS = 7000;
+const NOW_PLAYING_TIMEOUT_MS = 8000;
+const NOW_PLAYING_READ_LIMIT_BYTES = 524288;
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -88,35 +91,14 @@ async function handleNowPlaying(request) {
   }
 
   try {
-    const streamInfoUrl = new URL(STREAM_INFO_SOURCE);
-    streamInfoUrl.searchParams.set("_", Date.now().toString());
-
-    const response = await fetch(streamInfoUrl.toString(), {
-      cache: "no-store",
-      cf: {
-        cacheTtl: 0,
-        cacheEverything: false,
-      },
-      headers: {
-        Accept: "application/json",
-        "Cache-Control": "no-cache",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`jungletrain stream info returned ${response.status}`);
-    }
-
-    const stats = await response.json();
-    const nowplaying = normalizeNowPlaying(stats.title ?? stats.nowplaying);
+    const { nowplaying, listeners } = await getNowPlaying(request.signal);
     const { artist, track } = splitNowPlaying(nowplaying);
-    const listeners = Number(stats.listeners);
 
     return jsonResponse({
       nowplaying,
       artist,
       track,
-      listeners: Number.isFinite(listeners) ? listeners : null,
+      listeners,
       source: "jungletrain.net",
       updatedAt: new Date().toISOString(),
     });
@@ -130,6 +112,130 @@ async function handleNowPlaying(request) {
       error: "unavailable",
       updatedAt: new Date().toISOString(),
     }, 502);
+  }
+}
+
+async function getNowPlaying(signal) {
+  let lastError;
+
+  try {
+    const streamInfo = await fetchNowPlayingFromApi();
+
+    if (streamInfo.nowplaying) {
+      return streamInfo;
+    }
+
+    lastError = new Error("jungletrain stream info returned an empty title");
+  } catch (error) {
+    lastError = error;
+  }
+
+  for (const stream of STREAMS) {
+    if (signal.aborted) throw new Error("Client disconnected");
+
+    try {
+      const nowplaying = await readIcyNowPlaying(stream, signal);
+
+      if (nowplaying) {
+        return {
+          nowplaying,
+          listeners: null,
+        };
+      }
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError ?? new Error("jungletrain now playing is unavailable");
+}
+
+async function fetchNowPlayingFromApi() {
+  const streamInfoUrl = new URL(STREAM_INFO_SOURCE);
+  streamInfoUrl.searchParams.set("_", Date.now().toString());
+
+  const response = await fetch(streamInfoUrl.toString(), {
+    cache: "no-store",
+    headers: {
+      Accept: "application/json",
+      "Cache-Control": "no-cache",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`jungletrain stream info returned ${response.status}`);
+  }
+
+  const stats = await response.json();
+  const listeners = Number(stats.listeners);
+
+  return {
+    nowplaying: normalizeNowPlaying(stats.title ?? stats.nowplaying),
+    listeners: Number.isFinite(listeners) ? listeners : null,
+  };
+}
+
+async function readIcyNowPlaying(stream, signal) {
+  const socket = connect({ hostname: stream.hostname, port: stream.port });
+  const closeSocket = () => socket.close();
+  const headerTimeout = setTimeout(closeSocket, NOW_PLAYING_TIMEOUT_MS);
+  let reader;
+  let bytesRead = 0;
+  let headerParsed = false;
+  let metaInterval = 0;
+  let buffer = new Uint8Array(0);
+
+  signal.addEventListener("abort", closeSocket, { once: true });
+
+  try {
+    const socketWriter = socket.writable.getWriter();
+    await socketWriter.write(encoder.encode(buildRequest(stream, true)));
+    socketWriter.releaseLock();
+
+    reader = socket.readable.getReader();
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+
+      bytesRead += value.length;
+      if (bytesRead > NOW_PLAYING_READ_LIMIT_BYTES) {
+        throw new Error(`No ICY metadata from ${stream.hostname}`);
+      }
+
+      buffer = concatBytes(buffer, value);
+
+      if (!headerParsed) {
+        const headerEnd = findHeaderEnd(buffer);
+
+        if (headerEnd === -1) {
+          if (buffer.length > HEADER_LIMIT_BYTES) {
+            throw new Error(`No ICY headers from ${stream.hostname}`);
+          }
+
+          continue;
+        }
+
+        const headers = decoder.decode(buffer.slice(0, headerEnd));
+        metaInterval = getIcyMetaInterval(headers);
+        if (!metaInterval) {
+          throw new Error(`No icy-metaint from ${stream.hostname}`);
+        }
+
+        buffer = buffer.slice(headerEnd + 4);
+        headerParsed = true;
+      }
+
+      const streamTitle = readStreamTitleFromMetadata(buffer, metaInterval);
+      if (streamTitle) return streamTitle;
+    }
+
+    throw new Error(`No StreamTitle from ${stream.hostname}`);
+  } finally {
+    clearTimeout(headerTimeout);
+    signal.removeEventListener("abort", closeSocket);
+    if (reader) reader.releaseLock();
+    socket.close();
   }
 }
 
@@ -214,13 +320,13 @@ async function pipeStream(stream, writer, signal) {
   }
 }
 
-function buildRequest(stream) {
+function buildRequest(stream, includeMetadata = false) {
   return [
     "GET / HTTP/1.0",
     `Host: ${stream.hostname}:${stream.port}`,
     "User-Agent: svarganil-radio-relay/1.0",
     "Accept: audio/mpeg,*/*",
-    "Icy-MetaData: 0",
+    `Icy-MetaData: ${includeMetadata ? 1 : 0}`,
     "Connection: close",
     "",
     "",
@@ -247,6 +353,40 @@ function findHeaderEnd(bytes) {
   }
 
   return -1;
+}
+
+function getIcyMetaInterval(headers) {
+  const match = headers.match(/(?:^|\r?\n)icy-metaint:\s*(\d+)/i);
+  if (!match) return 0;
+
+  const metaInterval = Number(match[1]);
+  return Number.isFinite(metaInterval) ? metaInterval : 0;
+}
+
+function readStreamTitleFromMetadata(bytes, metaInterval) {
+  let offset = 0;
+
+  while (bytes.length >= offset + metaInterval + 1) {
+    const metadataLength = bytes[offset + metaInterval] * 16;
+    const metadataStart = offset + metaInterval + 1;
+    const metadataEnd = metadataStart + metadataLength;
+
+    if (bytes.length < metadataEnd) return "";
+
+    const metadata = decoder.decode(bytes.slice(metadataStart, metadataEnd)).replace(/\0+$/g, "");
+    const streamTitle = getStreamTitle(metadata);
+
+    if (streamTitle) return streamTitle;
+
+    offset = metadataEnd;
+  }
+
+  return "";
+}
+
+function getStreamTitle(metadata) {
+  const match = metadata.match(/StreamTitle='([^']*)'/i);
+  return match ? normalizeNowPlaying(match[1]) : "";
 }
 
 function normalizeNowPlaying(value) {
