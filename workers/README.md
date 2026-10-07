@@ -89,5 +89,5 @@ const WORKER_RADIO_RELAY_SOURCE = "https://svarganil-radio.svarganil.workers.dev
 const WORKER_NOW_PLAYING_SOURCE = "https://svarganil-radio.svarganil.workers.dev/now-playing";
 ```
 
-Текущий трек берётся из публичного `https://jungletrain.net/static/stats.json`,
+Текущий трек берётся из публичного `https://jungletrain.net/api/v1/stream/info/`,
 а Worker отдаёт его сайту через `/now-playing`, чтобы не зависеть от CORS.

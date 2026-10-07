@@ -6,7 +6,7 @@ const STREAMS = [
   { hostname: "stream3.jungletrain.net", port: 8000 },
 ];
 
-const STATS_SOURCE = "https://jungletrain.net/static/stats.json";
+const STREAM_INFO_SOURCE = "https://jungletrain.net/api/v1/stream/info/";
 const encoder = new TextEncoder();
 const HEADER_LIMIT_BYTES = 8192;
 const HEADER_TIMEOUT_MS = 7000;
@@ -88,19 +88,27 @@ async function handleNowPlaying(request) {
   }
 
   try {
-    const response = await fetch(STATS_SOURCE, {
+    const streamInfoUrl = new URL(STREAM_INFO_SOURCE);
+    streamInfoUrl.searchParams.set("_", Date.now().toString());
+
+    const response = await fetch(streamInfoUrl.toString(), {
       cache: "no-store",
+      cf: {
+        cacheTtl: 0,
+        cacheEverything: false,
+      },
       headers: {
         Accept: "application/json",
+        "Cache-Control": "no-cache",
       },
     });
 
     if (!response.ok) {
-      throw new Error(`jungletrain stats returned ${response.status}`);
+      throw new Error(`jungletrain stream info returned ${response.status}`);
     }
 
     const stats = await response.json();
-    const nowplaying = normalizeNowPlaying(stats.nowplaying);
+    const nowplaying = normalizeNowPlaying(stats.title ?? stats.nowplaying);
     const { artist, track } = splitNowPlaying(nowplaying);
     const listeners = Number(stats.listeners);
 
