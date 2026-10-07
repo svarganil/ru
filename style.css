@@ -119,6 +119,45 @@ button,
   transform: translate(-50%, 0);
 }
 
+.menu-card-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.menu-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #FCFDFA;
+  transform: translateX(110%);
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+  pointer-events: none;
+}
+
+.menu-card-main {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.menu-card-recipes {
+  transform: translateX(110%);
+}
+
+.menu-shell.show-recipes .menu-card-main {
+  transform: translateX(-110%);
+  pointer-events: none;
+}
+
+.menu-shell.show-recipes .menu-card-recipes {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
 .menu-label {
   flex: 0 0 auto;
   font-size: 22px;
@@ -589,7 +628,7 @@ button,
   font-weight: 700;
 }
 
-.menu-footer .menu-music-credit #music-credit-symbol {
+.menu-footer .menu-music-credit .music-credit-symbol {
   color: #C2242E;
 }
 

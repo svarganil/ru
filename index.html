@@ -194,15 +194,17 @@
   </section>
 </article>
 
-<div class="menu-shell" id="menu-sheet" aria-hidden="true">
+<div class="menu-shell" id="menu-sheet" aria-hidden="true" data-active-card="main">
+  <div class="menu-card-stage" id="menu-card-stage">
+    <section class="menu-card menu-card-main" data-menu-card-panel="main">
   <div class="menu-top">
     <div class="menu-top-row">
-      <div class="menu-label" id="menu-label">☰</div>
+      <div class="menu-label" id="menu-label">↑</div>
       <div class="menu-links">
         <a href="https://t.me/slappetizer" target="_blank" rel="noopener"><span class="link-full">ТЕЛЕГА</span><span class="link-short">TG</span></a>
         <a href="https://instagram.com/slappetizer" target="_blank" rel="noopener"><span class="link-full">ИНСТА*</span><span class="link-short">IG*</span></a>
         <a href="https://youtube.com/@slappetizer" target="_blank" rel="noopener"><span class="link-full">ЮТУБ</span><span class="link-short">YT</span></a>
-        <a><span class="link-full">РЕЦЕПТЫ →</span><span class="link-short">РЕЦЕПТЫ →</span></a>
+        <a class="menu-recipes-link" role="button" tabindex="0"><span class="link-full">РЕЦЕПТЫ →</span><span class="link-short">РЕЦЕПТЫ →</span></a>
       </div>
     </div>
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
@@ -790,7 +792,7 @@
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
     <div class="menu-footer">
       <span class="menu-disclaimer">*Продукт Meta Platforms 👻 Запрещено в РФ</span>
-      <span class="menu-music-credit">Музыка на сайте <span id="music-credit-symbol">▮▮</span> <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
+      <span class="menu-music-credit">Музыка на сайте <span class="music-credit-symbol" id="music-credit-symbol">▮▮</span> <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
       <span class="menu-copyright">© <span id="current-year">2026</span> Сварганил</span>
       <button class="menu-c-button" type="button" aria-label="Включить jitter" aria-pressed="false">
         <img class="menu-c-button-normal" src="assets/image/c_normal.png" alt="">
@@ -798,21 +800,23 @@
       </button>
     </div>
   </div>
+    </section>
+  </div>
 </div>
 
   <audio id="openSound" src="assets/sounds/open.mp3" preload="auto"></audio>
   <audio id="closeSound" src="assets/sounds/close.mp3" preload="auto"></audio>
   <audio id="menuOpenSound" src="assets/sounds/in.mp3" preload="auto"></audio>
   <audio id="menuCloseSound" src="assets/sounds/out.mp3" preload="auto"></audio>
+  <audio id="whooshSound" src="assets/sounds/whoosh.mp3" preload="auto"></audio>
 
   <script>
     let boxWasOpenedOnce = false;
-    const musicCreditSymbol = document.getElementById('music-credit-symbol');
 
     const updateMusicCreditSymbol = (isPlaying) => {
-      if (musicCreditSymbol) {
-        musicCreditSymbol.textContent = isPlaying ? '▶' : '▮▮';
-      }
+      document.querySelectorAll('.music-credit-symbol').forEach(symbol => {
+        symbol.textContent = isPlaying ? '▶' : '▮▮';
+      });
     };
 
     document.querySelector('.pizza-box').addEventListener('click', function() {
@@ -848,29 +852,94 @@
     });
 
     const menuSheet = document.getElementById('menu-sheet');
-    const menuLabel = document.getElementById('menu-label');
-    const currentYear = document.getElementById('current-year');
-    const jitterToggle = menuSheet.querySelector('.menu-c-button');
+    const menuCardStage = document.getElementById('menu-card-stage');
+    const mainMenuCard = menuSheet.querySelector('[data-menu-card-panel="main"]');
 
-    if (currentYear) {
-      currentYear.textContent = new Date().getFullYear();
+    const suffixCardIds = (card, suffix) => {
+      const idMap = new Map();
+
+      card.querySelectorAll('[id]').forEach(element => {
+        const oldId = element.id;
+        const newId = `${oldId}-${suffix}`;
+        idMap.set(oldId, newId);
+        element.id = newId;
+      });
+
+      card.querySelectorAll('[aria-controls]').forEach(element => {
+        const controls = element.getAttribute('aria-controls');
+        if (controls && idMap.has(controls)) {
+          element.setAttribute('aria-controls', idMap.get(controls));
+        }
+      });
+    };
+
+    if (menuCardStage && mainMenuCard && !menuSheet.querySelector('[data-menu-card-panel="recipes"]')) {
+      const recipesMenuCard = mainMenuCard.cloneNode(true);
+      recipesMenuCard.classList.remove('menu-card-main');
+      recipesMenuCard.classList.add('menu-card-recipes');
+      recipesMenuCard.dataset.menuCardPanel = 'recipes';
+      recipesMenuCard.setAttribute('aria-hidden', 'true');
+      suffixCardIds(recipesMenuCard, 'recipes');
+      const recipesMenuLabel = recipesMenuCard.querySelector('.menu-label');
+      if (recipesMenuLabel) {
+        recipesMenuLabel.textContent = '←';
+        recipesMenuLabel.classList.add('menu-label-back');
+        recipesMenuLabel.setAttribute('role', 'button');
+        recipesMenuLabel.setAttribute('tabindex', '0');
+        recipesMenuLabel.setAttribute('aria-label', 'Назад');
+      }
+
+      const recipesMenuLinks = recipesMenuCard.querySelector('.menu-links');
+      if (recipesMenuLinks) {
+        recipesMenuLinks.innerHTML = `
+          <a class="menu-recipes-tab" role="button" tabindex="0"><span class="link-full">БЛЮДА</span><span class="link-short">БЛЮДА</span></a>
+          <a class="menu-recipes-tab" role="button" tabindex="0"><span class="link-full">РЕКОМЕНДАЦИИ</span><span class="link-short">РЕКОМЕНДАЦИИ</span></a>
+        `;
+      }
+      menuCardStage.appendChild(recipesMenuCard);
     }
+
+    const mainMenuLabels = menuSheet.querySelectorAll('[data-menu-card-panel="main"] .menu-label');
+    const recipesBackLabels = menuSheet.querySelectorAll('[data-menu-card-panel="recipes"] .menu-label-back');
+    const currentYearItems = menuSheet.querySelectorAll('[id^="current-year"]');
+    const jitterToggles = menuSheet.querySelectorAll('.menu-c-button');
+    const menuCards = menuSheet.querySelectorAll('[data-menu-card-panel]');
+
+    currentYearItems.forEach(item => {
+      item.textContent = new Date().getFullYear();
+    });
 
     const setJitterEnabled = (isEnabled) => {
       menuSheet.classList.toggle('jitter-on', isEnabled);
-      if (!jitterToggle) return;
-      jitterToggle.classList.toggle('is-active', isEnabled);
-      jitterToggle.setAttribute('aria-pressed', String(isEnabled));
-      jitterToggle.setAttribute('aria-label', isEnabled ? 'Выключить jitter' : 'Включить jitter');
+      jitterToggles.forEach(toggle => {
+        toggle.classList.toggle('is-active', isEnabled);
+        toggle.setAttribute('aria-pressed', String(isEnabled));
+        toggle.setAttribute('aria-label', isEnabled ? 'Выключить jitter' : 'Включить jitter');
+      });
     };
 
-    if (jitterToggle) {
+    if (jitterToggles.length) {
       setJitterEnabled(false);
-      jitterToggle.addEventListener('click', (event) => {
-        event.stopPropagation();
-        setJitterEnabled(!menuSheet.classList.contains('jitter-on'));
+      jitterToggles.forEach(toggle => {
+        toggle.addEventListener('click', (event) => {
+          event.stopPropagation();
+          setJitterEnabled(!menuSheet.classList.contains('jitter-on'));
+        });
       });
     }
+
+    const updateMenuCardState = (activeCard) => {
+      const cardName = activeCard === 'recipes' ? 'recipes' : 'main';
+      menuSheet.dataset.activeCard = cardName;
+      menuSheet.classList.toggle('show-recipes', cardName === 'recipes');
+      menuCards.forEach(card => {
+        const isActive = card.dataset.menuCardPanel === cardName;
+        card.setAttribute('aria-hidden', String(!isActive));
+        card.toggleAttribute('inert', !isActive);
+      });
+    };
+
+    updateMenuCardState(menuSheet.dataset.activeCard);
 
     const nowPlayingText = document.getElementById('jungletrain-now-playing');
     const NOW_PLAYING_REFRESH_MS = 60000;
@@ -941,9 +1010,88 @@
       touchProjectQuery.addListener(closeProjectPopovers);
     }
 
+    const playWhoosh = () => {
+      const sound = document.getElementById('whooshSound');
+      if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+      }
+    };
+
+    const openRecipesCard = () => {
+      if (menuSheet.dataset.activeCard === 'recipes') return;
+      closeProjectPopovers();
+      playWhoosh();
+      updateMenuCardState('recipes');
+    };
+
+    const closeRecipesCard = () => {
+      if (menuSheet.dataset.activeCard !== 'recipes') return;
+      closeProjectPopovers();
+      playWhoosh();
+      updateMenuCardState('main');
+    };
+
+    menuSheet.querySelectorAll('.menu-recipes-link').forEach(link => {
+      link.addEventListener('click', (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        openRecipesCard();
+      });
+
+      link.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.stopPropagation();
+        event.preventDefault();
+        openRecipesCard();
+      });
+    });
+
+    recipesBackLabels.forEach(label => {
+      label.addEventListener('click', (event) => {
+        event.stopPropagation();
+        closeRecipesCard();
+      });
+
+      label.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.stopPropagation();
+        event.preventDefault();
+        closeRecipesCard();
+      });
+    });
+
+    const openMenu = () => {
+      if (menuSheet.classList.contains('open')) return;
+      menuSheet.classList.add('open');
+      menuSheet.setAttribute('aria-hidden', 'false');
+      updateMenuLabel(true);
+      const sound = document.getElementById('menuOpenSound');
+      if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+      }
+    };
+
+    menuSheet.querySelectorAll('.menu-recipes-tab').forEach(link => {
+      link.addEventListener('click', (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        openMenu();
+      });
+
+      link.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.stopPropagation();
+        event.preventDefault();
+        openMenu();
+      });
+    });
+
     const updateMenuLabel = (isOpen) => {
-      if (!menuLabel) return;
-      menuLabel.textContent = isOpen ? '✕' : '☰';
+      mainMenuLabels.forEach(label => {
+        label.textContent = isOpen ? '↓' : '↑';
+      });
     };
 
     const toggleMenu = () => {
@@ -960,10 +1108,12 @@
       }
     };
 
-    if (menuLabel) {
-      menuLabel.addEventListener('click', (event) => {
-        event.stopPropagation();
-        toggleMenu();
+    if (mainMenuLabels.length) {
+      mainMenuLabels.forEach(label => {
+        label.addEventListener('click', (event) => {
+          event.stopPropagation();
+          toggleMenu();
+        });
       });
       updateMenuLabel(menuSheet.classList.contains('open'));
     }
