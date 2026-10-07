@@ -892,15 +892,28 @@
       const recipesMenuLinks = recipesMenuCard.querySelector('.menu-links');
       if (recipesMenuLinks) {
         recipesMenuLinks.innerHTML = `
-          <a class="menu-recipes-tab" role="button" tabindex="0"><span class="link-full">БЛЮДА</span><span class="link-short">БЛЮДА</span></a>
-          <a class="menu-recipes-tab" role="button" tabindex="0"><span class="link-full">РЕКОМЕНДАЦИИ</span><span class="link-short">РЕКОМЕНДАЦИИ</span></a>
+          <a class="menu-recipes-tab menu-recipes-tab-active" role="button" tabindex="0" aria-current="page"><span class="link-full">РЕЦЕПТЫ</span><span class="link-short">РЕЦЕПТЫ</span></a>
+          <a class="menu-recipes-tab menu-recipes-tab-muted" role="button" tabindex="0"><span class="link-full">РЕКОМЕНДАЦИИ</span><span class="link-short">РЕКОМЕНДАЦИИ</span></a>
+          <a class="menu-recipes-tab menu-recipes-tab-muted" role="button" tabindex="0"><span class="link-full">О ПРОЕКТЕ</span><span class="link-short">О ПРОЕКТЕ</span></a>
         `;
+      }
+
+      const recipesMenuTopRow = recipesMenuCard.querySelector('.menu-top-row');
+      if (recipesMenuTopRow) {
+        const recipesMenuToggle = document.createElement('div');
+        recipesMenuToggle.className = 'menu-label menu-recipes-menu-toggle';
+        recipesMenuToggle.setAttribute('role', 'button');
+        recipesMenuToggle.setAttribute('tabindex', '0');
+        recipesMenuToggle.setAttribute('aria-label', 'Открыть меню');
+        recipesMenuToggle.textContent = menuSheet.classList.contains('open') ? '↓' : '↑';
+        recipesMenuTopRow.appendChild(recipesMenuToggle);
       }
       menuCardStage.appendChild(recipesMenuCard);
     }
 
     const mainMenuLabels = menuSheet.querySelectorAll('[data-menu-card-panel="main"] .menu-label');
     const recipesBackLabels = menuSheet.querySelectorAll('[data-menu-card-panel="recipes"] .menu-label-back');
+    const recipesMenuToggles = menuSheet.querySelectorAll('[data-menu-card-panel="recipes"] .menu-recipes-menu-toggle');
     const currentYearItems = menuSheet.querySelectorAll('[id^="current-year"]');
     const jitterToggles = menuSheet.querySelectorAll('.menu-c-button');
     const menuCards = menuSheet.querySelectorAll('[data-menu-card-panel]');
@@ -1092,6 +1105,10 @@
       mainMenuLabels.forEach(label => {
         label.textContent = isOpen ? '↓' : '↑';
       });
+      recipesMenuToggles.forEach(toggle => {
+        toggle.textContent = isOpen ? '↓' : '↑';
+        toggle.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
+      });
     };
 
     const toggleMenu = () => {
@@ -1115,8 +1132,23 @@
           toggleMenu();
         });
       });
-      updateMenuLabel(menuSheet.classList.contains('open'));
     }
+
+    recipesMenuToggles.forEach(toggle => {
+      toggle.addEventListener('click', (event) => {
+        event.stopPropagation();
+        toggleMenu();
+      });
+
+      toggle.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.stopPropagation();
+        event.preventDefault();
+        toggleMenu();
+      });
+    });
+
+    updateMenuLabel(menuSheet.classList.contains('open'));
 
     menuSheet.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', (event) => event.stopPropagation());
