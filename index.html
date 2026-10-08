@@ -204,7 +204,7 @@
         <a href="https://t.me/slappetizer" target="_blank" rel="noopener"><span class="link-full">ТЕЛЕГА</span><span class="link-short">TG</span></a>
         <a href="https://instagram.com/slappetizer" target="_blank" rel="noopener"><span class="link-full">ИНСТА*</span><span class="link-short">IG*</span></a>
         <a href="https://youtube.com/@slappetizer" target="_blank" rel="noopener"><span class="link-full">ЮТУБ</span><span class="link-short">YT</span></a>
-        <a class="menu-recipes-link" role="button" tabindex="0"><span class="link-full">РЕЦЕПТЫ →</span><span class="link-short">РЕЦЕПТЫ →</span></a>
+        <a class="menu-recipes-link" role="button" tabindex="0"><span class="link-full">РЕЦЕПТЫ</span><span class="link-short">РЕЦЕПТЫ</span></a>
       </div>
     </div>
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
@@ -878,8 +878,7 @@
       const recipesMenuLinks = recipesMenuCard.querySelector('.menu-links');
       if (recipesMenuLinks) {
         recipesMenuLinks.innerHTML = `
-          <a class="menu-recipes-tab menu-recipes-tab-active" role="button" tabindex="0" aria-current="page"><span class="link-full">РЕЦЕПТЫ</span><span class="link-short">РЕЦЕПТЫ</span></a>
-          <a class="menu-recipes-tab menu-recipes-tab-muted" role="button" tabindex="0"><span class="link-full">РЕКОМЕНДАЦИИ</span><span class="link-short">РЕКОМЕНДАЦИИ</span></a>
+          <a class="menu-recipes-tab menu-recipes-tab-active" role="button" tabindex="0" aria-current="page"><span class="link-full">СВАРГАНИЛ: THE COCKBOOK</span><span class="link-short">СВАРГАНИЛ: THE COCKBOOK</span></a>
         `;
       }
 
@@ -917,6 +916,7 @@
                 </div>
                 <div class="menu-recipe-caption">ВКУСНЫЕ И ЛЁГКИЕ БАКЛАЖАНЫ ПО СЕМЕЙНОМУ РЕЦЕПТУ.</div>
                 <div class="menu-recipe-download">
+                  <button class="menu-button menu-recipe-download-button menu-recipe-video-button" type="button" disabled>СМОТРЕТЬ ВИДЕО</button>
                   <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf>СКАЧАТЬ РЕЦЕПТ</button>
                 </div>
               </div>
@@ -1145,14 +1145,23 @@
       context.textBaseline = 'top';
 
       let y = margin;
+      let pdfSiteLinkRect = null;
 
       const setFont = (size) => {
         context.font = `700 ${size}px HouseFont, monospace`;
       };
 
       const drawRule = () => {
+        const square = 6;
+        const rows = 2;
+        const dividerEnd = margin + textWidth;
         context.fillStyle = '#C2242E';
-        context.fillRect(margin, y, textWidth, 4);
+        for (let row = 0; row < rows; row += 1) {
+          for (let x = margin, column = 0; x + square <= dividerEnd; x += square, column += 1) {
+            if ((row + column) % 2 !== 0) continue;
+            context.fillRect(x, y + row * square, square, square);
+          }
+        }
         y += 34;
       };
 
@@ -1161,6 +1170,29 @@
         setFont(34);
         context.fillStyle = '#C2242E';
         y = drawWrappedCanvasText(context, title, margin, y, textWidth, 40) + 18;
+      };
+
+      const drawFinalTitle = () => {
+        const linkText = '→ SVARGANIL.RU';
+        drawRule();
+
+        setFont(34);
+        context.fillStyle = '#C2242E';
+        context.fillText('ПРИЯТНОГО АППЕТИТА!', margin, y);
+
+        const linkWidth = context.measureText(linkText).width;
+        const linkX = margin + textWidth - linkWidth;
+        const linkY = y;
+        context.fillText(linkText, linkX, linkY);
+
+        pdfSiteLinkRect = {
+          x: linkX,
+          y: linkY,
+          width: linkWidth,
+          height: 40
+        };
+
+        y += 58;
       };
 
       const drawBottomLogo = () => {
@@ -1219,21 +1251,32 @@
       });
       y += 20;
 
-      drawSectionTitle('ПРИЯТНОГО АППЕТИТА!');
+      drawFinalTitle();
       drawBottomLogo();
 
       const jpegDataUrl = canvas.toDataURL('image/jpeg', 0.94);
       const jpegBinary = atob(jpegDataUrl.split(',')[1]);
       const pageWidth = 595.28;
       const pageHeight = 841.89;
+      const canvasRectToPdfRect = (rect) => {
+        const x1 = rect.x / width * pageWidth;
+        const x2 = (rect.x + rect.width) / width * pageWidth;
+        const y1 = pageHeight - ((rect.y + rect.height) / height * pageHeight);
+        const y2 = pageHeight - (rect.y / height * pageHeight);
+        return [x1, y1, x2, y2].map(value => Number(value.toFixed(2)));
+      };
+      const siteLinkRect = pdfSiteLinkRect ? canvasRectToPdfRect(pdfSiteLinkRect) : null;
       const contentStream = `q\n${pageWidth} 0 0 ${pageHeight} 0 0 cm\n/Im0 Do\nQ`;
       const objects = [
         '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n',
         '2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n',
-        `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n`,
+        `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R${siteLinkRect ? ' /Annots [6 0 R]' : ''} >>\nendobj\n`,
         `4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${width} /Height ${height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpegBinary.length} >>\nstream\n${jpegBinary}\nendstream\nendobj\n`,
         `5 0 obj\n<< /Length ${contentStream.length} >>\nstream\n${contentStream}\nendstream\nendobj\n`
       ];
+      if (siteLinkRect) {
+        objects.push(`6 0 obj\n<< /Type /Annot /Subtype /Link /Rect [${siteLinkRect.join(' ')}] /Border [0 0 0] /A << /S /URI /URI (https://svarganil.ru) >> >>\nendobj\n`);
+      }
 
       let pdf = '%PDF-1.3\n';
       const offsets = [0];

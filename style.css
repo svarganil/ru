@@ -214,7 +214,7 @@ button,
 }
 
 .menu-card-recipes .menu-links {
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .menu-card-recipes .menu-links a {
@@ -287,6 +287,10 @@ button,
 }
 
 .menu-recipe-download {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
   margin-top: 10px;
 }
 
@@ -825,6 +829,12 @@ button,
   padding: 5px 8px;
   font-size: 12px;
   line-height: 1.2;
+}
+
+.menu-button.menu-recipe-video-button {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: url('assets/cursor/cursor_normal.png') 8 8, default;
 }
 
 .menu-button:hover {
