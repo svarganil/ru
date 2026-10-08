@@ -278,6 +278,51 @@ button,
   overflow-wrap: anywhere;
 }
 
+.menu-recipe-caption {
+  margin-top: 12px;
+  color: #000000;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.menu-recipe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 6px;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.menu-recipe-tags-label {
+  color: #C2242E;
+}
+
+.menu-recipe-tag {
+  color: #000000;
+  transition: color 0.16s ease;
+}
+
+.menu-recipe-tag:hover {
+  color: #C2242E;
+}
+
+.menu-recipe-facts {
+  margin-top: 12px;
+  color: #000000;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.menu-recipe-facts span:first-child {
+  color: #C2242E;
+}
+
 .menu-subtitle.menu-recipe-subtitle {
   font-size: 22px;
   font-weight: 700;
@@ -492,7 +537,17 @@ button,
 .menu-shell.jitter-on .menu-marquee-copy,
 .menu-shell.jitter-on .menu-button,
 .menu-shell.jitter-on .menu-footer span,
-.menu-shell.jitter-on .menu-c-button img {
+.menu-shell.jitter-on .menu-c-button img,
+.menu-shell.jitter-on .menu-recipe-title,
+.menu-shell.jitter-on .menu-recipe-caption,
+.menu-shell.jitter-on .menu-recipe-tags,
+.menu-shell.jitter-on .menu-recipe-facts,
+.menu-shell.jitter-on .menu-recipe-ingredient-name,
+.menu-shell.jitter-on .menu-recipe-ingredient-qty,
+.menu-shell.jitter-on .menu-recipe-ingredient-amount,
+.menu-shell.jitter-on .menu-recipe-steps p,
+.menu-shell.jitter-on .menu-recipe-image-frame,
+.menu-shell.jitter-on .menu-recipe-image-frame::after {
   -webkit-animation: squiggly-anim 0.4s infinite;
   animation: squiggly-anim 0.4s infinite;
 }

@@ -756,26 +756,12 @@
       <span class="menu-tag"><img src="assets/icons/wip.png" alt=""><span>WIP</span></span>
     </div>
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
-    <div class="menu-marquee" aria-hidden="true">
+    <div class="menu-marquee menu-marquee-wip" aria-hidden="true">
       <div class="menu-marquee-track">
         <div class="menu-marquee-group">
           <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
         </div>
         <div class="menu-marquee-group" aria-hidden="true">
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
-          <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
           <span class="menu-marquee-copy">⌘ РАЗДЕЛ В РАБОТЕ ⌘ WIP&nbsp;</span>
         </div>
       </div>
@@ -918,6 +904,18 @@
               </figure>
               <div class="menu-recipe-info">
                 <div class="menu-recipe-title">Баклажан с томатным соусом и страчателлой</div>
+                <div class="menu-recipe-tags" aria-label="Теги рецепта">
+                  <span class="menu-recipe-tags-label">ТЕГИ:</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="закуска">#ЗАКУСКА</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="овощи">#ОВОЩИ</span>
+                </div>
+                <div class="menu-recipe-facts" aria-label="Параметры рецепта">
+                  <div><span>ВРЕМЯ:</span> <span>35 МИНУТ</span></div>
+                  <div><span>ПОРЦИИ:</span> <span>2</span></div>
+                  <div><span>СЛОЖНОСТЬ:</span> <span>ПРОСТО</span></div>
+                  <div><span>НУЖНО:</span> <span>ПЛИТА, ДУХОВКА</span></div>
+                </div>
+                <div class="menu-recipe-caption">ВКУСНЫЕ И ЛЁГКИЕ БАКЛАЖАНЫ ПО СЕМЕЙНОМУ РЕЦЕПТУ.</div>
               </div>
             </div>
             <div class="menu-recipe-ingredients-block">
@@ -958,7 +956,7 @@
                 <p>3. Собери блюдо: на дно глубокой тарелки выложи пару больших ложек томатного соуса, сверху баклажан, страчателлу, полей оливковым маслом и укрась веточкой свежего базилика.</p>
               </div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
-              <div class="menu-marquee" aria-hidden="true">
+              <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
                 <div class="menu-marquee-track">
                   <div class="menu-marquee-group">
                     <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
@@ -972,7 +970,7 @@
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">КНИГА ЖАЛОБ</div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-bio menu-note">
-                Впишусь в любую блуду: коммерческую и не шибко. Пиши — а там посмотрим.
+                Муха в супе, повар — мудак или всё понравилось? Пиши — жду с нетерпением.
               </div>
               <div class="menu-action">
                 <a class="menu-button" href="https://t.me/slaycid" target="_blank" rel="noopener">НАПИСАТЬ</a>
@@ -1005,6 +1003,37 @@
     currentYearItems.forEach(item => {
       item.textContent = new Date().getFullYear();
     });
+
+    const parseCssTime = (value) => {
+      const text = String(value || '').trim();
+      if (!text) return 0;
+      if (text.endsWith('ms')) return parseFloat(text) / 1000;
+      if (text.endsWith('s')) return parseFloat(text);
+      return parseFloat(text) || 0;
+    };
+
+    const syncWipMarqueeSpeed = () => {
+      const referenceMarquee = menuSheet.querySelector('.menu-marquee-recipe');
+      const targetMarquee = menuSheet.querySelector('.menu-marquee-wip');
+      const referenceTrack = referenceMarquee?.querySelector('.menu-marquee-track');
+      const referenceGroup = referenceMarquee?.querySelector('.menu-marquee-group');
+      const targetGroup = targetMarquee?.querySelector('.menu-marquee-group');
+      if (!referenceMarquee || !targetMarquee || !referenceTrack || !referenceGroup || !targetGroup) return;
+
+      const referenceWidth = referenceGroup.scrollWidth || referenceGroup.getBoundingClientRect().width;
+      const targetWidth = targetGroup.scrollWidth || targetGroup.getBoundingClientRect().width;
+      const referenceDuration = parseCssTime(getComputedStyle(referenceTrack).animationDuration.split(',')[0]);
+      if (!referenceWidth || !targetWidth || !referenceDuration) return;
+
+      const seconds = targetWidth / (referenceWidth / referenceDuration);
+      targetMarquee.style.setProperty('--marquee-duration', `${Math.max(seconds, 4).toFixed(2)}s`);
+    };
+
+    syncWipMarqueeSpeed();
+    window.addEventListener('resize', syncWipMarqueeSpeed);
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(syncWipMarqueeSpeed).catch(() => {});
+    }
 
     const setRecipeIngredientChecked = (row, isChecked) => {
       const amount = row.querySelector('.menu-recipe-ingredient-amount');
