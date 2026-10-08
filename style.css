@@ -221,17 +221,86 @@ button,
   letter-spacing: 0.04em;
 }
 
+.menu-card-recipes.is-recipe-detail .menu-top-row {
+  justify-content: space-between;
+}
+
+.menu-card-recipes.is-recipe-detail .menu-links {
+  display: none;
+}
+
+.menu-card-recipes.is-recipe-detail .menu-label-back {
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
 .menu-card-recipes .menu-content {
   margin-top: 0;
   padding-top: 8px;
 }
 
 .menu-recipes-content {
+  position: relative;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 18px;
   flex-wrap: wrap;
+  width: 100%;
+}
+
+.menu-recipe-list {
+  width: 100%;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.menu-recipe-list-item {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #000000;
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: left;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
+  transition: color 0.16s ease;
+}
+
+.menu-recipe-list-item:hover {
+  color: #C2242E;
+}
+
+.menu-recipe-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  flex-wrap: wrap;
+  width: 100%;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.menu-recipe-detail[hidden] {
+  display: none;
+}
+
+.menu-recipes-content.is-switching {
+  display: block;
+}
+
+.menu-recipes-content.is-switching .menu-recipe-list,
+.menu-recipes-content.is-switching .menu-recipe-detail {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
 }
 
@@ -548,6 +617,7 @@ button,
 .menu-shell.jitter-on .menu-button,
 .menu-shell.jitter-on .menu-footer span,
 .menu-shell.jitter-on .menu-c-button img,
+.menu-shell.jitter-on .menu-recipe-list-item,
 .menu-shell.jitter-on .menu-recipe-title,
 .menu-shell.jitter-on .menu-recipe-caption,
 .menu-shell.jitter-on .menu-recipe-tags,

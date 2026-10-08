@@ -897,6 +897,10 @@
       if (recipesMenuContent) {
         recipesMenuContent.innerHTML = `
           <div class="menu-recipes-content">
+            <div class="menu-recipe-list" data-recipe-list-panel>
+              <button class="menu-recipe-list-item" type="button" data-open-recipe-detail>Баклажан с томатным соусом и страчателлой</button>
+            </div>
+            <div class="menu-recipe-detail" data-recipe-detail-panel hidden>
             <div class="menu-recipe-hero">
               <figure class="menu-recipe-image-frame">
                 <img src="assets/food/test.webp" alt="Тестовое блюдо">
@@ -962,7 +966,7 @@
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИМЕЧАНИЯ</div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-recipe-steps">
-                <p>1. Можно заменить свежим или маслом базилика.</p>
+                <p>1. Можно заменить свежим базиликом или его маслом.</p>
               </div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
@@ -995,6 +999,7 @@
                 </button>
               </div>
             </div>
+            </div>
           </div>
         `;
       }
@@ -1007,9 +1012,16 @@
     const currentYearItems = menuSheet.querySelectorAll('[id^="current-year"]');
     const jitterToggles = menuSheet.querySelectorAll('.menu-c-button');
     const menuCards = menuSheet.querySelectorAll('[data-menu-card-panel]');
+    const recipesCard = menuSheet.querySelector('[data-menu-card-panel="recipes"]');
+    const recipesContentRoot = recipesCard?.querySelector('.menu-recipes-content');
+    const recipeListPanel = recipesCard?.querySelector('[data-recipe-list-panel]');
+    const recipeDetailPanel = recipesCard?.querySelector('[data-recipe-detail-panel]');
+    const recipeOpenButtons = recipesCard?.querySelectorAll('[data-open-recipe-detail]') || [];
+    const recipesMenuContentPanel = recipesCard?.querySelector('.menu-content');
     const recipeIngredientRows = menuSheet.querySelectorAll('.menu-recipe-ingredient-row');
     const recipeStepItems = menuSheet.querySelectorAll('.menu-recipe-step');
     const recipePdfButton = menuSheet.querySelector('[data-recipe-download-pdf]');
+    const RECIPE_VIEW_TRANSITION_MS = 280;
 
     currentYearItems.forEach(item => {
       item.textContent = new Date().getFullYear();
@@ -1031,9 +1043,30 @@
       const targetGroup = targetMarquee?.querySelector('.menu-marquee-group');
       if (!referenceMarquee || !targetMarquee || !referenceTrack || !referenceGroup || !targetGroup) return;
 
+      const shouldRestoreHiddenDetail = Boolean(recipeDetailPanel?.hidden);
+      const hiddenDetailStyle = shouldRestoreHiddenDetail ? recipeDetailPanel.getAttribute('style') : null;
+      if (shouldRestoreHiddenDetail) {
+        recipeDetailPanel.hidden = false;
+        recipeDetailPanel.style.position = 'absolute';
+        recipeDetailPanel.style.visibility = 'hidden';
+        recipeDetailPanel.style.pointerEvents = 'none';
+        recipeDetailPanel.style.left = '-9999px';
+        recipeDetailPanel.style.top = '0';
+      }
+
       const referenceWidth = referenceGroup.scrollWidth || referenceGroup.getBoundingClientRect().width;
       const targetWidth = targetGroup.scrollWidth || targetGroup.getBoundingClientRect().width;
       const referenceDuration = parseCssTime(getComputedStyle(referenceTrack).animationDuration.split(',')[0]);
+
+      if (recipeDetailPanel && shouldRestoreHiddenDetail) {
+        recipeDetailPanel.hidden = true;
+        if (hiddenDetailStyle) {
+          recipeDetailPanel.setAttribute('style', hiddenDetailStyle);
+        } else {
+          recipeDetailPanel.removeAttribute('style');
+        }
+      }
+
       if (!referenceWidth || !targetWidth || !referenceDuration) return;
 
       const seconds = targetWidth / (referenceWidth / referenceDuration);
@@ -1045,6 +1078,79 @@
     if (document.fonts?.ready) {
       document.fonts.ready.then(syncWipMarqueeSpeed).catch(() => {});
     }
+
+    const setRecipeView = (view) => {
+      const isDetail = view === 'detail';
+      if (!recipesCard || !recipeListPanel || !recipeDetailPanel) return;
+      const wasDetail = recipesCard.classList.contains('is-recipe-detail');
+      if (wasDetail === isDetail) return;
+
+      const incomingPanel = isDetail ? recipeDetailPanel : recipeListPanel;
+      const outgoingPanel = isDetail ? recipeListPanel : recipeDetailPanel;
+      const direction = isDetail ? 1 : -1;
+
+      recipesCard.classList.toggle('is-recipe-detail', isDetail);
+      recipesBackLabels.forEach(label => {
+        label.textContent = isDetail ? '← К РЕЦЕПТАМ' : '←';
+        label.setAttribute('aria-label', isDetail ? 'К рецептам' : 'Назад');
+      });
+
+      incomingPanel.hidden = false;
+      outgoingPanel.hidden = false;
+      const transitionHeight = Math.max(
+        incomingPanel.scrollHeight || incomingPanel.getBoundingClientRect().height,
+        outgoingPanel.scrollHeight || outgoingPanel.getBoundingClientRect().height
+      );
+      if (recipesContentRoot) {
+        recipesContentRoot.style.minHeight = `${transitionHeight}px`;
+        recipesContentRoot.classList.add('is-switching');
+      }
+      incomingPanel.style.transform = `translateX(${direction * 110}%)`;
+      incomingPanel.style.opacity = '0';
+      outgoingPanel.style.transform = 'translateX(0)';
+      outgoingPanel.style.opacity = '1';
+
+      window.requestAnimationFrame(() => {
+        incomingPanel.style.transform = 'translateX(0)';
+        incomingPanel.style.opacity = '1';
+        outgoingPanel.style.transform = `translateX(${-direction * 110}%)`;
+        outgoingPanel.style.opacity = '0';
+      });
+
+      window.setTimeout(() => {
+        outgoingPanel.hidden = true;
+        if (recipesContentRoot) {
+          recipesContentRoot.classList.remove('is-switching');
+          recipesContentRoot.style.minHeight = '';
+        }
+        outgoingPanel.style.transform = '';
+        outgoingPanel.style.opacity = '';
+        incomingPanel.style.transform = '';
+        incomingPanel.style.opacity = '';
+      }, RECIPE_VIEW_TRANSITION_MS);
+
+      if (recipesMenuContentPanel) {
+        recipesMenuContentPanel.scrollTop = 0;
+      }
+    };
+
+    setRecipeView('list');
+
+    recipeOpenButtons.forEach(button => {
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        playWhoosh();
+        setRecipeView('detail');
+      });
+
+      button.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.stopPropagation();
+        event.preventDefault();
+        playWhoosh();
+        setRecipeView('detail');
+      });
+    });
 
     const recipePdfContent = {
       title: 'БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ',
@@ -1075,7 +1181,7 @@
         '3. Собери блюдо: на дно глубокой тарелки выложи пару больших ложек томатного соуса, сверху баклажан, страчателлу, полей оливковым маслом и укрась веточкой свежего базилика.'
       ],
       notes: [
-        '1. Можно заменить свежим или маслом базилика.'
+        '1. Можно заменить свежим базиликом или его маслом.'
       ]
     };
 
@@ -1495,6 +1601,7 @@
     const openRecipesCard = () => {
       if (menuSheet.dataset.activeCard === 'recipes') return;
       closeProjectPopovers();
+      setRecipeView('list');
       playWhoosh();
       updateMenuCardState('recipes');
     };
@@ -1502,6 +1609,7 @@
     const closeRecipesCard = () => {
       if (menuSheet.dataset.activeCard !== 'recipes') return;
       closeProjectPopovers();
+      setRecipeView('list');
       playWhoosh();
       updateMenuCardState('main');
     };
@@ -1524,14 +1632,24 @@
     recipesBackLabels.forEach(label => {
       label.addEventListener('click', (event) => {
         event.stopPropagation();
-        closeRecipesCard();
+        if (recipesCard?.classList.contains('is-recipe-detail')) {
+          playWhoosh();
+          setRecipeView('list');
+        } else {
+          closeRecipesCard();
+        }
       });
 
       label.addEventListener('keydown', (event) => {
         if (event.key !== 'Enter' && event.key !== ' ') return;
         event.stopPropagation();
         event.preventDefault();
-        closeRecipesCard();
+        if (recipesCard?.classList.contains('is-recipe-detail')) {
+          playWhoosh();
+          setRecipeView('list');
+        } else {
+          closeRecipesCard();
+        }
       });
     });
 
