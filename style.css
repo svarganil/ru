@@ -401,27 +401,14 @@ button,
 }
 
 .menu-recipe-ingredient-row:not(.is-checked):hover .menu-recipe-ingredient-name,
-.menu-recipe-ingredient-row:not(.is-checked):hover .menu-recipe-ingredient-note,
 .menu-recipe-ingredient-row:not(.is-checked):hover .menu-recipe-ingredient-qty {
   color: #C2242E;
 }
 
 .menu-recipe-ingredient-row.is-checked .menu-recipe-ingredient-name {
   color: rgba(194, 36, 46, 0.5);
-}
-
-.menu-recipe-ingredient-row.is-checked .menu-recipe-ingredient-label {
   text-decoration-line: line-through;
   text-decoration-thickness: 2px;
-}
-
-.menu-recipe-ingredient-note {
-  color: #000000;
-  font-size: 0.6667em;
-}
-
-.menu-recipe-ingredient-row.is-checked .menu-recipe-ingredient-note {
-  display: none;
 }
 
 .menu-recipe-ingredient-row.is-checked .menu-recipe-ingredient-qty {
@@ -468,6 +455,21 @@ button,
 
 .menu-recipe-steps p:last-child {
   margin-bottom: 0;
+}
+
+.menu-recipe-step {
+  cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
+  transition: color 0.16s ease;
+}
+
+.menu-recipe-step:not(.is-checked):hover {
+  color: #C2242E;
+}
+
+.menu-recipe-step.is-checked {
+  color: rgba(194, 36, 46, 0.5);
+  text-decoration-line: line-through;
+  text-decoration-thickness: 2px;
 }
 
 .menu-recipe-image-frame::after {

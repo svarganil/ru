@@ -931,7 +931,7 @@
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
                 <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">МАСЛО ОЛИВКОВОЕ</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name"><span class="menu-recipe-ingredient-label">БАЗИЛИК СУШЁНЫЙ</span> <span class="menu-recipe-ingredient-note">(можно заменить свежим или маслом базилика)</span></span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name">БАЗИЛИК СУШЁНЫЙ ¹</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
                 <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">щепотка</span></span><span class="menu-recipe-ingredient-name">ОРЕГАНО</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
@@ -951,9 +951,15 @@
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИГОТОВЛЕНИЕ</div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-recipe-steps">
-                <p>1. Баклажан разрежь вдоль пополам, сделай диагональные надрезы, сбрызни оливковым маслом, посоли и запекай 35 минут при 200°C.</p>
-                <p>2. Перетёртые томаты вылей в сковороду, добавь соль, перец, сахар, орегано, базилик, винный уксус и вари соус 15 минут помешивая. В конце добавь измельчённый чеснок.</p>
-                <p>3. Собери блюдо: на дно глубокой тарелки выложи пару больших ложек томатного соуса, сверху баклажан, страчателлу, полей оливковым маслом и укрась веточкой свежего базилика.</p>
+                <p class="menu-recipe-step">1. Баклажан разрежь вдоль пополам, сделай диагональные надрезы, сбрызни оливковым маслом, посоли и запекай 35 минут при 200°C.</p>
+                <p class="menu-recipe-step">2. Перетёртые томаты вылей в сковороду, добавь соль, перец, сахар, орегано, базилик, винный уксус и вари соус 15 минут помешивая. В конце добавь измельчённый чеснок.</p>
+                <p class="menu-recipe-step">3. Собери блюдо: на дно глубокой тарелки выложи пару больших ложек томатного соуса, сверху баклажан, страчателлу, полей оливковым маслом и укрась веточкой свежего базилика.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИМЕЧАНИЯ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p>1. Можно заменить свежим или маслом базилика.</p>
               </div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
@@ -999,6 +1005,7 @@
     const jitterToggles = menuSheet.querySelectorAll('.menu-c-button');
     const menuCards = menuSheet.querySelectorAll('[data-menu-card-panel]');
     const recipeIngredientRows = menuSheet.querySelectorAll('.menu-recipe-ingredient-row');
+    const recipeStepItems = menuSheet.querySelectorAll('.menu-recipe-step');
 
     currentYearItems.forEach(item => {
       item.textContent = new Date().getFullYear();
@@ -1067,6 +1074,29 @@
         event.stopPropagation();
         event.preventDefault();
         setRecipeIngredientChecked(row, !row.classList.contains('is-checked'));
+      });
+    });
+
+    const setRecipeStepChecked = (step, isChecked) => {
+      step.classList.toggle('is-checked', isChecked);
+      step.setAttribute('aria-pressed', String(isChecked));
+    };
+
+    recipeStepItems.forEach(step => {
+      step.setAttribute('role', 'button');
+      step.setAttribute('tabindex', '0');
+      step.setAttribute('aria-pressed', 'false');
+
+      step.addEventListener('click', (event) => {
+        event.stopPropagation();
+        setRecipeStepChecked(step, !step.classList.contains('is-checked'));
+      });
+
+      step.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.stopPropagation();
+        event.preventDefault();
+        setRecipeStepChecked(step, !step.classList.contains('is-checked'));
       });
     });
 
