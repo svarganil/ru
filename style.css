@@ -221,6 +221,62 @@ button,
   letter-spacing: 0.04em;
 }
 
+.menu-card-recipes .menu-content {
+  margin-top: 0;
+  padding-top: 8px;
+}
+
+.menu-recipes-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.menu-recipe-image-frame {
+  --recipe-frame-square: 16px;
+  --recipe-frame-tile: calc(var(--recipe-frame-square) * 2);
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--recipe-frame-square);
+  background: repeating-conic-gradient(transparent 0% 25%, #C2242E 0% 50%) 0 0 / var(--recipe-frame-tile) var(--recipe-frame-tile);
+}
+
+.menu-recipe-image-frame img {
+  display: block;
+  width: 256px;
+  max-width: calc(100vw - 96px);
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.menu-recipe-title {
+  max-width: 280px;
+  color: #C2242E;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.menu-recipe-image-frame::after {
+  content: "";
+  position: absolute;
+  inset: var(--recipe-frame-square);
+  box-sizing: border-box;
+  padding: var(--recipe-frame-square);
+  pointer-events: none;
+  background: repeating-conic-gradient(transparent 0% 25%, #C2242E 0% 50%) 0 0 / var(--recipe-frame-tile) var(--recipe-frame-tile);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
 .menu-c-button {
   position: relative;
   display: inline-flex;

@@ -910,7 +910,14 @@
 
       const recipesMenuContent = recipesMenuCard.querySelector('.menu-content');
       if (recipesMenuContent) {
-        recipesMenuContent.replaceChildren();
+        recipesMenuContent.innerHTML = `
+          <div class="menu-recipes-content">
+            <figure class="menu-recipe-image-frame">
+              <img src="assets/food/test.webp" alt="Тестовое блюдо">
+            </figure>
+            <div class="menu-recipe-title">Баклажан с томатным соусом и страчателлой</div>
+          </div>
+        `;
       }
       menuCardStage.appendChild(recipesMenuCard);
     }
