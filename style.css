@@ -243,9 +243,8 @@ button,
   line-height: 1;
 }
 
-.menu-card-recipes .menu-content {
+.menu-card-recipes.is-recipe-detail .menu-content {
   margin-top: 0;
-  padding-top: 8px;
 }
 
 .menu-recipes-content {
@@ -272,9 +271,10 @@ button,
   background: transparent;
   color: #000000;
   font-family: inherit;
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.1;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
   text-align: left;
   text-transform: uppercase;
   overflow-wrap: anywhere;
@@ -374,12 +374,12 @@ button,
 .menu-recipe-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 6px;
+  gap: 6px 12px;
   margin-top: 6px;
   font-size: 12px;
   font-weight: 700;
   line-height: 1.2;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .menu-recipe-tags-label {
@@ -387,8 +387,19 @@ button,
 }
 
 .menu-recipe-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: #000000;
   transition: color 0.16s ease;
+}
+
+.menu-recipe-tag img {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
 
 .menu-recipe-tag:hover {
@@ -856,6 +867,14 @@ button,
   width: 16px;
   height: 16px;
   flex: 0 0 16px;
+}
+
+.menu-recipe-list .menu-tag {
+  transition: color 0.16s ease;
+}
+
+.menu-recipe-list .menu-tag:hover {
+  color: #C2242E;
 }
 
 .menu-subtitle {

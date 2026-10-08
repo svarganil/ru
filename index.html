@@ -727,30 +727,30 @@
     </div>
     <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
     <div class="menu-tag-legend" aria-label="Теги проектов">
-      <span class="menu-tag"><img src="assets/icons/art.png" alt=""><span>Арт</span></span>
-      <span class="menu-tag"><img src="assets/icons/artdir.png" alt=""><span>Арт-дирекшн</span></span>
-      <span class="menu-tag"><img src="assets/icons/bar.png" alt=""><span>Бар</span></span>
-      <span class="menu-tag"><img src="assets/icons/blog.png" alt=""><span>Блог</span></span>
-      <span class="menu-tag"><img src="assets/icons/vinyl.png" alt=""><span>Винил</span></span>
-      <span class="menu-tag"><img src="assets/icons/gastro.png" alt=""><span>Гастро</span></span>
-      <span class="menu-tag"><img src="assets/icons/des.png" alt=""><span>Дизайн</span></span>
-      <span class="menu-tag"><img src="assets/icons/event.png" alt=""><span>Ивенты</span></span>
-      <span class="menu-tag"><img src="assets/icons/tape.png" alt=""><span>Кассета</span></span>
-      <span class="menu-tag"><img src="assets/icons/comix.png" alt=""><span>Комикс</span></span>
-      <span class="menu-tag"><img src="assets/icons/cont.png" alt=""><span>Контент</span></span>
-      <span class="menu-tag"><img src="assets/icons/chef.png" alt=""><span>Кухня</span></span>
-      <span class="menu-tag"><img src="assets/icons/label.png" alt=""><span>Лейбл</span></span>
-      <span class="menu-tag"><img src="assets/icons/merch.png" alt=""><span>Мерч</span></span>
-      <span class="menu-tag"><img src="assets/icons/music.png" alt=""><span>Музыка</span></span>
-      <span class="menu-tag"><img src="assets/icons/edu.png" alt=""><span>Обучение</span></span>
-      <span class="menu-tag"><img src="assets/icons/pod.png" alt=""><span>Подкасты</span></span>
-      <span class="menu-tag"><img src="assets/icons/app.png" alt=""><span>Приложение</span></span>
-      <span class="menu-tag"><img src="assets/icons/prod.png" alt=""><span>Продакшн</span></span>
-      <span class="menu-tag"><img src="assets/icons/dev.png" alt=""><span>Разработка</span></span>
-      <span class="menu-tag"><img src="assets/icons/record.png" alt=""><span>Релиз</span></span>
-      <span class="menu-tag"><img src="assets/icons/sound.png" alt=""><span>Саунд-дизайн</span></span>
-      <span class="menu-tag"><img src="assets/icons/jour.png" alt=""><span>Тексты</span></span>
-      <span class="menu-tag"><img src="assets/icons/egg.png" alt=""><span>Яйцо</span></span>
+      <span class="menu-tag"><img src="assets/icons/art.png" alt=""><span>арт</span></span>
+      <span class="menu-tag"><img src="assets/icons/artdir.png" alt=""><span>арт-дирекшн</span></span>
+      <span class="menu-tag"><img src="assets/icons/bar.png" alt=""><span>бар</span></span>
+      <span class="menu-tag"><img src="assets/icons/blog.png" alt=""><span>блог</span></span>
+      <span class="menu-tag"><img src="assets/icons/vinyl.png" alt=""><span>винил</span></span>
+      <span class="menu-tag"><img src="assets/icons/gastro.png" alt=""><span>гастро</span></span>
+      <span class="menu-tag"><img src="assets/icons/des.png" alt=""><span>дизайн</span></span>
+      <span class="menu-tag"><img src="assets/icons/event.png" alt=""><span>ивенты</span></span>
+      <span class="menu-tag"><img src="assets/icons/tape.png" alt=""><span>кассета</span></span>
+      <span class="menu-tag"><img src="assets/icons/comix.png" alt=""><span>комикс</span></span>
+      <span class="menu-tag"><img src="assets/icons/cont.png" alt=""><span>контент</span></span>
+      <span class="menu-tag"><img src="assets/icons/chef.png" alt=""><span>кухня</span></span>
+      <span class="menu-tag"><img src="assets/icons/label.png" alt=""><span>лейбл</span></span>
+      <span class="menu-tag"><img src="assets/icons/merch.png" alt=""><span>мерч</span></span>
+      <span class="menu-tag"><img src="assets/icons/music.png" alt=""><span>музыка</span></span>
+      <span class="menu-tag"><img src="assets/icons/edu.png" alt=""><span>обучение</span></span>
+      <span class="menu-tag"><img src="assets/icons/pod.png" alt=""><span>подкасты</span></span>
+      <span class="menu-tag"><img src="assets/icons/app.png" alt=""><span>приложение</span></span>
+      <span class="menu-tag"><img src="assets/icons/prod.png" alt=""><span>продакшн</span></span>
+      <span class="menu-tag"><img src="assets/icons/dev.png" alt=""><span>разработка</span></span>
+      <span class="menu-tag"><img src="assets/icons/record.png" alt=""><span>релиз</span></span>
+      <span class="menu-tag"><img src="assets/icons/sound.png" alt=""><span>саунд-дизайн</span></span>
+      <span class="menu-tag"><img src="assets/icons/jour.png" alt=""><span>тексты</span></span>
+      <span class="menu-tag"><img src="assets/icons/egg.png" alt=""><span>яйцо</span></span>
       <span class="menu-tag"><img src="assets/icons/arvr.png" alt=""><span>AR</span></span>
       <span class="menu-tag"><img src="assets/icons/nda.png" alt=""><span>NDA</span></span>
       <span class="menu-tag"><img src="assets/icons/wip.png" alt=""><span>WIP</span></span>
@@ -895,11 +895,86 @@
 
       const recipesMenuContent = recipesMenuCard.querySelector('.menu-content');
       if (recipesMenuContent) {
+        const buildRecipeListHtml = () => {
+          const source = recipesMenuContent.cloneNode(true);
+          const list = document.createElement('div');
+          list.className = 'menu-recipe-list';
+          list.setAttribute('data-recipe-list-panel', '');
+
+          for (const child of Array.from(source.children)) {
+            list.appendChild(child.cloneNode(true));
+            if (child.classList.contains('menu-tag-legend')) break;
+          }
+
+          list.querySelectorAll('.menu-subtitle').forEach(subtitle => {
+            const text = subtitle.textContent.trim();
+            if (text === 'ОБО МНЕ') subtitle.textContent = 'ОТ АВТОРА';
+            if (text === 'СВАРГАНИЛ') subtitle.textContent = 'МЕНЮ';
+          });
+
+          const menuHeaderRow = Array.from(list.querySelectorAll('.menu-meta-row')).find(row => {
+            return row.textContent.includes('ПРОЕКТ') && row.textContent.includes('ГОД');
+          });
+          if (menuHeaderRow) {
+            const headerDivider = menuHeaderRow.nextElementSibling;
+            menuHeaderRow.remove();
+            if (headerDivider?.classList.contains('menu-divider')) {
+              headerDivider.remove();
+            }
+          }
+
+          const firstRecipeRow = list.querySelector('.menu-meta-row.sub-meta');
+          const firstRecipeTitle = firstRecipeRow?.querySelector('.menu-meta-left');
+          if (firstRecipeTitle) {
+            firstRecipeTitle.innerHTML = '<button class="menu-recipe-list-item" type="button" data-open-recipe-detail>БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ</button>';
+          }
+          const firstRecipeIcons = firstRecipeRow?.nextElementSibling;
+          if (firstRecipeIcons?.classList.contains('menu-icon-row')) {
+            firstRecipeIcons.innerHTML = `
+              <img src="assets/icons/snack.png" alt="snack icon">
+              <img src="assets/icons/veg.png" alt="vegetables icon">
+            `;
+          }
+          firstRecipeRow?.querySelector('.menu-meta-right')?.remove();
+
+          Array.from(list.querySelectorAll('.menu-meta-row.sub-meta')).slice(1).forEach(row => {
+            let node = row;
+            while (node && !node.classList.contains('menu-tag-legend')) {
+              const next = node.nextElementSibling;
+              node.remove();
+              if (!next || (next.classList.contains('menu-meta-row') && next.classList.contains('sub-meta'))) break;
+              node = next;
+            }
+          });
+
+          list.querySelectorAll('.menu-meta-right').forEach(item => item.remove());
+          const tagLegend = list.querySelector('.menu-tag-legend');
+          if (tagLegend) {
+            tagLegend.setAttribute('aria-label', 'Теги рецептов');
+            tagLegend.innerHTML = `
+              <span class="menu-tag"><img src="assets/icons/snack.png" alt=""><span>закуски</span></span>
+              <span class="menu-tag"><img src="assets/icons/veg.png" alt=""><span>овощи</span></span>
+            `;
+          }
+
+          const footer = source.querySelector('.menu-footer')?.cloneNode(true);
+          if (tagLegend && footer) {
+            footer.querySelectorAll('[id]').forEach(item => item.removeAttribute('id'));
+            const footerDivider = document.createElement('div');
+            footerDivider.className = 'menu-divider';
+            footerDivider.setAttribute('aria-hidden', 'true');
+            footerDivider.textContent = '========================================================================================================================';
+            list.appendChild(footerDivider);
+            list.appendChild(footer);
+          }
+
+          return list.outerHTML;
+        };
+        const recipeListHtml = buildRecipeListHtml();
+
         recipesMenuContent.innerHTML = `
           <div class="menu-recipes-content">
-            <div class="menu-recipe-list" data-recipe-list-panel>
-              <button class="menu-recipe-list-item" type="button" data-open-recipe-detail>Баклажан с томатным соусом и страчателлой</button>
-            </div>
+            ${recipeListHtml}
             <div class="menu-recipe-detail" data-recipe-detail-panel hidden>
             <div class="menu-recipe-hero">
               <figure class="menu-recipe-image-frame">
@@ -908,9 +983,8 @@
               <div class="menu-recipe-info">
                 <div class="menu-recipe-title">Баклажан с томатным соусом и страчателлой</div>
                 <div class="menu-recipe-tags" aria-label="Теги рецепта">
-                  <span class="menu-recipe-tags-label">ТЕГИ:</span>
-                  <span class="menu-recipe-tag" data-recipe-tag="закуски">#ЗАКУСКИ</span>
-                  <span class="menu-recipe-tag" data-recipe-tag="овощи">#ОВОЩИ</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/snack.png" alt="">закуски</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="овощи"><img src="assets/icons/veg.png" alt="">овощи</span>
                 </div>
                 <div class="menu-recipe-facts" aria-label="Параметры рецепта">
                   <div><span>ВРЕМЯ:</span> <span>35 МИНУТ</span></div>
