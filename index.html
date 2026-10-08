@@ -912,10 +912,82 @@
       if (recipesMenuContent) {
         recipesMenuContent.innerHTML = `
           <div class="menu-recipes-content">
-            <figure class="menu-recipe-image-frame">
-              <img src="assets/food/test.webp" alt="Тестовое блюдо">
-            </figure>
-            <div class="menu-recipe-title">Баклажан с томатным соусом и страчателлой</div>
+            <div class="menu-recipe-hero">
+              <figure class="menu-recipe-image-frame">
+                <img src="assets/food/test.webp" alt="Тестовое блюдо">
+              </figure>
+              <div class="menu-recipe-info">
+                <div class="menu-recipe-title">Баклажан с томатным соусом и страчателлой</div>
+              </div>
+            </div>
+            <div class="menu-recipe-ingredients-block">
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ИНГРЕДИЕНТЫ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-ingredients">
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">шт.</span></span><span class="menu-recipe-ingredient-name">БАКЛАЖАН</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">400</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">ТОМАТЫ ПЕРЕТЁРТЫЕ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">УКСУС ВИННЫЙ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">МАСЛО ОЛИВКОВОЕ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name"><span class="menu-recipe-ingredient-label">БАЗИЛИК СУШЁНЫЙ</span> <span class="menu-recipe-ingredient-note">(можно заменить свежим или маслом базилика)</span></span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">щепотка</span></span><span class="menu-recipe-ingredient-name">ОРЕГАНО</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">САХАР</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">зубчик</span></span><span class="menu-recipe-ingredient-name">ЧЕСНОК</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">уп.</span></span><span class="menu-recipe-ingredient-name">СТРАЧАТЕЛЛА</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">веточка</span></span><span class="menu-recipe-ingredient-name">БАЗИЛИК СВЕЖИЙ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-amount">по вкусу</span></span><span class="menu-recipe-ingredient-name">СОЛЬ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-amount">по вкусу</span></span><span class="menu-recipe-ingredient-name">ПЕРЕЦ</span></div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИГОТОВЛЕНИЕ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p>1. Баклажан разрежь вдоль пополам, сделай диагональные надрезы, сбрызни оливковым маслом, посоли и запекай 35 минут при 200°C.</p>
+                <p>2. Перетёртые томаты вылей в сковороду, добавь соль, перец, сахар, орегано, базилик, винный уксус и вари соус 15 минут помешивая. В конце добавь измельчённый чеснок.</p>
+                <p>3. Собери блюдо: на дно глубокой тарелки выложи пару больших ложек томатного соуса, сверху баклажан, страчателлу, полей оливковым маслом и укрась веточкой свежего базилика.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-marquee" aria-hidden="true">
+                <div class="menu-marquee-track">
+                  <div class="menu-marquee-group">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                  <div class="menu-marquee-group" aria-hidden="true">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                </div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">КНИГА ЖАЛОБ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-bio menu-note">
+                Впишусь в любую блуду: коммерческую и не шибко. Пиши — а там посмотрим.
+              </div>
+              <div class="menu-action">
+                <a class="menu-button" href="https://t.me/slaycid" target="_blank" rel="noopener">НАПИСАТЬ</a>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-footer">
+                <span class="menu-disclaimer">*Продукт Meta Platforms 👻 Запрещено в РФ</span>
+                <span class="menu-music-credit">Музыка на сайте <span class="music-credit-symbol">■</span> <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
+                <span class="menu-copyright">© <span id="current-year-recipes">2026</span> Сварганил</span>
+                <button class="menu-c-button" type="button" aria-label="Включить jitter" aria-pressed="false">
+                  <img class="menu-c-button-normal" src="assets/image/c_normal.png" alt="">
+                  <img class="menu-c-button-hover" src="assets/image/c_hover.png" alt="">
+                </button>
+              </div>
+            </div>
           </div>
         `;
       }
@@ -928,9 +1000,45 @@
     const currentYearItems = menuSheet.querySelectorAll('[id^="current-year"]');
     const jitterToggles = menuSheet.querySelectorAll('.menu-c-button');
     const menuCards = menuSheet.querySelectorAll('[data-menu-card-panel]');
+    const recipeIngredientRows = menuSheet.querySelectorAll('.menu-recipe-ingredient-row');
 
     currentYearItems.forEach(item => {
       item.textContent = new Date().getFullYear();
+    });
+
+    const setRecipeIngredientChecked = (row, isChecked) => {
+      const amount = row.querySelector('.menu-recipe-ingredient-amount');
+      if (!amount) return;
+      if (!amount.dataset.measureLabel) {
+        amount.dataset.measureLabel = amount.textContent;
+      }
+
+      row.classList.toggle('is-checked', isChecked);
+      row.setAttribute('aria-pressed', String(isChecked));
+      amount.textContent = isChecked ? '✓' : amount.dataset.measureLabel;
+    };
+
+    recipeIngredientRows.forEach(row => {
+      row.setAttribute('role', 'button');
+      row.setAttribute('tabindex', '0');
+      row.setAttribute('aria-pressed', 'false');
+
+      const amount = row.querySelector('.menu-recipe-ingredient-amount');
+      if (amount) {
+        amount.dataset.measureLabel = amount.textContent;
+      }
+
+      row.addEventListener('click', (event) => {
+        event.stopPropagation();
+        setRecipeIngredientChecked(row, !row.classList.contains('is-checked'));
+      });
+
+      row.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.stopPropagation();
+        event.preventDefault();
+        setRecipeIngredientChecked(row, !row.classList.contains('is-checked'));
+      });
     });
 
     const setJitterEnabled = (isEnabled) => {
