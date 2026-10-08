@@ -214,7 +214,7 @@
     <div class="menu-subtitle" aria-hidden="true">ОБО МНЕ</div>
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
     <div class="menu-bio">
-      Меня зовут Алексей Варганов — тот случай, когда фамилия определила, чё я буду делать по жизни. Лучше всего про меня расскажут делишки, список которых ниже. А ещё можешь тыкнуть на крутящуюся коробку и навалить музла. Мир!
+      Меня зовут Алексей Варганов — тот случай, когда фамилия определила, чё я буду делать по жизни. Лучше всего про меня расскажут проекты, список которых ниже. А ещё можешь тыкнуть на крутящуюся коробку и навалить музла. Мир!
     </div>
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
     <div class="menu-subtitle" aria-hidden="true">СВАРГАНИЛ</div>
@@ -784,7 +784,7 @@
     <div class="menu-subtitle" aria-hidden="true">НА СВЯЗИ</div>
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
     <div class="menu-bio menu-note">
-      Впишусь в любую блуду: коммерческую и не очень. Пиши — а там посмотрим.
+      Впишусь в любую блуду: коммерческую и не шибко. Пиши — а там посмотрим.
     </div>
     <div class="menu-action">
       <a class="menu-button" href="https://t.me/slaycid" target="_blank" rel="noopener">НАПИСАТЬ</a>
@@ -792,7 +792,7 @@
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
     <div class="menu-footer">
       <span class="menu-disclaimer">*Продукт Meta Platforms 👻 Запрещено в РФ</span>
-      <span class="menu-music-credit">Музыка на сайте <span class="music-credit-symbol" id="music-credit-symbol">▮▮</span> <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
+      <span class="menu-music-credit">Музыка на сайте <span class="music-credit-symbol" id="music-credit-symbol">■</span> <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
       <span class="menu-copyright">© <span id="current-year">2026</span> Сварганил</span>
       <button class="menu-c-button" type="button" aria-label="Включить jitter" aria-pressed="false">
         <img class="menu-c-button-normal" src="assets/image/c_normal.png" alt="">
@@ -815,7 +815,7 @@
 
     const updateMusicCreditSymbol = (isPlaying) => {
       document.querySelectorAll('.music-credit-symbol').forEach(symbol => {
-        symbol.textContent = isPlaying ? '▶' : '▮▮';
+        symbol.textContent = isPlaying ? '▶' : '■';
       });
     };
 
@@ -894,7 +894,6 @@
         recipesMenuLinks.innerHTML = `
           <a class="menu-recipes-tab menu-recipes-tab-active" role="button" tabindex="0" aria-current="page"><span class="link-full">РЕЦЕПТЫ</span><span class="link-short">РЕЦЕПТЫ</span></a>
           <a class="menu-recipes-tab menu-recipes-tab-muted" role="button" tabindex="0"><span class="link-full">РЕКОМЕНДАЦИИ</span><span class="link-short">РЕКОМЕНДАЦИИ</span></a>
-          <a class="menu-recipes-tab menu-recipes-tab-muted" role="button" tabindex="0"><span class="link-full">О ПРОЕКТЕ</span><span class="link-short">О ПРОЕКТЕ</span></a>
         `;
       }
 
@@ -907,6 +906,11 @@
         recipesMenuToggle.setAttribute('aria-label', 'Открыть меню');
         recipesMenuToggle.textContent = menuSheet.classList.contains('open') ? '↓' : '↑';
         recipesMenuTopRow.appendChild(recipesMenuToggle);
+      }
+
+      const recipesMenuContent = recipesMenuCard.querySelector('.menu-content');
+      if (recipesMenuContent) {
+        recipesMenuContent.replaceChildren();
       }
       menuCardStage.appendChild(recipesMenuCard);
     }

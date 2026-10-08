@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'HouseFont';
-  src: url('assets/font/font.woff2') format('woff2');
+  src: url('assets/font/PixeloidMono.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -601,7 +601,7 @@ button,
 }
 
 .menu-footer {
-  margin-top: 24px;
+  margin-top: 4px;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -666,11 +666,6 @@ button,
     font-size: clamp(12px, 3.8vw, 16px);
     letter-spacing: 0.02em;
     padding: 3px 2px;
-  }
-
-  .menu-card-recipes .menu-links a {
-    font-size: clamp(10px, 3vw, 14px);
-    letter-spacing: 0;
   }
 
   .menu-marquee {
