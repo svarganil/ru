@@ -230,9 +230,17 @@ button,
 }
 
 .menu-card-recipes.is-recipe-detail .menu-label-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 18px;
   letter-spacing: 0.04em;
   white-space: nowrap;
+}
+
+.menu-card-recipes.is-recipe-detail .menu-label-back-arrow {
+  font-size: 22px;
+  line-height: 1;
 }
 
 .menu-card-recipes .menu-content {
@@ -722,6 +730,10 @@ button,
   text-align: left;
 }
 
+.menu-meta-row.sub-meta {
+  color: #000000;
+}
+
 .menu-project-popover {
   position: relative;
   display: inline-block;
@@ -827,7 +839,7 @@ button,
   align-items: center;
   gap: 6px 12px;
   margin: 8px 0 10px;
-  color: #C2242E;
+  color: #000000;
   font-size: 12px;
   font-weight: 700;
   line-height: 1.2;
@@ -863,7 +875,7 @@ button,
   width: 100%;
   font-size: 12px;
   line-height: 1.6;
-  color: #C2242E;
+  color: #000000;
   letter-spacing: 0.01em;
   user-select: text;
   margin: 8px 0;
@@ -873,6 +885,10 @@ button,
   font-size: 12px;
   line-height: 1.4;
   text-align: center;
+}
+
+.menu-recipe-complaint-note {
+  color: #000000;
 }
 
 .menu-action {

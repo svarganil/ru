@@ -909,16 +909,16 @@
                 <div class="menu-recipe-title">Баклажан с томатным соусом и страчателлой</div>
                 <div class="menu-recipe-tags" aria-label="Теги рецепта">
                   <span class="menu-recipe-tags-label">ТЕГИ:</span>
-                  <span class="menu-recipe-tag" data-recipe-tag="закуска">#ЗАКУСКА</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="закуски">#ЗАКУСКИ</span>
                   <span class="menu-recipe-tag" data-recipe-tag="овощи">#ОВОЩИ</span>
                 </div>
                 <div class="menu-recipe-facts" aria-label="Параметры рецепта">
                   <div><span>ВРЕМЯ:</span> <span>35 МИНУТ</span></div>
                   <div><span>ПОРЦИИ:</span> <span>2</span></div>
                   <div><span>СЛОЖНОСТЬ:</span> <span>ПРОСТО</span></div>
-                  <div><span>НУЖНО:</span> <span>ПЛИТА, ДУХОВКА</span></div>
+                  <div><span>НУЖНО:</span> <span>ПЛИТА, ДУХОВКА, СКОВОРОДА</span></div>
                 </div>
-                <div class="menu-recipe-caption">ВКУСНЫЕ И ЛЁГКИЕ БАКЛАЖАНЫ ПО СЕМЕЙНОМУ РЕЦЕПТУ.</div>
+                <div class="menu-recipe-caption">Вкусные и лёгкие баклажаны по семейному рецепту.</div>
                 <div class="menu-recipe-download">
                   <button class="menu-button menu-recipe-download-button menu-recipe-video-button" type="button" disabled>СМОТРЕТЬ ВИДЕО</button>
                   <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf>СКАЧАТЬ РЕЦЕПТ</button>
@@ -982,7 +982,7 @@
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">КНИГА ЖАЛОБ</div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
-              <div class="menu-bio menu-note">
+              <div class="menu-bio menu-note menu-recipe-complaint-note">
                 Муха в супе, повар — мудак или всё понравилось? Пиши — жду с нетерпением.
               </div>
               <div class="menu-action">
@@ -1091,7 +1091,11 @@
 
       recipesCard.classList.toggle('is-recipe-detail', isDetail);
       recipesBackLabels.forEach(label => {
-        label.textContent = isDetail ? '← К РЕЦЕПТАМ' : '←';
+        if (isDetail) {
+          label.innerHTML = '<span class="menu-label-back-arrow">←</span><span class="menu-label-back-text">К РЕЦЕПТАМ</span>';
+        } else {
+          label.textContent = '←';
+        }
         label.setAttribute('aria-label', isDetail ? 'К рецептам' : 'Назад');
       });
 
@@ -1154,12 +1158,12 @@
 
     const recipePdfContent = {
       title: 'БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ',
-      description: 'ВКУСНЫЕ И ЛЁГКИЕ БАКЛАЖАНЫ ПО СЕМЕЙНОМУ РЕЦЕПТУ.',
+      description: 'Вкусные и лёгкие баклажаны по семейному рецепту.',
       info: [
         'ВРЕМЯ: 35 МИНУТ',
         'ПОРЦИИ: 2',
         'СЛОЖНОСТЬ: ПРОСТО',
-        'НУЖНО: ПЛИТА, ДУХОВКА'
+        'НУЖНО: ПЛИТА, ДУХОВКА, СКОВОРОДА'
       ],
       ingredients: [
         'БАКЛАЖАН — 1 ШТ.',
