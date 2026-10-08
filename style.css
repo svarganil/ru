@@ -286,6 +286,10 @@ button,
   line-height: 1.2;
 }
 
+.menu-recipe-download {
+  margin-top: 10px;
+}
+
 .menu-recipe-tags {
   display: flex;
   flex-wrap: wrap;
@@ -804,6 +808,7 @@ button,
 }
 
 .menu-button {
+  font-family: inherit;
   background: #C2242E;
   color: #FCFDFA;
   text-decoration: none;
@@ -814,6 +819,12 @@ button,
   border: 1px solid #C2242E;
   transition: background-color 0.2s ease, color 0.2s ease;
   cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
+}
+
+.menu-button.menu-recipe-download-button {
+  padding: 5px 8px;
+  font-size: 12px;
+  line-height: 1.2;
 }
 
 .menu-button:hover {

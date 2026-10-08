@@ -916,6 +916,9 @@
                   <div><span>НУЖНО:</span> <span>ПЛИТА, ДУХОВКА</span></div>
                 </div>
                 <div class="menu-recipe-caption">ВКУСНЫЕ И ЛЁГКИЕ БАКЛАЖАНЫ ПО СЕМЕЙНОМУ РЕЦЕПТУ.</div>
+                <div class="menu-recipe-download">
+                  <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf>СКАЧАТЬ РЕЦЕПТ</button>
+                </div>
               </div>
             </div>
             <div class="menu-recipe-ingredients-block">
@@ -1006,6 +1009,7 @@
     const menuCards = menuSheet.querySelectorAll('[data-menu-card-panel]');
     const recipeIngredientRows = menuSheet.querySelectorAll('.menu-recipe-ingredient-row');
     const recipeStepItems = menuSheet.querySelectorAll('.menu-recipe-step');
+    const recipePdfButton = menuSheet.querySelector('[data-recipe-download-pdf]');
 
     currentYearItems.forEach(item => {
       item.textContent = new Date().getFullYear();
@@ -1040,6 +1044,242 @@
     window.addEventListener('resize', syncWipMarqueeSpeed);
     if (document.fonts?.ready) {
       document.fonts.ready.then(syncWipMarqueeSpeed).catch(() => {});
+    }
+
+    const recipePdfContent = {
+      title: 'БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ',
+      description: 'ВКУСНЫЕ И ЛЁГКИЕ БАКЛАЖАНЫ ПО СЕМЕЙНОМУ РЕЦЕПТУ.',
+      info: [
+        'ВРЕМЯ: 35 МИНУТ',
+        'ПОРЦИИ: 2',
+        'СЛОЖНОСТЬ: ПРОСТО',
+        'НУЖНО: ПЛИТА, ДУХОВКА'
+      ],
+      ingredients: [
+        'БАКЛАЖАН — 1 ШТ.',
+        'ТОМАТЫ ПЕРЕТЁРТЫЕ — 400 МЛ',
+        'УКСУС ВИННЫЙ — 1 Ч.Л.',
+        'МАСЛО ОЛИВКОВОЕ — 1 Ч.Л.',
+        'БАЗИЛИК СУШЁНЫЙ¹ — 1 СТ.Л.',
+        'ОРЕГАНО — 1 ЩЕПОТКА',
+        'САХАР — 1 Ч.Л.',
+        'ЧЕСНОК — 1 ЗУБЧИК',
+        'СТРАЧАТЕЛЛА — 1 УП.',
+        'БАЗИЛИК СВЕЖИЙ — 1 ВЕТОЧКА',
+        'СОЛЬ — ПО ВКУСУ',
+        'ПЕРЕЦ — ПО ВКУСУ'
+      ],
+      steps: [
+        '1. Баклажан разрежь вдоль пополам, сделай диагональные надрезы, сбрызни оливковым маслом, посоли и запекай 35 минут при 200°C.',
+        '2. Перетёртые томаты вылей в сковороду, добавь соль, перец, сахар, орегано, базилик, винный уксус и вари соус 15 минут помешивая. В конце добавь измельчённый чеснок.',
+        '3. Собери блюдо: на дно глубокой тарелки выложи пару больших ложек томатного соуса, сверху баклажан, страчателлу, полей оливковым маслом и укрась веточкой свежего базилика.'
+      ],
+      notes: [
+        '1. Можно заменить свежим или маслом базилика.'
+      ]
+    };
+
+    const wrapCanvasText = (context, text, maxWidth) => {
+      const words = String(text).split(/\s+/);
+      const lines = [];
+      let line = '';
+
+      words.forEach(word => {
+        const testLine = line ? `${line} ${word}` : word;
+        if (context.measureText(testLine).width <= maxWidth) {
+          line = testLine;
+          return;
+        }
+
+        if (line) {
+          lines.push(line);
+          line = '';
+        }
+
+        if (context.measureText(word).width <= maxWidth) {
+          line = word;
+          return;
+        }
+
+        let chunk = '';
+        Array.from(word).forEach(char => {
+          const testChunk = `${chunk}${char}`;
+          if (context.measureText(testChunk).width <= maxWidth) {
+            chunk = testChunk;
+          } else {
+            if (chunk) lines.push(chunk);
+            chunk = char;
+          }
+        });
+        line = chunk;
+      });
+
+      if (line) lines.push(line);
+      return lines;
+    };
+
+    const drawWrappedCanvasText = (context, text, x, y, maxWidth, lineHeight) => {
+      const lines = wrapCanvasText(context, text, maxWidth);
+      lines.forEach((line, index) => {
+        context.fillText(line, x, y + index * lineHeight);
+      });
+      return y + lines.length * lineHeight;
+    };
+
+    const buildRecipePdfBlob = async () => {
+      if (document.fonts?.ready) {
+        await document.fonts.ready.catch(() => {});
+      }
+
+      const canvas = document.createElement('canvas');
+      const width = 1240;
+      const height = 1754;
+      const margin = 90;
+      const textWidth = width - margin * 2;
+      canvas.width = width;
+      canvas.height = height;
+
+      const context = canvas.getContext('2d');
+      context.fillStyle = '#FCFDFA';
+      context.fillRect(0, 0, width, height);
+      context.textBaseline = 'top';
+
+      let y = margin;
+
+      const setFont = (size) => {
+        context.font = `700 ${size}px HouseFont, monospace`;
+      };
+
+      const drawRule = () => {
+        context.fillStyle = '#C2242E';
+        context.fillRect(margin, y, textWidth, 4);
+        y += 34;
+      };
+
+      const drawSectionTitle = (title) => {
+        drawRule();
+        setFont(34);
+        context.fillStyle = '#C2242E';
+        y = drawWrappedCanvasText(context, title, margin, y, textWidth, 40) + 18;
+      };
+
+      const drawBottomLogo = () => {
+        if (typeof Path2D !== 'function') return;
+
+        const logoPath = new Path2D('M331.648 0C555.121 0 649.693 87.013 662 229.221H403.548C397.718 207.792 378.933 188.312 331 188.312C279.828 188.312 255.861 212.987 255.861 247.403V252.597C255.861 287.013 279.828 311.688 331 311.688C378.933 311.688 397.718 292.208 403.548 270.779H662C649.693 412.987 555.121 500 331.648 500C102.992 500 0 396.753 0 262.338V250C49.3025 250 90.0451 213.332 96.4679 165.766C108.417 171.877 121.953 175.325 136.294 175.325C184.684 175.325 223.912 136.077 223.912 87.6623C223.912 82.1917 223.411 76.8381 222.448 71.6478C231.86 75.686 242.228 77.9221 253.118 77.9221C295.701 77.9221 330.302 43.7294 330.99 1.28858L331 0.00324675L331.648 0Z');
+        const logoWidth = 88;
+        const logoHeight = logoWidth * (500 / 662);
+        const scale = logoWidth / 662;
+        const x = (width - logoWidth) / 2;
+        const logoY = height - margin - logoHeight;
+
+        context.save();
+        context.translate(x, logoY);
+        context.scale(scale, scale);
+        context.fillStyle = '#C2242E';
+        context.fill(logoPath);
+        context.restore();
+      };
+
+      setFont(44);
+      context.fillStyle = '#C2242E';
+      y = drawWrappedCanvasText(context, recipePdfContent.title, margin, y, textWidth, 50) + 24;
+
+      setFont(24);
+      context.fillStyle = '#000000';
+      y = drawWrappedCanvasText(context, recipePdfContent.description, margin, y, textWidth, 30) + 26;
+
+      setFont(24);
+      recipePdfContent.info.forEach(line => {
+        context.fillStyle = '#000000';
+        y = drawWrappedCanvasText(context, line, margin, y, textWidth, 30);
+      });
+      y += 20;
+
+      drawSectionTitle('ИНГРЕДИЕНТЫ');
+      setFont(23);
+      context.fillStyle = '#000000';
+      recipePdfContent.ingredients.forEach(line => {
+        y = drawWrappedCanvasText(context, line, margin, y, textWidth, 28);
+      });
+      y += 18;
+
+      drawSectionTitle('ПРИГОТОВЛЕНИЕ');
+      setFont(23);
+      context.fillStyle = '#000000';
+      recipePdfContent.steps.forEach(step => {
+        y = drawWrappedCanvasText(context, step, margin, y, textWidth, 28) + 14;
+      });
+
+      drawSectionTitle('ПРИМЕЧАНИЯ');
+      setFont(23);
+      context.fillStyle = '#000000';
+      recipePdfContent.notes.forEach(note => {
+        y = drawWrappedCanvasText(context, note, margin, y, textWidth, 28);
+      });
+      y += 20;
+
+      drawSectionTitle('ПРИЯТНОГО АППЕТИТА!');
+      drawBottomLogo();
+
+      const jpegDataUrl = canvas.toDataURL('image/jpeg', 0.94);
+      const jpegBinary = atob(jpegDataUrl.split(',')[1]);
+      const pageWidth = 595.28;
+      const pageHeight = 841.89;
+      const contentStream = `q\n${pageWidth} 0 0 ${pageHeight} 0 0 cm\n/Im0 Do\nQ`;
+      const objects = [
+        '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n',
+        '2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n',
+        `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n`,
+        `4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${width} /Height ${height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpegBinary.length} >>\nstream\n${jpegBinary}\nendstream\nendobj\n`,
+        `5 0 obj\n<< /Length ${contentStream.length} >>\nstream\n${contentStream}\nendstream\nendobj\n`
+      ];
+
+      let pdf = '%PDF-1.3\n';
+      const offsets = [0];
+      objects.forEach(object => {
+        offsets.push(pdf.length);
+        pdf += object;
+      });
+
+      const xrefOffset = pdf.length;
+      pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+      offsets.slice(1).forEach(offset => {
+        pdf += `${String(offset).padStart(10, '0')} 00000 n \n`;
+      });
+      pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+
+      const bytes = new Uint8Array(pdf.length);
+      for (let index = 0; index < pdf.length; index += 1) {
+        bytes[index] = pdf.charCodeAt(index) & 0xff;
+      }
+
+      return new Blob([bytes], { type: 'application/pdf' });
+    };
+
+    const downloadRecipePdf = async () => {
+      if (!recipePdfButton) return;
+      recipePdfButton.disabled = true;
+      try {
+        const pdfBlob = await buildRecipePdfBlob();
+        const url = URL.createObjectURL(pdfBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'baklazhan-s-tomatnym-sousom-i-strachatelloy.pdf';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } finally {
+        recipePdfButton.disabled = false;
+      }
+    };
+
+    if (recipePdfButton) {
+      recipePdfButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        downloadRecipePdf();
+      });
     }
 
     const setRecipeIngredientChecked = (row, isChecked) => {
