@@ -148,6 +148,15 @@ button,
   transform: translateX(110%);
 }
 
+.menu-card-transition-clone {
+  pointer-events: none;
+  z-index: 2;
+}
+
+.menu-card-recipes.is-view-transitioning {
+  z-index: 1;
+}
+
 .menu-shell.show-recipes .menu-card-main {
   transform: translateX(-110%);
   pointer-events: none;
@@ -364,12 +373,15 @@ button,
 .menu-recipe-image-frame {
   --recipe-frame-square: 16px;
   --recipe-frame-tile: calc(var(--recipe-frame-square) * 2);
+  --recipe-frame-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' shape-rendering='crispEdges'%3E%3Cpath fill='%23C2242E' d='M0 0h16v16H0zM16 16h16v16H16z'/%3E%3C/svg%3E");
   position: relative;
   display: inline-block;
   box-sizing: border-box;
   margin: 0;
   padding: var(--recipe-frame-square);
-  background: repeating-conic-gradient(transparent 0% 25%, #C2242E 0% 50%) 0 0 / var(--recipe-frame-tile) var(--recipe-frame-tile);
+  background-image: var(--recipe-frame-pattern);
+  background-size: var(--recipe-frame-tile) var(--recipe-frame-tile);
+  background-repeat: repeat;
 }
 
 .menu-recipe-image-frame img {
@@ -616,7 +628,9 @@ button,
   box-sizing: border-box;
   padding: var(--recipe-frame-square);
   pointer-events: none;
-  background: repeating-conic-gradient(transparent 0% 25%, #C2242E 0% 50%) 0 0 / var(--recipe-frame-tile) var(--recipe-frame-tile);
+  background-image: var(--recipe-frame-pattern);
+  background-size: var(--recipe-frame-tile) var(--recipe-frame-tile);
+  background-repeat: repeat;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -1103,6 +1117,8 @@ button,
 
 .menu-footer .menu-music-credit .music-credit-symbol {
   color: #C2242E;
+  cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
+  user-select: none;
 }
 
 @media (max-width: 768px) {

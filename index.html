@@ -792,15 +792,24 @@
 
   <script>
     let boxWasOpenedOnce = false;
+    const pizzaBox = document.querySelector('.pizza-box');
 
     const updateMusicCreditSymbol = (isPlaying) => {
       document.querySelectorAll('.music-credit-symbol').forEach(symbol => {
         symbol.textContent = isPlaying ? '▶' : '■';
+        symbol.setAttribute('role', 'button');
+        symbol.setAttribute('tabindex', '0');
+        symbol.setAttribute('aria-pressed', String(isPlaying));
+        symbol.setAttribute('aria-label', isPlaying ? 'Закрыть коробку и выключить радио' : 'Открыть коробку и включить радио');
       });
     };
 
-    document.querySelector('.pizza-box').addEventListener('click', function() {
-      const isOpen = this.classList.toggle('open');
+    const setPizzaBoxOpen = (nextIsOpen = !pizzaBox?.classList.contains('open')) => {
+      if (!pizzaBox) return;
+      const isOpen = Boolean(nextIsOpen);
+      if (pizzaBox.classList.contains('open') === isOpen) return;
+
+      pizzaBox.classList.toggle('open', isOpen);
       const openSound = document.getElementById('openSound');
       const closeSound = document.getElementById('closeSound');
       updateMusicCreditSymbol(isOpen);
@@ -809,7 +818,7 @@
         const wasOpenedBefore = boxWasOpenedOnce;
         radioStopAttempt += 1;
         radioShouldBePlaying = true;
-        openSound.play();
+        openSound?.play().catch(() => {});
         if (!wasOpenedBefore) {
           // самое первое открытие (которое включает радио) — без fade
           radio.volume = 0.3;
@@ -822,13 +831,41 @@
           fadeRadioVolumeTo(0.3, 350);
         }
       } else {
-        closeSound.play();
+        closeSound?.play().catch(() => {});
         if (boxWasOpenedOnce) {
           stopRadio(350);
         } else {
           stopRadio(0);
         }
       }
+    };
+
+    updateMusicCreditSymbol(Boolean(pizzaBox?.classList.contains('open')));
+
+    pizzaBox?.addEventListener('click', () => {
+      setPizzaBoxOpen();
+    });
+
+    const getMusicCreditSymbolTarget = (event) => {
+      const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+      return target?.closest('.music-credit-symbol');
+    };
+
+    document.addEventListener('click', (event) => {
+      const symbol = getMusicCreditSymbolTarget(event);
+      if (!symbol) return;
+      event.preventDefault();
+      event.stopPropagation();
+      setPizzaBoxOpen();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      const symbol = getMusicCreditSymbolTarget(event);
+      if (!symbol) return;
+      event.preventDefault();
+      event.stopPropagation();
+      setPizzaBoxOpen();
     });
 
     const menuSheet = document.getElementById('menu-sheet');
@@ -905,6 +942,10 @@
             if (text === 'ОБО МНЕ') subtitle.textContent = 'ОТ АВТОРА';
             if (text === 'СВАРГАНИЛ') subtitle.textContent = 'МЕНЮ';
           });
+          const authorBio = list.querySelector('.menu-bio');
+          if (authorBio) {
+            authorBio.textContent = 'Вот будет больше рецептов — придумаю чё сюда умного написать.';
+          }
 
           const menuHeaderRow = Array.from(list.querySelectorAll('.menu-meta-row')).find(row => {
             return row.textContent.includes('ПРОЕКТ') && row.textContent.includes('ГОД');
@@ -1633,6 +1674,7 @@
         `;
       }
       menuCardStage.appendChild(recipesMenuCard);
+      updateMusicCreditSymbol(Boolean(pizzaBox?.classList.contains('open')));
     }
 
     const mainMenuLabels = menuSheet.querySelectorAll('[data-menu-card-panel="main"] .menu-label');
@@ -1782,6 +1824,7 @@
       `;
 
       syncRecipeTagResultsHeight();
+      updateMusicCreditSymbol(Boolean(pizzaBox?.classList.contains('open')));
       const jitterEnabled = menuSheet.classList.contains('jitter-on');
       recipeTagResultsPanel.querySelectorAll('.menu-c-button').forEach(toggle => {
         toggle.classList.toggle('is-active', jitterEnabled);
@@ -1847,7 +1890,46 @@
       document.fonts.ready.then(syncWipMarqueeSpeed).catch(() => {});
     }
 
-    const setRecipeView = (view, recipeId = activeRecipeId, tagName = activeRecipeTag, tagReturnView = 'list') => {
+    const createRecipeCardTransitionClone = () => {
+      if (!recipesCard || !menuCardStage) return null;
+      const clone = recipesCard.cloneNode(true);
+      clone.classList.add('menu-card-transition-clone');
+      clone.setAttribute('aria-hidden', 'true');
+      clone.setAttribute('inert', '');
+      clone.querySelectorAll('[id]').forEach(item => item.removeAttribute('id'));
+      clone.style.transition = 'none';
+      clone.style.transform = 'translateX(0)';
+      clone.style.pointerEvents = 'none';
+      menuCardStage.appendChild(clone);
+      return clone;
+    };
+
+    const animateRecipeCardTransition = (outgoingClone, direction) => {
+      if (!recipesCard || !outgoingClone) return;
+      recipesCard.classList.add('is-view-transitioning');
+      recipesCard.style.transition = 'none';
+      recipesCard.style.transform = `translateX(${direction * 110}%)`;
+      recipesCard.style.pointerEvents = 'none';
+      outgoingClone.style.transition = 'none';
+      outgoingClone.style.transform = 'translateX(0)';
+
+      window.requestAnimationFrame(() => {
+        recipesCard.style.transition = '';
+        outgoingClone.style.transition = '';
+        recipesCard.style.transform = 'translateX(0)';
+        outgoingClone.style.transform = `translateX(${-direction * 110}%)`;
+      });
+
+      window.setTimeout(() => {
+        outgoingClone.remove();
+        recipesCard.classList.remove('is-view-transitioning');
+        recipesCard.style.transition = '';
+        recipesCard.style.transform = '';
+        recipesCard.style.pointerEvents = '';
+      }, RECIPE_VIEW_TRANSITION_MS);
+    };
+
+    const setRecipeView = (view, recipeId = activeRecipeId, tagName = activeRecipeTag, tagReturnView = 'list', animate = true) => {
       const isDetail = view === 'detail';
       const isTagResults = view === 'tag';
       if (!recipesCard || !recipeListPanel) return;
@@ -1888,6 +1970,7 @@
 
       const isReturningToRecipe = currentView === 'tag' && isDetail && recipeTagReturnView === 'detail' && recipeId === recipeTagReturnRecipeId;
       const direction = view === 'list' || isReturningToRecipe ? -1 : 1;
+      const outgoingClone = animate ? createRecipeCardTransitionClone() : null;
       if (isDetail) {
         activeRecipeId = incomingPanel.dataset.recipeId || activeRecipeId;
       }
@@ -1912,52 +1995,27 @@
         label.setAttribute('aria-label', isTagResults && recipeTagReturnView === 'detail' ? 'К рецепту' : isDetail || isTagResults ? 'К рецептам' : 'Назад');
       });
 
+      recipeListPanel.hidden = incomingPanel !== recipeListPanel;
       recipeDetailPanels.forEach(panel => {
-        if (panel !== incomingPanel && panel !== currentPanel) {
-          panel.hidden = true;
-          panel.style.transform = '';
-          panel.style.opacity = '';
-        }
+        panel.hidden = panel !== incomingPanel;
+        panel.style.transform = '';
+        panel.style.opacity = '';
       });
-      if (recipeTagResultsPanel && recipeTagResultsPanel !== incomingPanel && recipeTagResultsPanel !== currentPanel) {
-        recipeTagResultsPanel.hidden = true;
+      if (recipeTagResultsPanel) {
+        recipeTagResultsPanel.hidden = recipeTagResultsPanel !== incomingPanel;
         recipeTagResultsPanel.style.transform = '';
         recipeTagResultsPanel.style.opacity = '';
       }
-
       incomingPanel.hidden = false;
-      currentPanel.hidden = false;
-      const transitionHeight = Math.max(
-        incomingPanel.scrollHeight || incomingPanel.getBoundingClientRect().height,
-        currentPanel.scrollHeight || currentPanel.getBoundingClientRect().height
-      );
+
       if (recipesContentRoot) {
-        recipesContentRoot.style.minHeight = `${transitionHeight}px`;
-        recipesContentRoot.classList.add('is-switching');
+        recipesContentRoot.classList.remove('is-switching');
+        recipesContentRoot.style.minHeight = '';
       }
-      incomingPanel.style.transform = `translateX(${direction * 110}%)`;
-      incomingPanel.style.opacity = '0';
-      currentPanel.style.transform = 'translateX(0)';
-      currentPanel.style.opacity = '1';
 
-      window.requestAnimationFrame(() => {
-        incomingPanel.style.transform = 'translateX(0)';
-        incomingPanel.style.opacity = '1';
-        currentPanel.style.transform = `translateX(${-direction * 110}%)`;
-        currentPanel.style.opacity = '0';
-      });
-
-      window.setTimeout(() => {
-        currentPanel.hidden = true;
-        if (recipesContentRoot) {
-          recipesContentRoot.classList.remove('is-switching');
-          recipesContentRoot.style.minHeight = '';
-        }
-        currentPanel.style.transform = '';
-        currentPanel.style.opacity = '';
-        incomingPanel.style.transform = '';
-        incomingPanel.style.opacity = '';
-      }, RECIPE_VIEW_TRANSITION_MS);
+      if (outgoingClone) {
+        animateRecipeCardTransition(outgoingClone, direction);
+      }
 
       if (recipesMenuContentPanel) {
         recipesMenuContentPanel.scrollTop = 0;
@@ -2287,59 +2345,136 @@
       return y + lines.length * lineHeight;
     };
 
+    const RECIPE_PDF_LAYOUT = Object.freeze({
+      width: 1240,
+      height: 1754,
+      margin: 90,
+      textScale: 0.9,
+      logoWidth: 56,
+      finalLogoGap: 0,
+      dividerAdvance: 34,
+      finalDividerAdvance: 34,
+      jpegQuality: 0.94
+    });
+
     const buildRecipePdfBlob = async (recipePdfContent) => {
       if (!recipePdfContent) return null;
       if (document.fonts?.ready) {
         await document.fonts.ready.catch(() => {});
       }
 
-      const canvas = document.createElement('canvas');
-      const width = 1240;
-      const height = 1754;
-      const margin = 90;
+      const {
+        width,
+        height,
+        margin,
+        textScale: pdfTextScale,
+        logoWidth,
+        finalLogoGap,
+        dividerAdvance,
+        finalDividerAdvance,
+        jpegQuality
+      } = RECIPE_PDF_LAYOUT;
+      const scalePdfText = (value) => Number((value * pdfTextScale).toFixed(2));
       const textWidth = width - margin * 2;
-      canvas.width = width;
-      canvas.height = height;
-
-      const context = canvas.getContext('2d');
-      context.fillStyle = '#FCFDFA';
-      context.fillRect(0, 0, width, height);
-      context.textBaseline = 'top';
-
+      const contentBottom = height - margin;
+      const logoHeight = logoWidth * (500 / 662);
+      const finalLogoTop = height - margin - logoHeight;
+      const finalTextBottom = finalLogoTop - finalLogoGap;
+      const pages = [];
+      let canvas = null;
+      let context = null;
       let y = margin;
       let pdfSiteLinkRect = null;
+      let currentFont = `700 ${scalePdfText(23)}px HouseFont, monospace`;
+      let currentFillStyle = '#000000';
 
-      const setFont = (size) => {
-        context.font = `700 ${size}px HouseFont, monospace`;
+      const setFillStyle = (color) => {
+        currentFillStyle = color;
+        if (context) {
+          context.fillStyle = color;
+        }
       };
 
-      const drawRule = () => {
+      const beginPage = () => {
+        canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        context = canvas.getContext('2d');
+        context.fillStyle = '#FCFDFA';
+        context.fillRect(0, 0, width, height);
+        context.textBaseline = 'top';
+        context.font = currentFont;
+        context.fillStyle = currentFillStyle;
+        y = margin;
+        pages.push({ canvas });
+      };
+
+      const setFont = (size) => {
+        currentFont = `700 ${scalePdfText(size)}px HouseFont, monospace`;
+        if (context) {
+          context.font = currentFont;
+        }
+      };
+
+      beginPage();
+
+      const ensureSpace = (requiredHeight, bottomLimit = contentBottom) => {
+        if (y > margin && y + requiredHeight > bottomLimit) {
+          beginPage();
+        }
+      };
+
+      const drawWrappedPaginatedText = (text, x, maxWidth, lineHeight, gapAfter = 0, bottomLimit = contentBottom) => {
+        const lines = wrapCanvasText(context, text, maxWidth);
+        const blockHeight = lines.length * lineHeight;
+        const pageContentHeight = bottomLimit - margin;
+        if (blockHeight <= pageContentHeight) {
+          ensureSpace(blockHeight, bottomLimit);
+        }
+
+        lines.forEach(line => {
+          ensureSpace(lineHeight, bottomLimit);
+          context.fillText(line, x, y);
+          y += lineHeight;
+        });
+
+        y += gapAfter;
+        return y;
+      };
+
+      const drawRule = (bottomLimit = contentBottom, advance = dividerAdvance) => {
+        ensureSpace(advance, bottomLimit);
         const square = 6;
         const rows = 2;
         const dividerEnd = margin + textWidth;
-        context.fillStyle = '#C2242E';
+        const previousFillStyle = currentFillStyle;
+        setFillStyle('#C2242E');
         for (let row = 0; row < rows; row += 1) {
           for (let x = margin, column = 0; x + square <= dividerEnd; x += square, column += 1) {
             if ((row + column) % 2 !== 0) continue;
             context.fillRect(x, y + row * square, square, square);
           }
         }
-        y += 34;
+        setFillStyle(previousFillStyle);
+        y += advance;
       };
 
       const drawSectionTitle = (title) => {
+        ensureSpace(scalePdfText(120));
         drawRule();
         setFont(34);
-        context.fillStyle = '#C2242E';
-        y = drawWrappedCanvasText(context, title, margin, y, textWidth, 40) + 18;
+        setFillStyle('#C2242E');
+        y = drawWrappedPaginatedText(title, margin, textWidth, scalePdfText(40), scalePdfText(18));
       };
 
       const drawFinalTitle = () => {
         const linkText = '→ SVARGANIL.RU';
-        drawRule();
+        const finalTitleHeight = scalePdfText(40);
+        ensureSpace(finalDividerAdvance + finalTitleHeight, finalTextBottom);
+        drawRule(finalTextBottom, finalDividerAdvance);
 
         setFont(34);
-        context.fillStyle = '#C2242E';
+        setFillStyle('#C2242E');
         context.fillText('ПРИЯТНОГО АППЕТИТА!', margin, y);
 
         const linkWidth = context.measureText(linkText).width;
@@ -2348,24 +2483,23 @@
         context.fillText(linkText, linkX, linkY);
 
         pdfSiteLinkRect = {
+          pageIndex: pages.length - 1,
           x: linkX,
           y: linkY,
           width: linkWidth,
-          height: 40
+          height: finalTitleHeight
         };
 
-        y += 58;
+        y += scalePdfText(58);
       };
 
       const drawBottomLogo = () => {
         if (typeof Path2D !== 'function') return;
 
         const logoPath = new Path2D('M331.648 0C555.121 0 649.693 87.013 662 229.221H403.548C397.718 207.792 378.933 188.312 331 188.312C279.828 188.312 255.861 212.987 255.861 247.403V252.597C255.861 287.013 279.828 311.688 331 311.688C378.933 311.688 397.718 292.208 403.548 270.779H662C649.693 412.987 555.121 500 331.648 500C102.992 500 0 396.753 0 262.338V250C49.3025 250 90.0451 213.332 96.4679 165.766C108.417 171.877 121.953 175.325 136.294 175.325C184.684 175.325 223.912 136.077 223.912 87.6623C223.912 82.1917 223.411 76.8381 222.448 71.6478C231.86 75.686 242.228 77.9221 253.118 77.9221C295.701 77.9221 330.302 43.7294 330.99 1.28858L331 0.00324675L331.648 0Z');
-        const logoWidth = 88;
-        const logoHeight = logoWidth * (500 / 662);
         const scale = logoWidth / 662;
         const x = (width - logoWidth) / 2;
-        const logoY = height - margin - logoHeight;
+        const logoY = finalLogoTop;
 
         context.save();
         context.translate(x, logoY);
@@ -2376,50 +2510,48 @@
       };
 
       setFont(44);
-      context.fillStyle = '#C2242E';
-      y = drawWrappedCanvasText(context, recipePdfContent.title, margin, y, textWidth, 50) + 24;
+      setFillStyle('#C2242E');
+      y = drawWrappedPaginatedText(recipePdfContent.title, margin, textWidth, scalePdfText(50), scalePdfText(24));
 
       if (recipePdfContent.description) {
         setFont(24);
-        context.fillStyle = '#000000';
-        y = drawWrappedCanvasText(context, recipePdfContent.description, margin, y, textWidth, 30) + 26;
+        setFillStyle('#000000');
+        y = drawWrappedPaginatedText(recipePdfContent.description, margin, textWidth, scalePdfText(30), scalePdfText(26));
       }
 
       setFont(24);
+      setFillStyle('#000000');
       recipePdfContent.info.forEach(line => {
-        context.fillStyle = '#000000';
-        y = drawWrappedCanvasText(context, line, margin, y, textWidth, 30);
+        y = drawWrappedPaginatedText(line, margin, textWidth, scalePdfText(30));
       });
-      y += 20;
+      y += scalePdfText(20);
 
       drawSectionTitle('ИНГРЕДИЕНТЫ');
       setFont(23);
-      context.fillStyle = '#000000';
+      setFillStyle('#000000');
       recipePdfContent.ingredients.forEach(line => {
-        y = drawWrappedCanvasText(context, line, margin, y, textWidth, 28);
+        y = drawWrappedPaginatedText(line, margin, textWidth, scalePdfText(28));
       });
-      y += 18;
+      y += scalePdfText(18);
 
       drawSectionTitle('ПРИГОТОВЛЕНИЕ');
       setFont(23);
-      context.fillStyle = '#000000';
+      setFillStyle('#000000');
       recipePdfContent.steps.forEach(step => {
-        y = drawWrappedCanvasText(context, step, margin, y, textWidth, 28) + 14;
+        y = drawWrappedPaginatedText(step, margin, textWidth, scalePdfText(28), scalePdfText(14));
       });
 
       drawSectionTitle('ПРИМЕЧАНИЯ');
       setFont(23);
-      context.fillStyle = '#000000';
+      setFillStyle('#000000');
       recipePdfContent.notes.forEach(note => {
-        y = drawWrappedCanvasText(context, note, margin, y, textWidth, 28);
+        y = drawWrappedPaginatedText(note, margin, textWidth, scalePdfText(28));
       });
-      y += 20;
+      y += scalePdfText(20);
 
       drawFinalTitle();
       drawBottomLogo();
 
-      const jpegDataUrl = canvas.toDataURL('image/jpeg', 0.94);
-      const jpegBinary = atob(jpegDataUrl.split(',')[1]);
       const pageWidth = 595.28;
       const pageHeight = 841.89;
       const canvasRectToPdfRect = (rect) => {
@@ -2429,18 +2561,35 @@
         const y2 = pageHeight - (rect.y / height * pageHeight);
         return [x1, y1, x2, y2].map(value => Number(value.toFixed(2)));
       };
-      const siteLinkRect = pdfSiteLinkRect ? canvasRectToPdfRect(pdfSiteLinkRect) : null;
-      const contentStream = `q\n${pageWidth} 0 0 ${pageHeight} 0 0 cm\n/Im0 Do\nQ`;
-      const objects = [
-        '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n',
-        '2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n',
-        `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R${siteLinkRect ? ' /Annots [6 0 R]' : ''} >>\nendobj\n`,
-        `4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${width} /Height ${height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpegBinary.length} >>\nstream\n${jpegBinary}\nendstream\nendobj\n`,
-        `5 0 obj\n<< /Length ${contentStream.length} >>\nstream\n${contentStream}\nendstream\nendobj\n`
-      ];
-      if (siteLinkRect) {
-        objects.push(`6 0 obj\n<< /Type /Annot /Subtype /Link /Rect [${siteLinkRect.join(' ')}] /Border [0 0 0] /A << /S /URI /URI (https://svarganil.ru) >> >>\nendobj\n`);
-      }
+
+      const objects = ['', ''];
+      const pageObjectIds = [];
+      pages.forEach((page, pageIndex) => {
+        const jpegDataUrl = page.canvas.toDataURL('image/jpeg', jpegQuality);
+        const jpegBinary = atob(jpegDataUrl.split(',')[1]);
+        const contentStream = `q\n${pageWidth} 0 0 ${pageHeight} 0 0 cm\n/Im0 Do\nQ`;
+        const pageObjectId = objects.length + 1;
+        pageObjectIds.push(pageObjectId);
+        objects.push('');
+
+        const imageObjectId = objects.length + 1;
+        objects.push(`${imageObjectId} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${width} /Height ${height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpegBinary.length} >>\nstream\n${jpegBinary}\nendstream\nendobj\n`);
+
+        const contentObjectId = objects.length + 1;
+        objects.push(`${contentObjectId} 0 obj\n<< /Length ${contentStream.length} >>\nstream\n${contentStream}\nendstream\nendobj\n`);
+
+        let annotationObjectId = null;
+        if (pdfSiteLinkRect?.pageIndex === pageIndex) {
+          const siteLinkRect = canvasRectToPdfRect(pdfSiteLinkRect);
+          annotationObjectId = objects.length + 1;
+          objects.push(`${annotationObjectId} 0 obj\n<< /Type /Annot /Subtype /Link /Rect [${siteLinkRect.join(' ')}] /Border [0 0 0] /A << /S /URI /URI (https://svarganil.ru) >> >>\nendobj\n`);
+        }
+
+        objects[pageObjectId - 1] = `${pageObjectId} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im0 ${imageObjectId} 0 R >> >> /Contents ${contentObjectId} 0 R${annotationObjectId ? ` /Annots [${annotationObjectId} 0 R]` : ''} >>\nendobj\n`;
+      });
+
+      objects[0] = '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n';
+      objects[1] = `2 0 obj\n<< /Type /Pages /Kids [${pageObjectIds.map(id => `${id} 0 R`).join(' ')}] /Count ${pageObjectIds.length} >>\nendobj\n`;
 
       let pdf = '%PDF-1.3\n';
       const offsets = [0];
@@ -2664,7 +2813,7 @@
     const openRecipesCard = () => {
       if (menuSheet.dataset.activeCard === 'recipes') return;
       closeProjectPopovers();
-      setRecipeView('list');
+      setRecipeView('list', activeRecipeId, activeRecipeTag, 'list', false);
       playWhoosh();
       updateMenuCardState('recipes');
     };
@@ -2672,7 +2821,7 @@
     const closeRecipesCard = () => {
       if (menuSheet.dataset.activeCard !== 'recipes') return;
       closeProjectPopovers();
-      setRecipeView('list');
+      setRecipeView('list', activeRecipeId, activeRecipeTag, 'list', false);
       playWhoosh();
       updateMenuCardState('main');
     };
