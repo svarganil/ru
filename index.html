@@ -1798,9 +1798,14 @@
 
     const syncRecipeTagResultsHeight = () => {
       if (!recipeTagResultsPanel || !recipesMenuContentPanel) return;
-      const height = recipesMenuContentPanel.clientHeight;
+      const contentStyle = window.getComputedStyle(recipesMenuContentPanel);
+      const verticalPadding = (parseFloat(contentStyle.paddingTop) || 0) + (parseFloat(contentStyle.paddingBottom) || 0);
+      const safeBottomGap = 32;
+      const height = recipesMenuContentPanel.clientHeight - verticalPadding - safeBottomGap;
       if (!height) return;
-      recipeTagResultsPanel.style.setProperty('--recipe-tag-results-min-height', `${Math.max(height - 8, 0)}px`);
+      const minHeight = `${Math.max(height, 0)}px`;
+      recipesContentRoot?.style.setProperty('--recipe-tag-results-min-height', minHeight);
+      recipeTagResultsPanel.style.setProperty('--recipe-tag-results-min-height', minHeight);
     };
 
     const renderRecipeTagResults = (tagName) => {

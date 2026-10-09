@@ -276,7 +276,7 @@ button,
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: stretch;
-  min-height: 100%;
+  min-height: var(--recipe-tag-results-min-height, 100%);
 }
 
 .menu-recipe-tag-results {
