@@ -999,14 +999,14 @@
           if (tagLegend) {
             tagLegend.setAttribute('aria-label', 'Теги рецептов');
             tagLegend.innerHTML = `
-              <span class="menu-tag"><img src="assets/icons/junk.png" alt=""><span>джанк-фуд</span></span>
-              <span class="menu-tag"><img src="assets/icons/bfast.png" alt=""><span>завтраки</span></span>
-              <span class="menu-tag"><img src="assets/icons/zakus.png" alt=""><span>закуски</span></span>
-              <span class="menu-tag"><img src="assets/icons/nood.png" alt=""><span>лапша</span></span>
-              <span class="menu-tag"><img src="assets/icons/meat.png" alt=""><span>мясо</span></span>
-              <span class="menu-tag"><img src="assets/icons/veg.png" alt=""><span>овощи</span></span>
-              <span class="menu-tag"><img src="assets/icons/beer.png" alt=""><span>подпивас</span></span>
-              <span class="menu-tag"><img src="assets/icons/egg.png" alt=""><span>яйца</span></span>
+              <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="джанк-фуд"><img src="assets/icons/junk.png" alt=""><span>джанк-фуд</span></button>
+              <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="завтраки"><img src="assets/icons/bfast.png" alt=""><span>завтраки</span></button>
+              <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="закуски"><img src="assets/icons/zakus.png" alt=""><span>закуски</span></button>
+              <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="лапша"><img src="assets/icons/nood.png" alt=""><span>лапша</span></button>
+              <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="мясо"><img src="assets/icons/meat.png" alt=""><span>мясо</span></button>
+              <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="овощи"><img src="assets/icons/veg.png" alt=""><span>овощи</span></button>
+              <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="подпивас"><img src="assets/icons/beer.png" alt=""><span>подпивас</span></button>
+              <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="яйца"><img src="assets/icons/egg.png" alt=""><span>яйца</span></button>
             `;
           }
 
@@ -1028,6 +1028,7 @@
         recipesMenuContent.innerHTML = `
           <div class="menu-recipes-content">
             ${recipeListHtml}
+            <div class="menu-recipe-tag-results" data-recipe-tag-results-panel hidden></div>
             <div class="menu-recipe-detail" data-recipe-detail-panel data-recipe-id="baklazhan" hidden>
             <div class="menu-recipe-hero">
               <figure class="menu-recipe-image-frame">
@@ -1643,18 +1644,150 @@
     const recipesCard = menuSheet.querySelector('[data-menu-card-panel="recipes"]');
     const recipesContentRoot = recipesCard?.querySelector('.menu-recipes-content');
     const recipeListPanel = recipesCard?.querySelector('[data-recipe-list-panel]');
+    const recipeTagResultsPanel = recipesCard?.querySelector('[data-recipe-tag-results-panel]');
     const recipeDetailPanels = recipesCard?.querySelectorAll('[data-recipe-detail-panel]') || [];
     const recipeDetailPanel = recipeDetailPanels[0] || null;
-    const recipeOpenButtons = recipesCard?.querySelectorAll('[data-open-recipe-detail]') || [];
     const recipesMenuContentPanel = recipesCard?.querySelector('.menu-content');
     const recipeIngredientRows = menuSheet.querySelectorAll('.menu-recipe-ingredient-row');
     const recipeStepItems = menuSheet.querySelectorAll('.menu-recipe-step');
     const recipePdfButtons = menuSheet.querySelectorAll('[data-recipe-download-pdf]');
     const RECIPE_VIEW_TRANSITION_MS = 280;
     let activeRecipeId = recipeDetailPanel?.dataset.recipeId || 'baklazhan';
+    let activeRecipeTag = '';
+    let recipeTagReturnView = 'list';
+    let recipeTagReturnRecipeId = activeRecipeId;
+
+    const recipeSearchItems = [
+      {
+        id: 'baklazhan',
+        title: 'БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ',
+        tags: [
+          { name: 'закуски', icon: 'assets/icons/zakus.png', alt: 'snack icon' },
+          { name: 'овощи', icon: 'assets/icons/veg.png', alt: 'vegetables icon' }
+        ]
+      },
+      {
+        id: 'buldak-carbonara',
+        title: 'БУЛЬДАК КАРБОНАРА',
+        tags: [
+          { name: 'лапша', icon: 'assets/icons/nood.png', alt: 'noodles icon' },
+          { name: 'джанк-фуд', icon: 'assets/icons/junk.png', alt: 'junk food icon' }
+        ]
+      },
+      {
+        id: 'dzherki-iz-indeyki',
+        title: 'ДЖЕРКИ ИЗ ИНДЕЙКИ',
+        tags: [
+          { name: 'подпивас', icon: 'assets/icons/beer.png', alt: 'beer icon' },
+          { name: 'мясо', icon: 'assets/icons/meat.png', alt: 'meat icon' }
+        ]
+      },
+      {
+        id: 'marinovannye-yaytsa',
+        title: 'МАРИНОВАННЫЕ ЯЙЦА',
+        tags: [
+          { name: 'закуски', icon: 'assets/icons/zakus.png', alt: 'snack icon' },
+          { name: 'яйца', icon: 'assets/icons/egg.png', alt: 'egg icon' }
+        ]
+      },
+      {
+        id: 'rebra-bbq-cola',
+        title: 'РЁБРА BBQ COLA',
+        tags: [
+          { name: 'мясо', icon: 'assets/icons/meat.png', alt: 'meat icon' }
+        ]
+      },
+      {
+        id: 'cilbir',
+        title: 'ЧЫЛБЫР',
+        tags: [
+          { name: 'завтраки', icon: 'assets/icons/bfast.png', alt: 'breakfast icon' },
+          { name: 'яйца', icon: 'assets/icons/egg.png', alt: 'egg icon' }
+        ]
+      }
+    ];
 
     const getRecipeDetailPanel = (recipeId = activeRecipeId) => {
       return Array.from(recipeDetailPanels).find(panel => panel.dataset.recipeId === recipeId) || recipeDetailPanel;
+    };
+
+    const escapeHtml = (value) => {
+      return String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    };
+
+    const menuDividerLine = '========================================================================================================================';
+    const menuDashDividerLine = '————————————————————————————————————————————————————————————————————————————————————————';
+
+    const buildRecipeSearchItemHtml = (recipe) => {
+      const iconHtml = recipe.tags.map(tag => {
+        return `<img src="${escapeHtml(tag.icon)}" alt="${escapeHtml(tag.alt)}">`;
+      }).join('');
+
+      return `
+        <div class="menu-meta-row sub-meta">
+          <span class="menu-meta-left">
+            <button class="menu-recipe-list-item" type="button" data-open-recipe-detail="${escapeHtml(recipe.id)}">${escapeHtml(recipe.title)}</button>
+          </span>
+        </div>
+        <div class="menu-icon-row">
+          ${iconHtml}
+        </div>
+      `;
+    };
+
+    const buildRecipesFooterHtml = () => {
+      const footer = recipeListPanel?.querySelector('.menu-footer')?.cloneNode(true);
+      if (!footer) return '';
+
+      footer.querySelectorAll('[id]').forEach(item => item.removeAttribute('id'));
+      return `
+        <div class="menu-recipe-tag-footer">
+          <div class="menu-divider" aria-hidden="true">${menuDividerLine}</div>
+          ${footer.outerHTML}
+        </div>
+      `;
+    };
+
+    const syncRecipeTagResultsHeight = () => {
+      if (!recipeTagResultsPanel || !recipesMenuContentPanel) return;
+      const height = recipesMenuContentPanel.clientHeight;
+      if (!height) return;
+      recipeTagResultsPanel.style.setProperty('--recipe-tag-results-min-height', `${Math.max(height - 8, 0)}px`);
+    };
+
+    const renderRecipeTagResults = (tagName) => {
+      if (!recipeTagResultsPanel) return;
+      const tagRecipes = recipeSearchItems
+        .filter(recipe => recipe.tags.some(tag => tag.name === tagName))
+        .sort((left, right) => left.title.localeCompare(right.title, 'ru'));
+
+      const recipeRows = tagRecipes.map((recipe, index) => {
+        const divider = index < tagRecipes.length - 1
+          ? `<div class="menu-divider menu-divider-dash" aria-hidden="true">${menuDashDividerLine}</div>`
+          : '';
+        return `${buildRecipeSearchItemHtml(recipe)}${divider}`;
+      }).join('');
+
+      recipeTagResultsPanel.innerHTML = `
+        <div class="menu-subtitle" aria-hidden="true">${escapeHtml(tagName.toUpperCase())}</div>
+        <div class="menu-divider" aria-hidden="true">${menuDividerLine}</div>
+        ${recipeRows || '<div class="menu-bio menu-note">НИЧЕГО НЕ НАЙДЕНО</div>'}
+        ${buildRecipesFooterHtml()}
+      `;
+
+      syncRecipeTagResultsHeight();
+      const jitterEnabled = menuSheet.classList.contains('jitter-on');
+      recipeTagResultsPanel.querySelectorAll('.menu-c-button').forEach(toggle => {
+        toggle.classList.toggle('is-active', jitterEnabled);
+        toggle.setAttribute('aria-pressed', String(jitterEnabled));
+        toggle.setAttribute('aria-label', jitterEnabled ? 'Выключить jitter' : 'Включить jitter');
+      });
     };
 
     currentYearItems.forEach(item => {
@@ -1709,46 +1842,94 @@
 
     syncWipMarqueeSpeed();
     window.addEventListener('resize', syncWipMarqueeSpeed);
+    window.addEventListener('resize', syncRecipeTagResultsHeight);
     if (document.fonts?.ready) {
       document.fonts.ready.then(syncWipMarqueeSpeed).catch(() => {});
     }
 
-    const setRecipeView = (view, recipeId = activeRecipeId) => {
+    const setRecipeView = (view, recipeId = activeRecipeId, tagName = activeRecipeTag, tagReturnView = 'list') => {
       const isDetail = view === 'detail';
-      const targetDetailPanel = getRecipeDetailPanel(recipeId);
-      const currentDetailPanel = getRecipeDetailPanel(activeRecipeId);
-      if (!recipesCard || !recipeListPanel || !targetDetailPanel || !currentDetailPanel) return;
-      const wasDetail = recipesCard.classList.contains('is-recipe-detail');
-      if (wasDetail && isDetail && currentDetailPanel === targetDetailPanel) return;
-      if (!wasDetail && !isDetail) return;
+      const isTagResults = view === 'tag';
+      if (!recipesCard || !recipeListPanel) return;
 
-      const incomingPanel = isDetail ? targetDetailPanel : recipeListPanel;
-      const outgoingPanel = isDetail ? (wasDetail ? currentDetailPanel : recipeListPanel) : currentDetailPanel;
-      const direction = isDetail ? 1 : -1;
-      activeRecipeId = targetDetailPanel.dataset.recipeId || activeRecipeId;
+      const currentView = recipesCard.classList.contains('is-recipe-detail')
+        ? 'detail'
+        : recipesCard.classList.contains('is-recipe-tag-results')
+          ? 'tag'
+          : 'list';
+      const currentPanel = currentView === 'detail'
+        ? getRecipeDetailPanel(activeRecipeId)
+        : currentView === 'tag'
+          ? recipeTagResultsPanel
+          : recipeListPanel;
+      let incomingPanel = recipeListPanel;
+
+      if (isDetail) {
+        incomingPanel = getRecipeDetailPanel(recipeId);
+        if (!incomingPanel) return;
+      } else if (isTagResults) {
+        if (!recipeTagResultsPanel || !tagName) return;
+        renderRecipeTagResults(tagName);
+        incomingPanel = recipeTagResultsPanel;
+      }
+
+      if (!currentPanel || !incomingPanel) return;
+      if (currentView === view && incomingPanel === currentPanel) {
+        if (isTagResults && activeRecipeTag !== tagName) {
+          activeRecipeTag = tagName;
+          recipeTagReturnView = tagReturnView === 'detail' ? 'detail' : 'list';
+          recipeTagReturnRecipeId = recipeTagReturnView === 'detail' ? recipeId : activeRecipeId;
+          if (recipesMenuContentPanel) {
+            recipesMenuContentPanel.scrollTop = 0;
+          }
+        }
+        return;
+      }
+
+      const isReturningToRecipe = currentView === 'tag' && isDetail && recipeTagReturnView === 'detail' && recipeId === recipeTagReturnRecipeId;
+      const direction = view === 'list' || isReturningToRecipe ? -1 : 1;
+      if (isDetail) {
+        activeRecipeId = incomingPanel.dataset.recipeId || activeRecipeId;
+      }
+      if (isTagResults) {
+        recipeTagReturnView = tagReturnView === 'detail' ? 'detail' : 'list';
+        recipeTagReturnRecipeId = recipeTagReturnView === 'detail' ? recipeId : activeRecipeId;
+      }
+      if (view === 'list') {
+        recipeTagReturnView = 'list';
+      }
+      activeRecipeTag = isTagResults ? tagName : '';
 
       recipesCard.classList.toggle('is-recipe-detail', isDetail);
+      recipesCard.classList.toggle('is-recipe-tag-results', isTagResults);
       recipesBackLabels.forEach(label => {
-        if (isDetail) {
-          label.innerHTML = '<span class="menu-label-back-arrow">←</span><span class="menu-label-back-text">К РЕЦЕПТАМ</span>';
+        if (isDetail || isTagResults) {
+          const backText = isTagResults && recipeTagReturnView === 'detail' ? 'К РЕЦЕПТУ' : 'К РЕЦЕПТАМ';
+          label.innerHTML = `<span class="menu-label-back-arrow">←</span><span class="menu-label-back-text">${backText}</span>`;
         } else {
           label.textContent = '←';
         }
-        label.setAttribute('aria-label', isDetail ? 'К рецептам' : 'Назад');
+        label.setAttribute('aria-label', isTagResults && recipeTagReturnView === 'detail' ? 'К рецепту' : isDetail || isTagResults ? 'К рецептам' : 'Назад');
       });
 
       recipeDetailPanels.forEach(panel => {
-        if (panel !== incomingPanel && panel !== outgoingPanel) {
+        if (panel !== incomingPanel && panel !== currentPanel) {
           panel.hidden = true;
           panel.style.transform = '';
           panel.style.opacity = '';
         }
       });
+      if (recipeTagResultsPanel && recipeTagResultsPanel !== incomingPanel && recipeTagResultsPanel !== currentPanel) {
+        recipeTagResultsPanel.hidden = true;
+        recipeTagResultsPanel.style.transform = '';
+        recipeTagResultsPanel.style.opacity = '';
+      }
+
       incomingPanel.hidden = false;
-      outgoingPanel.hidden = false;
+      currentPanel.hidden = false;
       const transitionHeight = Math.max(
         incomingPanel.scrollHeight || incomingPanel.getBoundingClientRect().height,
-        outgoingPanel.scrollHeight || outgoingPanel.getBoundingClientRect().height
+        currentPanel.scrollHeight || currentPanel.getBoundingClientRect().height
       );
       if (recipesContentRoot) {
         recipesContentRoot.style.minHeight = `${transitionHeight}px`;
@@ -1756,24 +1937,24 @@
       }
       incomingPanel.style.transform = `translateX(${direction * 110}%)`;
       incomingPanel.style.opacity = '0';
-      outgoingPanel.style.transform = 'translateX(0)';
-      outgoingPanel.style.opacity = '1';
+      currentPanel.style.transform = 'translateX(0)';
+      currentPanel.style.opacity = '1';
 
       window.requestAnimationFrame(() => {
         incomingPanel.style.transform = 'translateX(0)';
         incomingPanel.style.opacity = '1';
-        outgoingPanel.style.transform = `translateX(${-direction * 110}%)`;
-        outgoingPanel.style.opacity = '0';
+        currentPanel.style.transform = `translateX(${-direction * 110}%)`;
+        currentPanel.style.opacity = '0';
       });
 
       window.setTimeout(() => {
-        outgoingPanel.hidden = true;
+        currentPanel.hidden = true;
         if (recipesContentRoot) {
           recipesContentRoot.classList.remove('is-switching');
           recipesContentRoot.style.minHeight = '';
         }
-        outgoingPanel.style.transform = '';
-        outgoingPanel.style.opacity = '';
+        currentPanel.style.transform = '';
+        currentPanel.style.opacity = '';
         incomingPanel.style.transform = '';
         incomingPanel.style.opacity = '';
       }, RECIPE_VIEW_TRANSITION_MS);
@@ -1785,20 +1966,66 @@
 
     setRecipeView('list');
 
-    recipeOpenButtons.forEach(button => {
-      button.addEventListener('click', (event) => {
+    recipesCard?.querySelectorAll('[data-recipe-tag]').forEach(tag => {
+      tag.setAttribute('role', 'button');
+      tag.setAttribute('tabindex', '0');
+    });
+
+    recipesCard?.addEventListener('click', (event) => {
+      const recipeButton = event.target.closest('[data-open-recipe-detail]');
+      if (recipeButton && recipesCard.contains(recipeButton)) {
         event.stopPropagation();
         playWhoosh();
-        setRecipeView('detail', button.dataset.openRecipeDetail);
-      });
+        setRecipeView('detail', recipeButton.dataset.openRecipeDetail);
+        return;
+      }
 
-      button.addEventListener('keydown', (event) => {
-        if (event.key !== 'Enter' && event.key !== ' ') return;
+      const tagButton = event.target.closest('[data-open-recipe-tag]');
+      if (tagButton && recipesCard.contains(tagButton)) {
+        event.stopPropagation();
+        playWhoosh();
+        setRecipeView('tag', activeRecipeId, tagButton.dataset.openRecipeTag, 'list');
+        return;
+      }
+
+      const recipeTag = event.target.closest('[data-recipe-tag]');
+      if (recipeTag && recipesCard.contains(recipeTag)) {
+        const sourceRecipeId = recipeTag.closest('[data-recipe-detail-panel]')?.dataset.recipeId || activeRecipeId;
+        event.stopPropagation();
+        playWhoosh();
+        setRecipeView('tag', sourceRecipeId, recipeTag.dataset.recipeTag, 'detail');
+      }
+    });
+
+    recipesCard?.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+
+      const recipeButton = event.target.closest('[data-open-recipe-detail]');
+      if (recipeButton && recipesCard.contains(recipeButton)) {
         event.stopPropagation();
         event.preventDefault();
         playWhoosh();
-        setRecipeView('detail', button.dataset.openRecipeDetail);
-      });
+        setRecipeView('detail', recipeButton.dataset.openRecipeDetail);
+        return;
+      }
+
+      const tagButton = event.target.closest('[data-open-recipe-tag]');
+      if (tagButton && recipesCard.contains(tagButton)) {
+        event.stopPropagation();
+        event.preventDefault();
+        playWhoosh();
+        setRecipeView('tag', activeRecipeId, tagButton.dataset.openRecipeTag, 'list');
+        return;
+      }
+
+      const recipeTag = event.target.closest('[data-recipe-tag]');
+      if (recipeTag && recipesCard.contains(recipeTag)) {
+        const sourceRecipeId = recipeTag.closest('[data-recipe-detail-panel]')?.dataset.recipeId || activeRecipeId;
+        event.stopPropagation();
+        event.preventDefault();
+        playWhoosh();
+        setRecipeView('tag', sourceRecipeId, recipeTag.dataset.recipeTag, 'detail');
+      }
     });
 
     const recipePdfContentById = {
@@ -2323,9 +2550,11 @@
       });
     });
 
+    const getJitterToggles = () => menuSheet.querySelectorAll('.menu-c-button');
+
     const setJitterEnabled = (isEnabled) => {
       menuSheet.classList.toggle('jitter-on', isEnabled);
-      jitterToggles.forEach(toggle => {
+      getJitterToggles().forEach(toggle => {
         toggle.classList.toggle('is-active', isEnabled);
         toggle.setAttribute('aria-pressed', String(isEnabled));
         toggle.setAttribute('aria-label', isEnabled ? 'Выключить jitter' : 'Включить jitter');
@@ -2334,11 +2563,11 @@
 
     if (jitterToggles.length) {
       setJitterEnabled(false);
-      jitterToggles.forEach(toggle => {
-        toggle.addEventListener('click', (event) => {
-          event.stopPropagation();
-          setJitterEnabled(!menuSheet.classList.contains('jitter-on'));
-        });
+      menuSheet.addEventListener('click', (event) => {
+        const toggle = event.target.closest('.menu-c-button');
+        if (!toggle || !menuSheet.contains(toggle)) return;
+        event.stopPropagation();
+        setJitterEnabled(!menuSheet.classList.contains('jitter-on'));
       });
     }
 
@@ -2466,7 +2695,14 @@
     recipesBackLabels.forEach(label => {
       label.addEventListener('click', (event) => {
         event.stopPropagation();
-        if (recipesCard?.classList.contains('is-recipe-detail')) {
+        if (recipesCard?.classList.contains('is-recipe-tag-results')) {
+          playWhoosh();
+          if (recipeTagReturnView === 'detail') {
+            setRecipeView('detail', recipeTagReturnRecipeId);
+          } else {
+            setRecipeView('list');
+          }
+        } else if (recipesCard?.classList.contains('is-recipe-detail')) {
           playWhoosh();
           setRecipeView('list');
         } else {
@@ -2478,7 +2714,14 @@
         if (event.key !== 'Enter' && event.key !== ' ') return;
         event.stopPropagation();
         event.preventDefault();
-        if (recipesCard?.classList.contains('is-recipe-detail')) {
+        if (recipesCard?.classList.contains('is-recipe-tag-results')) {
+          playWhoosh();
+          if (recipeTagReturnView === 'detail') {
+            setRecipeView('detail', recipeTagReturnRecipeId);
+          } else {
+            setRecipeView('list');
+          }
+        } else if (recipesCard?.classList.contains('is-recipe-detail')) {
           playWhoosh();
           setRecipeView('list');
         } else {
