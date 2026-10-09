@@ -214,7 +214,7 @@
     <div class="menu-subtitle" aria-hidden="true">ОБО МНЕ</div>
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
     <div class="menu-bio">
-      Меня зовут Алексей Варганов — тот случай, когда фамилия определила, чё я буду делать по жизни. Лучше всего про меня расскажут проекты, список которых ниже. А ещё можешь тыкнуть на крутящуюся коробку и навалить музла. Мир!
+      Йо! Меня зовут Алексей Варганов — тот случай, когда фамилия определила, чё я буду делать по жизни. Лучше всего обо мне расскажут штуки, список которых ниже. А ещё можешь заценить рецепты, тыкнуть на коробку с пиццей и навалить музла. Приятного!
     </div>
     <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
     <div class="menu-subtitle" aria-hidden="true">СВАРГАНИЛ</div>
@@ -660,12 +660,16 @@
     </div>
     <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
     <div class="menu-meta-row sub-meta">
-      <span class="menu-meta-left">ATM</span>
+      <span class="menu-meta-left">ATM001: JONGLIST</span>
       <span class="menu-meta-right">2026</span>
     </div>
     <div class="menu-icon-row">
       <img src="assets/icons/music.png" alt="music icon">
-      <img src="assets/icons/label.png" alt="label icon">
+      <img src="assets/icons/prod.png" alt="production icon">
+      <img src="assets/icons/record.png" alt="record icon">
+      <img src="assets/icons/artdir.png" alt="art direction icon">
+      <img src="assets/icons/art.png" alt="art icon">
+      <img src="assets/icons/des.png" alt="design icon">
     </div>
     <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
     <div class="menu-meta-row sub-meta">
@@ -700,7 +704,6 @@
       <img src="assets/icons/art.png" alt="art icon">
       <img src="assets/icons/des.png" alt="design icon">
       <img src="assets/icons/sound.png" alt="sound icon">
-      <img src="assets/icons/egg.png" alt="egg icon">
     </div>
     <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
     <div class="menu-meta-row sub-meta">
@@ -744,7 +747,6 @@
       <span class="menu-tag"><img src="assets/icons/record.png" alt=""><span>релиз</span></span>
       <span class="menu-tag"><img src="assets/icons/sound.png" alt=""><span>саунд-дизайн</span></span>
       <span class="menu-tag"><img src="assets/icons/jour.png" alt=""><span>тексты</span></span>
-      <span class="menu-tag"><img src="assets/icons/egg.png" alt=""><span>яйцо</span></span>
       <span class="menu-tag"><img src="assets/icons/arvr.png" alt=""><span>AR</span></span>
       <span class="menu-tag"><img src="assets/icons/nda.png" alt=""><span>NDA</span></span>
       <span class="menu-tag"><img src="assets/icons/wip.png" alt=""><span>WIP</span></span>
@@ -944,7 +946,7 @@
           });
           const authorBio = list.querySelector('.menu-bio');
           if (authorBio) {
-            authorBio.textContent = 'Вот будет больше рецептов — придумаю чё сюда умного написать.';
+            authorBio.innerHTML = 'Почему «cockbook»? Во-первых, созвучно «cookbook», а во-вторых, так на сленге кличут журнальчики для взрослых. Еда меня дико заводит — всё сходится.<br><br>Короче, вручаю тебе не просто кулинарную книгу, а реальный кухонный стержень. Только руки не забудь помыть перед прочтением!';
           }
 
           const menuHeaderRow = Array.from(list.querySelectorAll('.menu-meta-row')).find(row => {
@@ -966,7 +968,7 @@
           const firstRecipeIcons = firstRecipeRow?.nextElementSibling;
           if (firstRecipeIcons?.classList.contains('menu-icon-row')) {
             firstRecipeIcons.innerHTML = `
-              <img src="assets/icons/zakus.png" alt="snack icon">
+              <img src="assets/icons/snack.png" alt="snack icon">
               <img src="assets/icons/veg.png" alt="vegetables icon">
             `;
           }
@@ -1012,7 +1014,7 @@
                 </span>
               </div>
               <div class="menu-icon-row">
-                <img src="assets/icons/zakus.png" alt="snack icon">
+                <img src="assets/icons/snack.png" alt="snack icon">
                 <img src="assets/icons/egg.png" alt="egg icon">
               </div>
               <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
@@ -1027,7 +1029,7 @@
               <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
               <div class="menu-meta-row sub-meta">
                 <span class="menu-meta-left">
-                  <button class="menu-recipe-list-item" type="button" data-open-recipe-detail="cilbir">ЧЫЛБЫР</button>
+                  <button class="menu-recipe-list-item" type="button" data-open-recipe-detail="cilbir">ЧЫЛБЫР — ЯЙЦА ПО-ТУРЕЦКИ</button>
                 </span>
               </div>
               <div class="menu-icon-row">
@@ -1042,7 +1044,7 @@
             tagLegend.innerHTML = `
               <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="джанк-фуд"><img src="assets/icons/junk.png" alt=""><span>джанк-фуд</span></button>
               <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="завтраки"><img src="assets/icons/bfast.png" alt=""><span>завтраки</span></button>
-              <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="закуски"><img src="assets/icons/zakus.png" alt=""><span>закуски</span></button>
+              <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="закуски"><img src="assets/icons/snack.png" alt=""><span>закуски</span></button>
               <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="лапша"><img src="assets/icons/nood.png" alt=""><span>лапша</span></button>
               <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="мясо"><img src="assets/icons/meat.png" alt=""><span>мясо</span></button>
               <button class="menu-tag menu-tag-button" type="button" data-open-recipe-tag="овощи"><img src="assets/icons/veg.png" alt=""><span>овощи</span></button>
@@ -1078,11 +1080,11 @@
               <div class="menu-recipe-info">
                 <div class="menu-recipe-title">Баклажан с томатным соусом и страчателлой</div>
                 <div class="menu-recipe-tags" aria-label="Теги рецепта">
-                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/zakus.png" alt="">закуски</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/snack.png" alt="">закуски</span>
                   <span class="menu-recipe-tag" data-recipe-tag="овощи"><img src="assets/icons/veg.png" alt="">овощи</span>
                 </div>
                 <div class="menu-recipe-facts" aria-label="Параметры рецепта">
-                  <div><span>ВРЕМЯ:</span> <span>35 МИНУТ</span></div>
+                  <div><span>ВРЕМЯ:</span> <span>45 МИНУТ</span></div>
                   <div><span>ПОРЦИИ:</span> <span>2</span></div>
                   <div><span>СЛОЖНОСТЬ:</span> <span>ПРОСТО</span></div>
                   <div><span>НУЖНО:</span> <span>ПЛИТА, ДУХОВКА, СКОВОРОДА</span></div>
@@ -1388,7 +1390,7 @@
               <div class="menu-recipe-info">
                 <div class="menu-recipe-title">Маринованные яйца</div>
                 <div class="menu-recipe-tags" aria-label="Теги рецепта">
-                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/zakus.png" alt="">закуски</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/snack.png" alt="">закуски</span>
                   <span class="menu-recipe-tag" data-recipe-tag="яйца"><img src="assets/icons/egg.png" alt="">яйца</span>
                 </div>
                 <div class="menu-recipe-facts" aria-label="Параметры рецепта">
@@ -1570,10 +1572,10 @@
             <div class="menu-recipe-detail" data-recipe-detail-panel data-recipe-id="cilbir" hidden>
             <div class="menu-recipe-hero">
               <figure class="menu-recipe-image-frame">
-                <img src="assets/food/cilbir.webp" alt="Чылбыр">
+                <img src="assets/food/cilbir.webp" alt="Чылбыр — яйца по-турецки">
               </figure>
               <div class="menu-recipe-info">
-                <div class="menu-recipe-title">Чылбыр</div>
+                <div class="menu-recipe-title">ЧЫЛБЫР — ЯЙЦА ПО-ТУРЕЦКИ</div>
                 <div class="menu-recipe-tags" aria-label="Теги рецепта">
                   <span class="menu-recipe-tag" data-recipe-tag="завтраки"><img src="assets/icons/bfast.png" alt="">завтраки</span>
                   <span class="menu-recipe-tag" data-recipe-tag="яйца"><img src="assets/icons/egg.png" alt="">яйца</span>
@@ -1704,7 +1706,7 @@
         id: 'baklazhan',
         title: 'БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ',
         tags: [
-          { name: 'закуски', icon: 'assets/icons/zakus.png', alt: 'snack icon' },
+          { name: 'закуски', icon: 'assets/icons/snack.png', alt: 'snack icon' },
           { name: 'овощи', icon: 'assets/icons/veg.png', alt: 'vegetables icon' }
         ]
       },
@@ -1728,7 +1730,7 @@
         id: 'marinovannye-yaytsa',
         title: 'МАРИНОВАННЫЕ ЯЙЦА',
         tags: [
-          { name: 'закуски', icon: 'assets/icons/zakus.png', alt: 'snack icon' },
+          { name: 'закуски', icon: 'assets/icons/snack.png', alt: 'snack icon' },
           { name: 'яйца', icon: 'assets/icons/egg.png', alt: 'egg icon' }
         ]
       },
@@ -1741,7 +1743,7 @@
       },
       {
         id: 'cilbir',
-        title: 'ЧЫЛБЫР',
+        title: 'ЧЫЛБЫР — ЯЙЦА ПО-ТУРЕЦКИ',
         tags: [
           { name: 'завтраки', icon: 'assets/icons/bfast.png', alt: 'breakfast icon' },
           { name: 'яйца', icon: 'assets/icons/egg.png', alt: 'egg icon' }
@@ -2097,7 +2099,7 @@
         title: 'БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ',
         description: 'Вкусные и лёгкие баклажаны по семейному рецепту.',
         info: [
-          'ВРЕМЯ: 35 МИНУТ',
+          'ВРЕМЯ: 45 МИНУТ',
           'ПОРЦИИ: 2',
           'СЛОЖНОСТЬ: ПРОСТО',
           'НУЖНО: ПЛИТА, ДУХОВКА, СКОВОРОДА'
@@ -2267,7 +2269,7 @@
       },
       cilbir: {
         filename: 'cilbir.pdf',
-        title: 'ЧЫЛБЫР',
+        title: 'ЧЫЛБЫР — ЯЙЦА ПО-ТУРЕЦКИ',
         description: 'Отличный завтрак для тех, кого заебали избитые способы готовить яйца.',
         info: [
           'ВРЕМЯ: 20 МИНУТ',
