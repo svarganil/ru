@@ -231,7 +231,6 @@
           <span class="menu-project-tooltip" id="100ninjas-project-tooltip">
             <span class="menu-project-tooltip-text">
               Проект в жанре «пост-дабстеп» с релизами на знаковых лейблах Eight:FX и Section 8 Recordings.
-              <a class="menu-project-tooltip-link" href="https://soundcloud.com/100ninjas" target="_blank" rel="noopener">Ссылка →</a>
             </span>
           </span>
         </span>
@@ -250,7 +249,6 @@
           <span class="menu-project-tooltip" id="moon-officer-project-tooltip">
             <span class="menu-project-tooltip-text">
               Дабстеп-проект с классическим звучанием, участник важного для жанра комьюнити Subline.
-              <a class="menu-project-tooltip-link" href="https://www.mixcloud.com/burydabwoy/moon-officer-metalheadz-xx-tour-10112014/" target="_blank" rel="noopener">Ссылка →</a>
             </span>
           </span>
         </span>
@@ -269,7 +267,6 @@
           <span class="menu-project-tooltip" id="subline-project-tooltip">
             <span class="menu-project-tooltip-text">
               Культовый лейбл, подкаст, промогруппа и новостной блог про бэйс-музыку.
-              <a class="menu-project-tooltip-link" href="https://soundcloud.com/subline" target="_blank" rel="noopener">Ссылка →</a>
             </span>
           </span>
         </span>
@@ -310,7 +307,6 @@
           <span class="menu-project-tooltip" id="goodies-project-tooltip">
             <span class="menu-project-tooltip-text">
               Концептуальный клубный ресторан, где лондонский стрит-арт андерграунд встречается с ярким американским поп-артом — под виниловую музыку.
-              <a class="menu-project-tooltip-link" href="https://vk.ru/goodies_cafe" target="_blank" rel="noopener">Ссылка →</a>
             </span>
           </span>
         </span>
@@ -509,7 +505,6 @@
           <span class="menu-project-tooltip" id="vyhod-project-tooltip">
             <span class="menu-project-tooltip-text">
               Интернет-издания о жизни и культуре.
-              <a class="menu-project-tooltip-link" href="https://vk.ru/ttexit" target="_blank" rel="noopener">Ссылка →</a>
             </span>
           </span>
         </span>
@@ -692,7 +687,6 @@
           <span class="menu-project-tooltip" id="koki-project-tooltip">
             <span class="menu-project-tooltip-text">
               Приложение для варки яиц с таймером, советами, рецептами и не самым умным помощником Клавой.
-              <a class="menu-project-tooltip-link" href="https://svarganil.github.io/koky/" target="_blank" rel="noopener">Ссылка →</a>
             </span>
           </span>
         </span>
@@ -926,7 +920,7 @@
           const firstRecipeRow = list.querySelector('.menu-meta-row.sub-meta');
           const firstRecipeTitle = firstRecipeRow?.querySelector('.menu-meta-left');
           if (firstRecipeTitle) {
-            firstRecipeTitle.innerHTML = '<button class="menu-recipe-list-item" type="button" data-open-recipe-detail>БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ</button>';
+            firstRecipeTitle.innerHTML = '<button class="menu-recipe-list-item" type="button" data-open-recipe-detail="baklazhan">БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ</button>';
           }
           const firstRecipeIcons = firstRecipeRow?.nextElementSibling;
           if (firstRecipeIcons?.classList.contains('menu-icon-row')) {
@@ -949,6 +943,40 @@
 
           list.querySelectorAll('.menu-meta-right').forEach(item => item.remove());
           const tagLegend = list.querySelector('.menu-tag-legend');
+          if (tagLegend) {
+            tagLegend.insertAdjacentHTML('beforebegin', `
+              <div class="menu-meta-row sub-meta">
+                <span class="menu-meta-left">
+                  <button class="menu-recipe-list-item" type="button" data-open-recipe-detail="buldak-carbonara">БУЛЬДАК КАРБОНАРА</button>
+                </span>
+              </div>
+              <div class="menu-icon-row">
+                <img src="assets/icons/snack.png" alt="snack icon">
+                <img src="assets/icons/veg.png" alt="vegetables icon">
+              </div>
+              <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
+              <div class="menu-meta-row sub-meta">
+                <span class="menu-meta-left">
+                  <button class="menu-recipe-list-item" type="button" data-open-recipe-detail="rebra-bbq-cola">РЁБРА BBQ COLA</button>
+                </span>
+              </div>
+              <div class="menu-icon-row">
+                <img src="assets/icons/snack.png" alt="snack icon">
+                <img src="assets/icons/veg.png" alt="vegetables icon">
+              </div>
+              <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
+              <div class="menu-meta-row sub-meta">
+                <span class="menu-meta-left">
+                  <button class="menu-recipe-list-item" type="button" data-open-recipe-detail="cilbir">ЧЫЛБЫР</button>
+                </span>
+              </div>
+              <div class="menu-icon-row">
+                <img src="assets/icons/snack.png" alt="snack icon">
+                <img src="assets/icons/veg.png" alt="vegetables icon">
+              </div>
+              <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
+            `);
+          }
           if (tagLegend) {
             tagLegend.setAttribute('aria-label', 'Теги рецептов');
             tagLegend.innerHTML = `
@@ -975,10 +1003,10 @@
         recipesMenuContent.innerHTML = `
           <div class="menu-recipes-content">
             ${recipeListHtml}
-            <div class="menu-recipe-detail" data-recipe-detail-panel hidden>
+            <div class="menu-recipe-detail" data-recipe-detail-panel data-recipe-id="baklazhan" hidden>
             <div class="menu-recipe-hero">
               <figure class="menu-recipe-image-frame">
-                <img src="assets/food/test.webp" alt="Тестовое блюдо">
+                <img src="assets/food/baklazhan.webp" alt="Баклажан с томатным соусом и страчателлой">
               </figure>
               <div class="menu-recipe-info">
                 <div class="menu-recipe-title">Баклажан с томатным соусом и страчателлой</div>
@@ -995,7 +1023,7 @@
                 <div class="menu-recipe-caption">Вкусные и лёгкие баклажаны по семейному рецепту.</div>
                 <div class="menu-recipe-download">
                   <button class="menu-button menu-recipe-download-button menu-recipe-video-button" type="button" disabled>СМОТРЕТЬ ВИДЕО</button>
-                  <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf>СКАЧАТЬ РЕЦЕПТ</button>
+                  <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf="baklazhan">СКАЧАТЬ РЕЦЕПТ</button>
                 </div>
               </div>
             </div>
@@ -1074,6 +1102,314 @@
               </div>
             </div>
             </div>
+            <div class="menu-recipe-detail" data-recipe-detail-panel data-recipe-id="buldak-carbonara" hidden>
+            <div class="menu-recipe-hero">
+              <figure class="menu-recipe-image-frame">
+                <img src="assets/food/buldakcarb.webp" alt="Бульдак Карбонара">
+              </figure>
+              <div class="menu-recipe-info">
+                <div class="menu-recipe-title">Бульдак Карбонара</div>
+                <div class="menu-recipe-tags" aria-label="Теги рецепта">
+                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/snack.png" alt="">закуски</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="овощи"><img src="assets/icons/veg.png" alt="">овощи</span>
+                </div>
+                <div class="menu-recipe-facts" aria-label="Параметры рецепта">
+                  <div><span>ВРЕМЯ:</span> <span>20 МИНУТ</span></div>
+                  <div><span>ПОРЦИИ:</span> <span>1</span></div>
+                  <div><span>СЛОЖНОСТЬ:</span> <span>ПРОСТО</span></div>
+                  <div><span>НУЖНО:</span> <span>ПЛИТА, ДУХОВКА, КОВШИК</span></div>
+                </div>
+                <div class="menu-recipe-caption">Тот самый, который «розовый».</div>
+                <div class="menu-recipe-download">
+                  <a class="menu-button menu-recipe-download-button" href="https://t.me/slappetizer/476" target="_blank" rel="noopener">СМОТРЕТЬ ВИДЕО</a>
+                  <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf="buldak-carbonara">СКАЧАТЬ РЕЦЕПТ</button>
+                </div>
+              </div>
+            </div>
+            <div class="menu-recipe-ingredients-block">
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ИНГРЕДИЕНТЫ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-ingredients">
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">уп.</span></span><span class="menu-recipe-ingredient-name">BULDAK CREAM CARBONARA</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">шт.</span></span><span class="menu-recipe-ingredient-name">ЯЙЦО (ЖЕЛТОК)</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">25</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">СЛИВКИ 10%</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">25</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">СЫРНЫЙ СОУС ¹</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">л</span></span><span class="menu-recipe-ingredient-name">ВОДА</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">150</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">БЕКОН СЫРОЙ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-amount">по вкусу</span></span><span class="menu-recipe-ingredient-name">СОЛЬ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">50</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">ГРИБЫ МУЭР</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">2</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">РИСОВЫЙ УКСУС</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">СОУС ШРИРАЧА</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name">СОЕВЫЙ СОУС</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">КУНЖУТНОЕ МАСЛО</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">½</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">СОК ЛАЙМА</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">½</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">ДЖИН С БУЗИНОЙ ²</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">¼</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">ВУСТЕРСКИЙ СОУС</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">шт.</span></span><span class="menu-recipe-ingredient-name">ЯЙЦО МАРИНОВАННОЕ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-amount">по вкусу</span></span><span class="menu-recipe-ingredient-name">ЖАРЕНЫЙ ЛУК</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-amount">по вкусу</span></span><span class="menu-recipe-ingredient-name">КУНЖУТ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-amount">по вкусу</span></span><span class="menu-recipe-ingredient-name">ПАРМЕЗАН</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-amount">по вкусу</span></span><span class="menu-recipe-ingredient-name">НОРИ</span></div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИГОТОВЛЕНИЕ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p class="menu-recipe-step">1. Сперва рекомендую подготовить топпинги. Положи древесные грибы в банку, подлей рисовый уксус, шрирачу, соевый соус, кунжутное масло, сок лайма, джин, вустерский соус и маринуй не меньше часа (лучше сутки). Бекон просто посоли и запекай до хруста.</p>
+                <p class="menu-recipe-step">2. Замешай содержимое двух пакетиков из пачки «бульдака», желток СЫРОГО яйца, сливки и сырный соус в глубокой миске.</p>
+                <p class="menu-recipe-step">3. Лапшу вари 4 минуты в кипящей воде. Под конец варки зачерпни немного воды, добавь к соусу и перемешай.</p>
+                <p class="menu-recipe-step">4. Слей воду из кастрюли, а лапшу вывали в миску к остальному.</p>
+                <p class="menu-recipe-step">5. Добавь топпинги: бекон, грибы, яйцо, жареный лук, кунжут, пармезан и нори.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИМЕЧАНИЯ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p>1. В идеале — сырный соус «Пармезан» из Burger King.</p>
+                <p>2. Я люблю Barrister Elderflower, но есть и другие варианты.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
+                <div class="menu-marquee-track">
+                  <div class="menu-marquee-group">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                  <div class="menu-marquee-group" aria-hidden="true">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                </div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">КНИГА ЖАЛОБ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-bio menu-note menu-recipe-complaint-note">
+                Муха в супе, повар — мудак или всё понравилось? Пиши — жду с нетерпением.
+              </div>
+              <div class="menu-action">
+                <a class="menu-button" href="https://t.me/slaycid" target="_blank" rel="noopener">НАПИСАТЬ</a>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-footer">
+                <span class="menu-disclaimer">*Продукт Meta Platforms 👻 Запрещено в РФ</span>
+                <span class="menu-music-credit">Музыка на сайте <span class="music-credit-symbol">■</span> <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
+                <span class="menu-copyright">© <span id="current-year-recipes-buldak">2026</span> Сварганил</span>
+                <button class="menu-c-button" type="button" aria-label="Включить jitter" aria-pressed="false">
+                  <img class="menu-c-button-normal" src="assets/image/c_normal.png" alt="">
+                  <img class="menu-c-button-hover" src="assets/image/c_hover.png" alt="">
+                </button>
+              </div>
+            </div>
+            </div>
+            <div class="menu-recipe-detail" data-recipe-detail-panel data-recipe-id="rebra-bbq-cola" hidden>
+            <div class="menu-recipe-hero">
+              <figure class="menu-recipe-image-frame">
+                <img src="assets/food/colaribs.webp" alt="Рёбра BBQ Cola">
+              </figure>
+              <div class="menu-recipe-info">
+                <div class="menu-recipe-title">Рёбра BBQ Cola</div>
+                <div class="menu-recipe-tags" aria-label="Теги рецепта">
+                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/snack.png" alt="">закуски</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="овощи"><img src="assets/icons/veg.png" alt="">овощи</span>
+                </div>
+                <div class="menu-recipe-facts" aria-label="Параметры рецепта">
+                  <div><span>ВРЕМЯ:</span> <span>150 МИНУТ</span></div>
+                  <div><span>ПОРЦИИ:</span> <span>4</span></div>
+                  <div><span>СЛОЖНОСТЬ:</span> <span>СРЕДНЕ</span></div>
+                  <div><span>НУЖНО:</span> <span>ДУХОВКА</span></div>
+                </div>
+                <div class="menu-recipe-caption">Рёбрышки без су-видов и прочих выебонов.</div>
+                <div class="menu-recipe-download">
+                  <a class="menu-button menu-recipe-download-button" href="https://t.me/slappetizer/550" target="_blank" rel="noopener">СМОТРЕТЬ ВИДЕО</a>
+                  <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf="rebra-bbq-cola">СКАЧАТЬ РЕЦЕПТ</button>
+                </div>
+              </div>
+            </div>
+            <div class="menu-recipe-ingredients-block">
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ИНГРЕДИЕНТЫ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-ingredients">
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">кг</span></span><span class="menu-recipe-ingredient-name">РЁБРА СВИНЫЕ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">3</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name">АМЕРИКАНСКАЯ ГОРЧИЦА</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">40</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">ПРИПРАВА BBQ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">100</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">СОУС BBQ СО ВКУСОМ КОЛЫ ¹</span></div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИГОТОВЛЕНИЕ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p class="menu-recipe-step">1. Сними плёнку с рёбер.</p>
+                <p class="menu-recipe-step">2. Смажь горчицей и посыпь сухим BBQ.</p>
+                <p class="menu-recipe-step">3. Укутай рёбра в фольгу.</p>
+                <p class="menu-recipe-step">4. Запекай 2 часа при 180°C.</p>
+                <p class="menu-recipe-step">5. Сними фольгу и щедро намажь рёбра соусом.</p>
+                <p class="menu-recipe-step">6. Запекай ещё 20 минут при 220°C.</p>
+                <p class="menu-recipe-step">7. Подавай с соусом и любимой закуской.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИМЕЧАНИЯ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p>1. Любой другой соус BBQ тоже сойдёт.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
+                <div class="menu-marquee-track">
+                  <div class="menu-marquee-group">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                  <div class="menu-marquee-group" aria-hidden="true">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                </div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">КНИГА ЖАЛОБ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-bio menu-note menu-recipe-complaint-note">
+                Муха в супе, повар — мудак или всё понравилось? Пиши — жду с нетерпением.
+              </div>
+              <div class="menu-action">
+                <a class="menu-button" href="https://t.me/slaycid" target="_blank" rel="noopener">НАПИСАТЬ</a>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-footer">
+                <span class="menu-disclaimer">*Продукт Meta Platforms 👻 Запрещено в РФ</span>
+                <span class="menu-music-credit">Музыка на сайте <span class="music-credit-symbol">■</span> <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
+                <span class="menu-copyright">© <span id="current-year-recipes-ribs">2026</span> Сварганил</span>
+                <button class="menu-c-button" type="button" aria-label="Включить jitter" aria-pressed="false">
+                  <img class="menu-c-button-normal" src="assets/image/c_normal.png" alt="">
+                  <img class="menu-c-button-hover" src="assets/image/c_hover.png" alt="">
+                </button>
+              </div>
+            </div>
+            </div>
+            <div class="menu-recipe-detail" data-recipe-detail-panel data-recipe-id="cilbir" hidden>
+            <div class="menu-recipe-hero">
+              <figure class="menu-recipe-image-frame">
+                <img src="assets/food/cilbir.webp" alt="Чылбыр">
+              </figure>
+              <div class="menu-recipe-info">
+                <div class="menu-recipe-title">Чылбыр</div>
+                <div class="menu-recipe-tags" aria-label="Теги рецепта">
+                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/snack.png" alt="">закуски</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="овощи"><img src="assets/icons/veg.png" alt="">овощи</span>
+                </div>
+                <div class="menu-recipe-facts" aria-label="Параметры рецепта">
+                  <div><span>ВРЕМЯ:</span> <span>20 МИНУТ</span></div>
+                  <div><span>ПОРЦИИ:</span> <span>2</span></div>
+                  <div><span>СЛОЖНОСТЬ:</span> <span>ПРОСТО</span></div>
+                  <div><span>НУЖНО:</span> <span>ПЛИТА, КОВШИК, СОТЕЙНИК</span></div>
+                </div>
+                <div class="menu-recipe-caption">Отличный завтрак для тех, кого заебали избитые способы готовить яйца.</div>
+                <div class="menu-recipe-download">
+                  <a class="menu-button menu-recipe-download-button" href="https://t.me/slappetizer/432" target="_blank" rel="noopener">СМОТРЕТЬ ВИДЕО</a>
+                  <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf="cilbir">СКАЧАТЬ РЕЦЕПТ</button>
+                </div>
+              </div>
+            </div>
+            <div class="menu-recipe-ingredients-block">
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ИНГРЕДИЕНТЫ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-ingredients">
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">250</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">ГРЕЧЕСКИЙ ЙОГУРТ (ГУСТОЙ)</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">5</span><span class="menu-recipe-ingredient-amount">веточка</span></span><span class="menu-recipe-ingredient-name">УКРОП</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">зубчик</span></span><span class="menu-recipe-ingredient-name">ЧЕСНОК</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">¼</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">СОЛЬ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">¼</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">TABASCO JALAPENO ¹</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">40</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">СЛИВОЧНОЕ МАСЛО</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name">ОЛИВКОВОЕ МАСЛО</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">2</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name">СОУС LAO GAN MA ²</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name">УКСУС (9%)</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">¼</span><span class="menu-recipe-ingredient-amount">ч.л.</span></span><span class="menu-recipe-ingredient-name">СОЛЬ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">4</span><span class="menu-recipe-ingredient-amount">шт.</span></span><span class="menu-recipe-ingredient-name">ЯЙЦО</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">5</span><span class="menu-recipe-ingredient-amount">слайс</span></span><span class="menu-recipe-ingredient-name">ХАЛАПЕНЬО СВЕЖИЙ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">шт.</span></span><span class="menu-recipe-ingredient-name">РОТИ</span></div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИГОТОВЛЕНИЕ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p class="menu-recipe-step">1. Достань йогурт из холодильника заранее, чтобы он достиг комнатной температуры. Мелко нарежь укроп, чеснок раздави в прессе (или натри на мелкой тёрке). Смешай йогурт с укропом, чесноком, солью и соусом TABASCO Jalapeno. Выложи массу в две тарелки.</p>
+                <p class="menu-recipe-step">2. В маленьком сотейнике разогрей сливочное и оливковое масло, добавь соус Lao Gan Ma, перемешай и готовь 1 минуту на небольшом огне. Оставь настаиваться на 5–10 минут, слей в соусник.</p>
+                <p class="menu-recipe-step">3. В кастрюлю налей слой воды толщиной 8-10 сантиметров, добавь уксус и соль, доведи до кипения и убавь огонь на слабый. Яйцо комнатной температуры разбей в маленькую миску, наклони её над водой и осторожно опусти яйцо в кастрюлю, вари 2–3 минуты по 2 яйца за раз. Аккуратно достань яйца с помощью шумовки, промокни бумажным полотенцем и выложи на йогуртовый соус.</p>
+                <p class="menu-recipe-step">4. Полей пряным маслом, укрась тонкими слайсами халапеньо и укропом. Подавай с роти.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИМЕЧАНИЯ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p>1. Можно заменить небольшим количеством любой пряной сухой приправы.</p>
+                <p>2. Можно заменить миксом молотой копчёной паприки и хлопьев перца чили.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
+                <div class="menu-marquee-track">
+                  <div class="menu-marquee-group">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                  <div class="menu-marquee-group" aria-hidden="true">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                </div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">КНИГА ЖАЛОБ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-bio menu-note menu-recipe-complaint-note">
+                Муха в супе, повар — мудак или всё понравилось? Пиши — жду с нетерпением.
+              </div>
+              <div class="menu-action">
+                <a class="menu-button" href="https://t.me/slaycid" target="_blank" rel="noopener">НАПИСАТЬ</a>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-footer">
+                <span class="menu-disclaimer">*Продукт Meta Platforms 👻 Запрещено в РФ</span>
+                <span class="menu-music-credit">Музыка на сайте <span class="music-credit-symbol">■</span> <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
+                <span class="menu-copyright">© <span id="current-year-recipes-cilbir">2026</span> Сварганил</span>
+                <button class="menu-c-button" type="button" aria-label="Включить jitter" aria-pressed="false">
+                  <img class="menu-c-button-normal" src="assets/image/c_normal.png" alt="">
+                  <img class="menu-c-button-hover" src="assets/image/c_hover.png" alt="">
+                </button>
+              </div>
+            </div>
+            </div>
           </div>
         `;
       }
@@ -1089,13 +1425,19 @@
     const recipesCard = menuSheet.querySelector('[data-menu-card-panel="recipes"]');
     const recipesContentRoot = recipesCard?.querySelector('.menu-recipes-content');
     const recipeListPanel = recipesCard?.querySelector('[data-recipe-list-panel]');
-    const recipeDetailPanel = recipesCard?.querySelector('[data-recipe-detail-panel]');
+    const recipeDetailPanels = recipesCard?.querySelectorAll('[data-recipe-detail-panel]') || [];
+    const recipeDetailPanel = recipeDetailPanels[0] || null;
     const recipeOpenButtons = recipesCard?.querySelectorAll('[data-open-recipe-detail]') || [];
     const recipesMenuContentPanel = recipesCard?.querySelector('.menu-content');
     const recipeIngredientRows = menuSheet.querySelectorAll('.menu-recipe-ingredient-row');
     const recipeStepItems = menuSheet.querySelectorAll('.menu-recipe-step');
-    const recipePdfButton = menuSheet.querySelector('[data-recipe-download-pdf]');
+    const recipePdfButtons = menuSheet.querySelectorAll('[data-recipe-download-pdf]');
     const RECIPE_VIEW_TRANSITION_MS = 280;
+    let activeRecipeId = recipeDetailPanel?.dataset.recipeId || 'baklazhan';
+
+    const getRecipeDetailPanel = (recipeId = activeRecipeId) => {
+      return Array.from(recipeDetailPanels).find(panel => panel.dataset.recipeId === recipeId) || recipeDetailPanel;
+    };
 
     currentYearItems.forEach(item => {
       item.textContent = new Date().getFullYear();
@@ -1153,15 +1495,19 @@
       document.fonts.ready.then(syncWipMarqueeSpeed).catch(() => {});
     }
 
-    const setRecipeView = (view) => {
+    const setRecipeView = (view, recipeId = activeRecipeId) => {
       const isDetail = view === 'detail';
-      if (!recipesCard || !recipeListPanel || !recipeDetailPanel) return;
+      const targetDetailPanel = getRecipeDetailPanel(recipeId);
+      const currentDetailPanel = getRecipeDetailPanel(activeRecipeId);
+      if (!recipesCard || !recipeListPanel || !targetDetailPanel || !currentDetailPanel) return;
       const wasDetail = recipesCard.classList.contains('is-recipe-detail');
-      if (wasDetail === isDetail) return;
+      if (wasDetail && isDetail && currentDetailPanel === targetDetailPanel) return;
+      if (!wasDetail && !isDetail) return;
 
-      const incomingPanel = isDetail ? recipeDetailPanel : recipeListPanel;
-      const outgoingPanel = isDetail ? recipeListPanel : recipeDetailPanel;
+      const incomingPanel = isDetail ? targetDetailPanel : recipeListPanel;
+      const outgoingPanel = isDetail ? (wasDetail ? currentDetailPanel : recipeListPanel) : currentDetailPanel;
       const direction = isDetail ? 1 : -1;
+      activeRecipeId = targetDetailPanel.dataset.recipeId || activeRecipeId;
 
       recipesCard.classList.toggle('is-recipe-detail', isDetail);
       recipesBackLabels.forEach(label => {
@@ -1173,6 +1519,13 @@
         label.setAttribute('aria-label', isDetail ? 'К рецептам' : 'Назад');
       });
 
+      recipeDetailPanels.forEach(panel => {
+        if (panel !== incomingPanel && panel !== outgoingPanel) {
+          panel.hidden = true;
+          panel.style.transform = '';
+          panel.style.opacity = '';
+        }
+      });
       incomingPanel.hidden = false;
       outgoingPanel.hidden = false;
       const transitionHeight = Math.max(
@@ -1218,7 +1571,7 @@
       button.addEventListener('click', (event) => {
         event.stopPropagation();
         playWhoosh();
-        setRecipeView('detail');
+        setRecipeView('detail', button.dataset.openRecipeDetail);
       });
 
       button.addEventListener('keydown', (event) => {
@@ -1226,41 +1579,153 @@
         event.stopPropagation();
         event.preventDefault();
         playWhoosh();
-        setRecipeView('detail');
+        setRecipeView('detail', button.dataset.openRecipeDetail);
       });
     });
 
-    const recipePdfContent = {
-      title: 'БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ',
-      description: 'Вкусные и лёгкие баклажаны по семейному рецепту.',
-      info: [
-        'ВРЕМЯ: 35 МИНУТ',
-        'ПОРЦИИ: 2',
-        'СЛОЖНОСТЬ: ПРОСТО',
-        'НУЖНО: ПЛИТА, ДУХОВКА, СКОВОРОДА'
-      ],
-      ingredients: [
-        'БАКЛАЖАН — 1 ШТ.',
-        'ТОМАТЫ ПЕРЕТЁРТЫЕ — 400 МЛ',
-        'УКСУС ВИННЫЙ — 1 Ч.Л.',
-        'МАСЛО ОЛИВКОВОЕ — 1 Ч.Л.',
-        'БАЗИЛИК СУШЁНЫЙ¹ — 1 СТ.Л.',
-        'ОРЕГАНО СУШЁНЫЙ — 1 ЩЕПОТКА',
-        'САХАР — 1 Ч.Л.',
-        'ЧЕСНОК — 1 ЗУБЧИК',
-        'СТРАЧАТЕЛЛА — 1 УП.',
-        'БАЗИЛИК СВЕЖИЙ — 1 ВЕТОЧКА',
-        'СОЛЬ — ПО ВКУСУ',
-        'ПЕРЕЦ — ПО ВКУСУ'
-      ],
-      steps: [
-        '1. Баклажан разрежь вдоль пополам, сделай диагональные надрезы, сбрызни оливковым маслом, посоли и запекай 35 минут при 200°C.',
-        '2. Перетёртые томаты вылей в сковороду, добавь соль, перец, сахар, орегано, базилик, винный уксус и вари соус 15 минут помешивая. В конце добавь измельчённый чеснок.',
-        '3. Собери блюдо: на дно глубокой тарелки выложи пару больших ложек томатного соуса, сверху баклажан, страчателлу, полей оливковым маслом и укрась веточкой свежего базилика.'
-      ],
-      notes: [
-        '1. Можно заменить свежим базиликом или его маслом.'
-      ]
+    const recipePdfContentById = {
+      baklazhan: {
+        filename: 'baklazhan-s-tomatnym-sousom-i-strachatelloy.pdf',
+        title: 'БАКЛАЖАН С ТОМАТНЫМ СОУСОМ И СТРАЧАТЕЛЛОЙ',
+        description: 'Вкусные и лёгкие баклажаны по семейному рецепту.',
+        info: [
+          'ВРЕМЯ: 35 МИНУТ',
+          'ПОРЦИИ: 2',
+          'СЛОЖНОСТЬ: ПРОСТО',
+          'НУЖНО: ПЛИТА, ДУХОВКА, СКОВОРОДА'
+        ],
+        ingredients: [
+          'БАКЛАЖАН — 1 ШТ.',
+          'ТОМАТЫ ПЕРЕТЁРТЫЕ — 400 МЛ',
+          'УКСУС ВИННЫЙ — 1 Ч.Л.',
+          'МАСЛО ОЛИВКОВОЕ — 1 Ч.Л.',
+          'БАЗИЛИК СУШЁНЫЙ¹ — 1 СТ.Л.',
+          'ОРЕГАНО СУШЁНЫЙ — 1 ЩЕПОТКА',
+          'САХАР — 1 Ч.Л.',
+          'ЧЕСНОК — 1 ЗУБЧИК',
+          'СТРАЧАТЕЛЛА — 1 УП.',
+          'БАЗИЛИК СВЕЖИЙ — 1 ВЕТОЧКА',
+          'СОЛЬ — ПО ВКУСУ',
+          'ПЕРЕЦ — ПО ВКУСУ'
+        ],
+        steps: [
+          '1. Баклажан разрежь вдоль пополам, сделай диагональные надрезы, сбрызни оливковым маслом, посоли и запекай 35 минут при 200°C.',
+          '2. Перетёртые томаты вылей в сковороду, добавь соль, перец, сахар, орегано, базилик, винный уксус и вари соус 15 минут помешивая. В конце добавь измельчённый чеснок.',
+          '3. Собери блюдо: на дно глубокой тарелки выложи пару больших ложек томатного соуса, сверху баклажан, страчателлу, полей оливковым маслом и укрась веточкой свежего базилика.'
+        ],
+        notes: [
+          '1. Можно заменить свежим базиликом или его маслом.'
+        ]
+      },
+      'buldak-carbonara': {
+        filename: 'buldak-carbonara.pdf',
+        title: 'БУЛЬДАК КАРБОНАРА',
+        description: 'Тот самый, который «розовый».',
+        info: [
+          'ВРЕМЯ: 20 МИНУТ',
+          'ПОРЦИИ: 1',
+          'СЛОЖНОСТЬ: ПРОСТО',
+          'НУЖНО: ПЛИТА, ДУХОВКА, КОВШИК'
+        ],
+        ingredients: [
+          'BULDAK CREAM CARBONARA — 1 УП.',
+          'ЯЙЦО (ЖЕЛТОК) — 1 ШТ.',
+          'СЛИВКИ 10% — 25 МЛ',
+          'СЫРНЫЙ СОУС¹ — 25 Г',
+          'ВОДА — 1 Л',
+          'БЕКОН СЫРОЙ — 150 Г',
+          'СОЛЬ — ПО ВКУСУ',
+          'ГРИБЫ МУЭР — 50 Г',
+          'РИСОВЫЙ УКСУС — 2 Ч.Л.',
+          'СОУС ШРИРАЧА — 1 Ч.Л.',
+          'СОЕВЫЙ СОУС — 1 СТ.Л.',
+          'КУНЖУТНОЕ МАСЛО — 1 Ч.Л.',
+          'СОК ЛАЙМА — ½ Ч.Л.',
+          'ДЖИН С БУЗИНОЙ² — ½ Ч.Л.',
+          'ВУСТЕРСКИЙ СОУС — ¼ Ч.Л.',
+          'ЯЙЦО МАРИНОВАННОЕ — 1 ШТ.',
+          'ЖАРЕНЫЙ ЛУК — ПО ВКУСУ',
+          'КУНЖУТ — ПО ВКУСУ',
+          'ПАРМЕЗАН — ПО ВКУСУ',
+          'НОРИ — ПО ВКУСУ'
+        ],
+        steps: [
+          '1. Сперва рекомендую подготовить топпинги. Положи древесные грибы в банку, подлей рисовый уксус, шрирачу, соевый соус, кунжутное масло, сок лайма, джин, вустерский соус и маринуй не меньше часа (лучше сутки). Бекон просто посоли и запекай до хруста.',
+          '2. Замешай содержимое двух пакетиков из пачки «бульдака», желток СЫРОГО яйца, сливки и сырный соус в глубокой миске.',
+          '3. Лапшу вари 4 минуты в кипящей воде. Под конец варки зачерпни немного воды, добавь к соусу и перемешай.',
+          '4. Слей воду из кастрюли, а лапшу вывали в миску к остальному.',
+          '5. Добавь топпинги: бекон, грибы, яйцо, жареный лук, кунжут, пармезан и нори.'
+        ],
+        notes: [
+          '1. В идеале — сырный соус «Пармезан» из Burger King.',
+          '2. Я люблю Barrister Elderflower, но есть и другие варианты.'
+        ]
+      },
+      'rebra-bbq-cola': {
+        filename: 'rebra-bbq-cola.pdf',
+        title: 'РЁБРА BBQ COLA',
+        description: 'Рёбрышки без су-видов и прочих выебонов.',
+        info: [
+          'ВРЕМЯ: 150 МИНУТ',
+          'ПОРЦИИ: 4',
+          'СЛОЖНОСТЬ: СРЕДНЕ',
+          'НУЖНО: ДУХОВКА'
+        ],
+        ingredients: [
+          'РЁБРА СВИНЫЕ — 1 КГ',
+          'АМЕРИКАНСКАЯ ГОРЧИЦА — 3 СТ.Л.',
+          'ПРИПРАВА BBQ — 40 Г',
+          'СОУС BBQ СО ВКУСОМ КОЛЫ¹ — 100 МЛ'
+        ],
+        steps: [
+          '1. Сними плёнку с рёбер.',
+          '2. Смажь горчицей и посыпь сухим BBQ.',
+          '3. Укутай рёбра в фольгу.',
+          '4. Запекай 2 часа при 180°C.',
+          '5. Сними фольгу и щедро намажь рёбра соусом.',
+          '6. Запекай ещё 20 минут при 220°C.',
+          '7. Подавай с соусом и любимой закуской.'
+        ],
+        notes: [
+          '1. Любой другой соус BBQ тоже сойдёт.'
+        ]
+      },
+      cilbir: {
+        filename: 'cilbir.pdf',
+        title: 'ЧЫЛБЫР',
+        description: 'Отличный завтрак для тех, кого заебали избитые способы готовить яйца.',
+        info: [
+          'ВРЕМЯ: 20 МИНУТ',
+          'ПОРЦИИ: 2',
+          'СЛОЖНОСТЬ: ПРОСТО',
+          'НУЖНО: ПЛИТА, КОВШИК, СОТЕЙНИК'
+        ],
+        ingredients: [
+          'ГРЕЧЕСКИЙ ЙОГУРТ (ГУСТОЙ) — 250 Г',
+          'УКРОП — 5 ВЕТОЧКА',
+          'ЧЕСНОК — 1 ЗУБЧИК',
+          'СОЛЬ — ¼ Ч.Л.',
+          'TABASCO JALAPENO¹ — ¼ Ч.Л.',
+          'СЛИВОЧНОЕ МАСЛО — 40 Г',
+          'ОЛИВКОВОЕ МАСЛО — 1 СТ.Л.',
+          'СОУС LAO GAN MA² — 2 СТ.Л.',
+          'УКСУС (9%) — 1 СТ.Л.',
+          'СОЛЬ — ¼ Ч.Л.',
+          'ЯЙЦО — 4 ШТ.',
+          'ХАЛАПЕНЬО СВЕЖИЙ — 5 СЛАЙС',
+          'РОТИ — 1 ШТ.'
+        ],
+        steps: [
+          '1. Достань йогурт из холодильника заранее, чтобы он достиг комнатной температуры. Мелко нарежь укроп, чеснок раздави в прессе (или натри на мелкой тёрке). Смешай йогурт с укропом, чесноком, солью и соусом TABASCO Jalapeno. Выложи массу в две тарелки.',
+          '2. В маленьком сотейнике разогрей сливочное и оливковое масло, добавь соус Lao Gan Ma, перемешай и готовь 1 минуту на небольшом огне. Оставь настаиваться на 5–10 минут, слей в соусник.',
+          '3. В кастрюлю налей слой воды толщиной 8-10 сантиметров, добавь уксус и соль, доведи до кипения и убавь огонь на слабый. Яйцо комнатной температуры разбей в маленькую миску, наклони её над водой и осторожно опусти яйцо в кастрюлю, вари 2–3 минуты по 2 яйца за раз. Аккуратно достань яйца с помощью шумовки, промокни бумажным полотенцем и выложи на йогуртовый соус.',
+          '4. Полей пряным маслом, укрась тонкими слайсами халапеньо и укропом. Подавай с роти.'
+        ],
+        notes: [
+          '1. Можно заменить небольшим количеством любой пряной сухой приправы.',
+          '2. Можно заменить миксом молотой копчёной паприки и хлопьев перца чили.'
+        ]
+      }
     };
 
     const wrapCanvasText = (context, text, maxWidth) => {
@@ -1310,7 +1775,8 @@
       return y + lines.length * lineHeight;
     };
 
-    const buildRecipePdfBlob = async () => {
+    const buildRecipePdfBlob = async (recipePdfContent) => {
+      if (!recipePdfContent) return null;
       if (document.fonts?.ready) {
         await document.fonts.ready.catch(() => {});
       }
@@ -1401,9 +1867,11 @@
       context.fillStyle = '#C2242E';
       y = drawWrappedCanvasText(context, recipePdfContent.title, margin, y, textWidth, 50) + 24;
 
-      setFont(24);
-      context.fillStyle = '#000000';
-      y = drawWrappedCanvasText(context, recipePdfContent.description, margin, y, textWidth, 30) + 26;
+      if (recipePdfContent.description) {
+        setFont(24);
+        context.fillStyle = '#000000';
+        y = drawWrappedCanvasText(context, recipePdfContent.description, margin, y, textWidth, 30) + 26;
+      }
 
       setFont(24);
       recipePdfContent.info.forEach(line => {
@@ -1484,30 +1952,33 @@
       return new Blob([bytes], { type: 'application/pdf' });
     };
 
-    const downloadRecipePdf = async () => {
-      if (!recipePdfButton) return;
-      recipePdfButton.disabled = true;
+    const downloadRecipePdf = async (button) => {
+      if (!button) return;
+      const recipeId = button.dataset.recipeDownloadPdf || button.closest('[data-recipe-detail-panel]')?.dataset.recipeId || activeRecipeId;
+      const recipePdfContent = recipePdfContentById[recipeId] || recipePdfContentById.baklazhan;
+      button.disabled = true;
       try {
-        const pdfBlob = await buildRecipePdfBlob();
+        const pdfBlob = await buildRecipePdfBlob(recipePdfContent);
+        if (!pdfBlob) return;
         const url = URL.createObjectURL(pdfBlob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'baklazhan-s-tomatnym-sousom-i-strachatelloy.pdf';
+        link.download = recipePdfContent.filename;
         document.body.appendChild(link);
         link.click();
         link.remove();
         window.setTimeout(() => URL.revokeObjectURL(url), 1000);
       } finally {
-        recipePdfButton.disabled = false;
+        button.disabled = false;
       }
     };
 
-    if (recipePdfButton) {
-      recipePdfButton.addEventListener('click', (event) => {
+    recipePdfButtons.forEach(button => {
+      button.addEventListener('click', (event) => {
         event.stopPropagation();
-        downloadRecipePdf();
+        downloadRecipePdf(button);
       });
-    }
+    });
 
     const setRecipeIngredientChecked = (row, isChecked) => {
       const amount = row.querySelector('.menu-recipe-ingredient-amount');

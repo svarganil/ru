@@ -391,6 +391,7 @@ button,
   align-items: center;
   gap: 4px;
   color: #000000;
+  cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
   transition: color 0.16s ease;
 }
 
@@ -768,6 +769,12 @@ button,
   text-transform: inherit;
   vertical-align: baseline;
   cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
+  transition: color 0.16s ease;
+}
+
+.menu-project-popover:hover .menu-project-trigger,
+.menu-project-popover.is-open .menu-project-trigger {
+  color: #C2242E;
 }
 
 .menu-project-tooltip {
@@ -870,6 +877,7 @@ button,
 }
 
 .menu-recipe-list .menu-tag {
+  cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
   transition: color 0.16s ease;
 }
 
