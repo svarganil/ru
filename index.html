@@ -925,7 +925,7 @@
           const firstRecipeIcons = firstRecipeRow?.nextElementSibling;
           if (firstRecipeIcons?.classList.contains('menu-icon-row')) {
             firstRecipeIcons.innerHTML = `
-              <img src="assets/icons/snack.png" alt="snack icon">
+              <img src="assets/icons/zakus.png" alt="snack icon">
               <img src="assets/icons/veg.png" alt="vegetables icon">
             `;
           }
@@ -951,8 +951,28 @@
                 </span>
               </div>
               <div class="menu-icon-row">
-                <img src="assets/icons/snack.png" alt="snack icon">
-                <img src="assets/icons/veg.png" alt="vegetables icon">
+                <img src="assets/icons/nood.png" alt="noodles icon">
+                <img src="assets/icons/junk.png" alt="junk food icon">
+              </div>
+              <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
+              <div class="menu-meta-row sub-meta">
+                <span class="menu-meta-left">
+                  <button class="menu-recipe-list-item" type="button" data-open-recipe-detail="dzherki-iz-indeyki">ДЖЕРКИ ИЗ ИНДЕЙКИ</button>
+                </span>
+              </div>
+              <div class="menu-icon-row">
+                <img src="assets/icons/beer.png" alt="beer icon">
+                <img src="assets/icons/meat.png" alt="meat icon">
+              </div>
+              <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
+              <div class="menu-meta-row sub-meta">
+                <span class="menu-meta-left">
+                  <button class="menu-recipe-list-item" type="button" data-open-recipe-detail="marinovannye-yaytsa">МАРИНОВАННЫЕ ЯЙЦА</button>
+                </span>
+              </div>
+              <div class="menu-icon-row">
+                <img src="assets/icons/zakus.png" alt="snack icon">
+                <img src="assets/icons/egg.png" alt="egg icon">
               </div>
               <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
               <div class="menu-meta-row sub-meta">
@@ -961,8 +981,7 @@
                 </span>
               </div>
               <div class="menu-icon-row">
-                <img src="assets/icons/snack.png" alt="snack icon">
-                <img src="assets/icons/veg.png" alt="vegetables icon">
+                <img src="assets/icons/meat.png" alt="meat icon">
               </div>
               <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
               <div class="menu-meta-row sub-meta">
@@ -971,8 +990,8 @@
                 </span>
               </div>
               <div class="menu-icon-row">
-                <img src="assets/icons/snack.png" alt="snack icon">
-                <img src="assets/icons/veg.png" alt="vegetables icon">
+                <img src="assets/icons/bfast.png" alt="breakfast icon">
+                <img src="assets/icons/egg.png" alt="egg icon">
               </div>
               <div class="menu-divider menu-divider-dash" aria-hidden="true">————————————————————————————————————————————————————————————————————————————————————————</div>
             `);
@@ -980,8 +999,14 @@
           if (tagLegend) {
             tagLegend.setAttribute('aria-label', 'Теги рецептов');
             tagLegend.innerHTML = `
-              <span class="menu-tag"><img src="assets/icons/snack.png" alt=""><span>закуски</span></span>
+              <span class="menu-tag"><img src="assets/icons/junk.png" alt=""><span>джанк-фуд</span></span>
+              <span class="menu-tag"><img src="assets/icons/bfast.png" alt=""><span>завтраки</span></span>
+              <span class="menu-tag"><img src="assets/icons/zakus.png" alt=""><span>закуски</span></span>
+              <span class="menu-tag"><img src="assets/icons/nood.png" alt=""><span>лапша</span></span>
+              <span class="menu-tag"><img src="assets/icons/meat.png" alt=""><span>мясо</span></span>
               <span class="menu-tag"><img src="assets/icons/veg.png" alt=""><span>овощи</span></span>
+              <span class="menu-tag"><img src="assets/icons/beer.png" alt=""><span>подпивас</span></span>
+              <span class="menu-tag"><img src="assets/icons/egg.png" alt=""><span>яйца</span></span>
             `;
           }
 
@@ -1011,7 +1036,7 @@
               <div class="menu-recipe-info">
                 <div class="menu-recipe-title">Баклажан с томатным соусом и страчателлой</div>
                 <div class="menu-recipe-tags" aria-label="Теги рецепта">
-                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/snack.png" alt="">закуски</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/zakus.png" alt="">закуски</span>
                   <span class="menu-recipe-tag" data-recipe-tag="овощи"><img src="assets/icons/veg.png" alt="">овощи</span>
                 </div>
                 <div class="menu-recipe-facts" aria-label="Параметры рецепта">
@@ -1110,8 +1135,8 @@
               <div class="menu-recipe-info">
                 <div class="menu-recipe-title">Бульдак Карбонара</div>
                 <div class="menu-recipe-tags" aria-label="Теги рецепта">
-                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/snack.png" alt="">закуски</span>
-                  <span class="menu-recipe-tag" data-recipe-tag="овощи"><img src="assets/icons/veg.png" alt="">овощи</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="лапша"><img src="assets/icons/nood.png" alt="">лапша</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="джанк-фуд"><img src="assets/icons/junk.png" alt="">джанк-фуд</span>
                 </div>
                 <div class="menu-recipe-facts" aria-label="Параметры рецепта">
                   <div><span>ВРЕМЯ:</span> <span>20 МИНУТ</span></div>
@@ -1220,6 +1245,200 @@
               </div>
             </div>
             </div>
+            <div class="menu-recipe-detail" data-recipe-detail-panel data-recipe-id="dzherki-iz-indeyki" hidden>
+            <div class="menu-recipe-hero">
+              <figure class="menu-recipe-image-frame">
+                <img src="assets/food/turkjerk.webp" alt="Джерки из индейки">
+              </figure>
+              <div class="menu-recipe-info">
+                <div class="menu-recipe-title">Джерки из индейки</div>
+                <div class="menu-recipe-tags" aria-label="Теги рецепта">
+                  <span class="menu-recipe-tag" data-recipe-tag="подпивас"><img src="assets/icons/beer.png" alt="">подпивас</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="мясо"><img src="assets/icons/meat.png" alt="">мясо</span>
+                </div>
+                <div class="menu-recipe-facts" aria-label="Параметры рецепта">
+                  <div><span>ВРЕМЯ:</span> <span>30 МИНУТ ¹</span></div>
+                  <div><span>ПОРЦИИ:</span> <span>10</span></div>
+                  <div><span>СЛОЖНОСТЬ:</span> <span>СРЕДНЕ</span></div>
+                  <div><span>НУЖНО:</span> <span>ДЕГИДРАТОР</span></div>
+                </div>
+                <div class="menu-recipe-caption">Лучше покупных.</div>
+                <div class="menu-recipe-download">
+                  <a class="menu-button menu-recipe-download-button" href="https://t.me/slappetizer/607" target="_blank" rel="noopener">СМОТРЕТЬ ВИДЕО</a>
+                  <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf="dzherki-iz-indeyki">СКАЧАТЬ РЕЦЕПТ</button>
+                </div>
+              </div>
+            </div>
+            <div class="menu-recipe-ingredients-block">
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ИНГРЕДИЕНТЫ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-ingredients">
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">кг</span></span><span class="menu-recipe-ingredient-name">ИНДЕЙКА (ФИЛЕ ГРУДКИ)</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">100</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">СОЕВЫЙ СОУС</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">15</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">БАЛЬЗАМИЧЕСКИЙ УКСУС</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">50</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">ВУСТЕРШИРСКИЙ СОУС</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">50</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">КЛЕНОВЫЙ СИРОП</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">10</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">ОСТРЫЙ СОУС ЧАНТИКО «ЛАЮ НА СМОКЕР»</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">10</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">СУХОЙ МАРИНАД CHILI HOOLIGANS «BEER CAN CHICKEN»</span></div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИГОТОВЛЕНИЕ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p class="menu-recipe-step">1. Для маринада тщательно смешай соевый соус, бальзамический уксус, вустерский соус, кленовый сироп, острый соус и сухой маринад.</p>
+                <p class="menu-recipe-step">2. Нарежь индейку на ровные одинаковые слайсы толщиной 6 миллиметров.</p>
+                <p class="menu-recipe-step">3. Положи мясо в маринад и перемешай. Затем плотно накрой и убери в холодильник на ночь (лучше — на сутки).</p>
+                <p class="menu-recipe-step">4. Удали излишки маринада, мясо не должно быть слишком влажным.</p>
+                <p class="menu-recipe-step">5. Разложи мясо в дегидраторе так, чтобы между кусочками было свободное пространство для циркуляции воздуха. Суши на 70 градусах 6 часов.</p>
+                <p class="menu-recipe-step">6. Через 3 часа после начала поменяй поддоны местами.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИМЕЧАНИЯ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p>1. 30 минут — это активное время готовки. Требуется ещё 24 часа на маринование и 6 часов на сушку.</p>
+                <p>2. Лучше храни джерки в герметичном контейнере или пакете в холодильнике.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
+                <div class="menu-marquee-track">
+                  <div class="menu-marquee-group">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                  <div class="menu-marquee-group" aria-hidden="true">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                </div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">КНИГА ЖАЛОБ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-bio menu-note menu-recipe-complaint-note">
+                Муха в супе, повар — мудак или всё понравилось? Пиши — жду с нетерпением.
+              </div>
+              <div class="menu-action">
+                <a class="menu-button" href="https://t.me/slaycid" target="_blank" rel="noopener">НАПИСАТЬ</a>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-footer">
+                <span class="menu-disclaimer">*Продукт Meta Platforms 👻 Запрещено в РФ</span>
+                <span class="menu-music-credit">Музыка на сайте <span class="music-credit-symbol">■</span> <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
+                <span class="menu-copyright">© <span id="current-year-recipes-turkjerk">2026</span> Сварганил</span>
+                <button class="menu-c-button" type="button" aria-label="Включить jitter" aria-pressed="false">
+                  <img class="menu-c-button-normal" src="assets/image/c_normal.png" alt="">
+                  <img class="menu-c-button-hover" src="assets/image/c_hover.png" alt="">
+                </button>
+              </div>
+            </div>
+            </div>
+            <div class="menu-recipe-detail" data-recipe-detail-panel data-recipe-id="marinovannye-yaytsa" hidden>
+            <div class="menu-recipe-hero">
+              <figure class="menu-recipe-image-frame">
+                <img src="assets/food/marinegg.webp" alt="Маринованные яйца">
+              </figure>
+              <div class="menu-recipe-info">
+                <div class="menu-recipe-title">Маринованные яйца</div>
+                <div class="menu-recipe-tags" aria-label="Теги рецепта">
+                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/zakus.png" alt="">закуски</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="яйца"><img src="assets/icons/egg.png" alt="">яйца</span>
+                </div>
+                <div class="menu-recipe-facts" aria-label="Параметры рецепта">
+                  <div><span>ВРЕМЯ:</span> <span>40 МИНУТ ¹</span></div>
+                  <div><span>ПОРЦИИ:</span> <span>10</span></div>
+                  <div><span>СЛОЖНОСТЬ:</span> <span>СРЕДНЕ</span></div>
+                  <div><span>НУЖНО:</span> <span>ПЛИТА</span></div>
+                </div>
+                <div class="menu-recipe-caption">Настоящий мужчина должен знать две вещи про яйца: их надо мыть и мариновать.</div>
+                <div class="menu-recipe-download">
+                  <a class="menu-button menu-recipe-download-button" href="https://t.me/slappetizer/552" target="_blank" rel="noopener">СМОТРЕТЬ ВИДЕО</a>
+                  <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf="marinovannye-yaytsa">СКАЧАТЬ РЕЦЕПТ</button>
+                </div>
+              </div>
+            </div>
+            <div class="menu-recipe-ingredients-block">
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ИНГРЕДИЕНТЫ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-ingredients">
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">10</span><span class="menu-recipe-ingredient-amount">шт.</span></span><span class="menu-recipe-ingredient-name">ЯЙЦО СО</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name">СОЛЬ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">50</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">ИМБИРЬ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">10</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">ЧЕСНОК</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">10</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">ОСТРЫЙ ПЕРЕЦ</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">2</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">РАСТИТЕЛЬНОЕ МАСЛО</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">300</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">ВОДА</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">300</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">СОЕВЫЙ СОУС</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">2</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name">ТРОСТНИКОВЫЙ САХАР</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">30</span><span class="menu-recipe-ingredient-amount">г</span></span><span class="menu-recipe-ingredient-name">ЗЕЛЁНЫЙ ЛУК</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">5</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">ВУСТЕРШИРСКИЙ СОУС</span></div>
+                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">2</span><span class="menu-recipe-ingredient-amount">ст.л.</span></span><span class="menu-recipe-ingredient-name">РИСОВЫЙ УКСУС</span></div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИГОТОВЛЕНИЕ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p class="menu-recipe-step">1. Сперва отвари яйца. Вскипяти воду и посоли в пропорции чайная ложка соли на литр. Аккуратно опусти яйца, вода должна полностью покрывать их. Сбавь огонь, чтобы не было бурного кипения. Для «кремового желтка» потребуется от 4 до 5 минут в зависимости от категории (размера) и температуры яиц.</p>
+                <p class="menu-recipe-step">2. Переложи яйца в ледяную воду, а через 5 минут смени её, чтобы остановить процесс варки внутри. Аккуратно почисти яйца и положи их в банку.</p>
+                <p class="menu-recipe-step">3. Для маринада почисти и нарежь свежий имбирь, чеснок и острый перец. Немного обжарь их, залей водой, соевым соусом и добавь сахар. Вари 10-15 минут.</p>
+                <p class="menu-recipe-step">4. Нарежь зелёный лук и добавь к яйцам. Капни вустерский соус, залей маринадом и добавь рисовый уксус.</p>
+                <p class="menu-recipe-step">5. Плотно закрой банку и убери в холодильник на 24 часа.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИМЕЧАНИЯ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-recipe-steps">
+                <p>1. 40 минут — это активное время готовки. Требуется ещё минимум 24 часа на маринование.</p>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
+                <div class="menu-marquee-track">
+                  <div class="menu-marquee-group">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                  <div class="menu-marquee-group" aria-hidden="true">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ ENJOY YOUR MEAL ⌘ BON APPÉTIT ⌘ BUEN PROVECHO ⌘ QǏNG MÀN YÒNG ⌘ ITADAKIMASU&nbsp;</span>
+                  </div>
+                </div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">КНИГА ЖАЛОБ</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-bio menu-note menu-recipe-complaint-note">
+                Муха в супе, повар — мудак или всё понравилось? Пиши — жду с нетерпением.
+              </div>
+              <div class="menu-action">
+                <a class="menu-button" href="https://t.me/slaycid" target="_blank" rel="noopener">НАПИСАТЬ</a>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-footer">
+                <span class="menu-disclaimer">*Продукт Meta Platforms 👻 Запрещено в РФ</span>
+                <span class="menu-music-credit">Музыка на сайте <span class="music-credit-symbol">■</span> <a href="https://jungletrain.net" target="_blank" rel="noopener">jungletrain.net</a></span>
+                <span class="menu-copyright">© <span id="current-year-recipes-marinegg">2026</span> Сварганил</span>
+                <button class="menu-c-button" type="button" aria-label="Включить jitter" aria-pressed="false">
+                  <img class="menu-c-button-normal" src="assets/image/c_normal.png" alt="">
+                  <img class="menu-c-button-hover" src="assets/image/c_hover.png" alt="">
+                </button>
+              </div>
+            </div>
+            </div>
             <div class="menu-recipe-detail" data-recipe-detail-panel data-recipe-id="rebra-bbq-cola" hidden>
             <div class="menu-recipe-hero">
               <figure class="menu-recipe-image-frame">
@@ -1228,8 +1447,7 @@
               <div class="menu-recipe-info">
                 <div class="menu-recipe-title">Рёбра BBQ Cola</div>
                 <div class="menu-recipe-tags" aria-label="Теги рецепта">
-                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/snack.png" alt="">закуски</span>
-                  <span class="menu-recipe-tag" data-recipe-tag="овощи"><img src="assets/icons/veg.png" alt="">овощи</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="мясо"><img src="assets/icons/meat.png" alt="">мясо</span>
                 </div>
                 <div class="menu-recipe-facts" aria-label="Параметры рецепта">
                   <div><span>ВРЕМЯ:</span> <span>150 МИНУТ</span></div>
@@ -1315,8 +1533,8 @@
               <div class="menu-recipe-info">
                 <div class="menu-recipe-title">Чылбыр</div>
                 <div class="menu-recipe-tags" aria-label="Теги рецепта">
-                  <span class="menu-recipe-tag" data-recipe-tag="закуски"><img src="assets/icons/snack.png" alt="">закуски</span>
-                  <span class="menu-recipe-tag" data-recipe-tag="овощи"><img src="assets/icons/veg.png" alt="">овощи</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="завтраки"><img src="assets/icons/bfast.png" alt="">завтраки</span>
+                  <span class="menu-recipe-tag" data-recipe-tag="яйца"><img src="assets/icons/egg.png" alt="">яйца</span>
                 </div>
                 <div class="menu-recipe-facts" aria-label="Параметры рецепта">
                   <div><span>ВРЕМЯ:</span> <span>20 МИНУТ</span></div>
@@ -1659,6 +1877,73 @@
         notes: [
           '1. В идеале — сырный соус «Пармезан» из Burger King.',
           '2. Я люблю Barrister Elderflower, но есть и другие варианты.'
+        ]
+      },
+      'dzherki-iz-indeyki': {
+        filename: 'dzherki-iz-indeyki.pdf',
+        title: 'ДЖЕРКИ ИЗ ИНДЕЙКИ',
+        description: 'Лучше покупных.',
+        info: [
+          'ВРЕМЯ: 30 МИНУТ¹',
+          'ПОРЦИИ: 10',
+          'СЛОЖНОСТЬ: СРЕДНЕ',
+          'НУЖНО: ДЕГИДРАТОР'
+        ],
+        ingredients: [
+          'ИНДЕЙКА (ФИЛЕ ГРУДКИ) — 1 КГ',
+          'СОЕВЫЙ СОУС — 100 МЛ',
+          'БАЛЬЗАМИЧЕСКИЙ УКСУС — 15 МЛ',
+          'ВУСТЕРШИРСКИЙ СОУС — 50 МЛ',
+          'КЛЕНОВЫЙ СИРОП — 50 МЛ',
+          'ОСТРЫЙ СОУС ЧАНТИКО «ЛАЮ НА СМОКЕР» — 10 МЛ',
+          'СУХОЙ МАРИНАД CHILI HOOLIGANS «BEER CAN CHICKEN» — 10 Г'
+        ],
+        steps: [
+          '1. Для маринада тщательно смешай соевый соус, бальзамический уксус, вустерский соус, кленовый сироп, острый соус и сухой маринад.',
+          '2. Нарежь индейку на ровные одинаковые слайсы толщиной 6 миллиметров.',
+          '3. Положи мясо в маринад и перемешай. Затем плотно накрой и убери в холодильник на ночь (лучше — на сутки).',
+          '4. Удали излишки маринада, мясо не должно быть слишком влажным.',
+          '5. Разложи мясо в дегидраторе так, чтобы между кусочками было свободное пространство для циркуляции воздуха. Суши на 70 градусах 6 часов.',
+          '6. Через 3 часа после начала поменяй поддоны местами.'
+        ],
+        notes: [
+          '1. 30 минут — это активное время готовки. Требуется ещё 24 часа на маринование и 6 часов на сушку.',
+          '2. Лучше храни джерки в герметичном контейнере или пакете в холодильнике.'
+        ]
+      },
+      'marinovannye-yaytsa': {
+        filename: 'marinovannye-yaytsa.pdf',
+        title: 'МАРИНОВАННЫЕ ЯЙЦА',
+        description: 'Настоящий мужчина должен знать две вещи про яйца: их надо мыть и мариновать.',
+        info: [
+          'ВРЕМЯ: 40 МИНУТ¹',
+          'ПОРЦИИ: 10',
+          'СЛОЖНОСТЬ: СРЕДНЕ',
+          'НУЖНО: ПЛИТА'
+        ],
+        ingredients: [
+          'ЯЙЦО СО — 10 ШТ.',
+          'СОЛЬ — 1 СТ.Л.',
+          'ИМБИРЬ — 50 Г',
+          'ЧЕСНОК — 10 Г',
+          'ОСТРЫЙ ПЕРЕЦ — 10 Г',
+          'РАСТИТЕЛЬНОЕ МАСЛО — 2 МЛ',
+          'ВОДА — 300 МЛ',
+          'СОЕВЫЙ СОУС — 300 МЛ',
+          'ТРОСТНИКОВЫЙ САХАР — 2 СТ.Л.',
+          'ЗЕЛЁНЫЙ ЛУК — 30 Г',
+          'ВУСТЕРШИРСКИЙ СОУС — 5 МЛ',
+          'РИСОВЫЙ УКСУС — 2 СТ.Л.'
+        ],
+        steps: [
+          '1. Сперва отвари яйца. Вскипяти воду и посоли в пропорции чайная ложка соли на литр. Аккуратно опусти яйца, вода должна полностью покрывать их. Сбавь огонь, чтобы не было бурного кипения. Для «кремового желтка» потребуется от 4 до 5 минут в зависимости от категории (размера) и температуры яиц.',
+          '2. Переложи яйца в ледяную воду, а через 5 минут смени её, чтобы остановить процесс варки внутри. Аккуратно почисти яйца и положи их в банку.',
+          '3. Для маринада почисти и нарежь свежий имбирь, чеснок и острый перец. Немного обжарь их, залей водой, соевым соусом и добавь сахар. Вари 10-15 минут.',
+          '4. Нарежь зелёный лук и добавь к яйцам. Капни вустерский соус, залей маринадом и добавь рисовый уксус.',
+          '5. Плотно закрой банку и убери в холодильник на 24 часа.'
+        ],
+        notes: [
+          '1. 40 минут — это активное время готовки. Требуется ещё минимум 24 часа на маринование.'
         ]
       },
       'rebra-bbq-cola': {
