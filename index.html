@@ -2452,7 +2452,7 @@
       height: 1754,
       margin: 90,
       textScale: 0.9,
-      logoWidth: 56,
+      logoWidth: 64,
       finalLogoGap: 0,
       dividerAdvance: 34,
       finalDividerAdvance: 34,
@@ -2486,7 +2486,7 @@
       let canvas = null;
       let context = null;
       let y = margin;
-      let pdfSiteLinkRect = null;
+      let pdfSiteLinkRects = [];
       let currentFont = `700 ${scalePdfText(23)}px HouseFont, monospace`;
       let currentFillStyle = '#000000';
 
@@ -2633,27 +2633,41 @@
       };
 
       const drawFinalTitle = () => {
-        const linkText = '→ SVARGANIL.RU';
+        const footerLinks = [
+          { label: '→ SVARGANIL.RU', url: 'https://svarganil.ru' },
+          { label: '→ TELEGRAM', url: 'https://t.me/slappetizer' },
+          { label: '→ INSTAGRAM', url: 'https://instagram.com/slappetizer' },
+          { label: '→ YOUTUBE', url: 'https://youtube.com/@slappetizer' }
+        ];
         const finalTitleHeight = scalePdfText(40);
         ensureSpace(finalDividerAdvance + finalTitleHeight, finalTextBottom);
         drawRule(finalTextBottom, finalDividerAdvance);
 
         setFont(34);
         setFillStyle('#C2242E');
-        context.fillText('ПРИЯТНОГО АППЕТИТА!', margin, y);
-
-        const linkWidth = context.measureText(linkText).width;
-        const linkX = margin + textWidth - linkWidth;
+        const linkWidths = footerLinks.map(link => context.measureText(link.label).width);
+        const totalLinksWidth = linkWidths.reduce((sum, itemWidth) => sum + itemWidth, 0);
+        const linkGap = (textWidth - totalLinksWidth) / (footerLinks.length - 1);
         const linkY = y;
-        context.fillText(linkText, linkX, linkY);
 
-        pdfSiteLinkRect = {
-          pageIndex: pages.length - 1,
-          x: linkX,
-          y: linkY,
-          width: linkWidth,
-          height: finalTitleHeight
-        };
+        let linkX = margin;
+        footerLinks.forEach((link, index) => {
+          if (index === footerLinks.length - 1) {
+            linkX = margin + textWidth - linkWidths[index];
+          }
+
+          context.fillText(link.label, linkX, linkY);
+          pdfSiteLinkRects.push({
+            pageIndex: pages.length - 1,
+            x: linkX,
+            y: linkY,
+            width: linkWidths[index],
+            height: finalTitleHeight,
+            url: link.url
+          });
+
+          linkX += linkWidths[index] + linkGap;
+        });
 
         y += scalePdfText(58);
       };
@@ -2724,6 +2738,10 @@
         const y2 = pageHeight - (rect.y / height * pageHeight);
         return [x1, y1, x2, y2].map(value => Number(value.toFixed(2)));
       };
+      const escapePdfString = (value) => String(value)
+        .replace(/\\/g, '\\\\')
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)');
 
       const objects = ['', ''];
       const pageObjectIds = [];
@@ -2741,14 +2759,18 @@
         const contentObjectId = objects.length + 1;
         objects.push(`${contentObjectId} 0 obj\n<< /Length ${contentStream.length} >>\nstream\n${contentStream}\nendstream\nendobj\n`);
 
-        let annotationObjectId = null;
-        if (pdfSiteLinkRect?.pageIndex === pageIndex) {
-          const siteLinkRect = canvasRectToPdfRect(pdfSiteLinkRect);
-          annotationObjectId = objects.length + 1;
-          objects.push(`${annotationObjectId} 0 obj\n<< /Type /Annot /Subtype /Link /Rect [${siteLinkRect.join(' ')}] /Border [0 0 0] /A << /S /URI /URI (https://svarganil.ru) >> >>\nendobj\n`);
-        }
+        const annotationObjectIds = [];
+        pdfSiteLinkRects
+          .filter(linkRect => linkRect.pageIndex === pageIndex)
+          .forEach(linkRect => {
+            const pdfLinkRect = canvasRectToPdfRect(linkRect);
+            const annotationObjectId = objects.length + 1;
+            annotationObjectIds.push(annotationObjectId);
+            objects.push(`${annotationObjectId} 0 obj\n<< /Type /Annot /Subtype /Link /Rect [${pdfLinkRect.join(' ')}] /Border [0 0 0] /A << /S /URI /URI (${escapePdfString(linkRect.url)}) >> >>\nendobj\n`);
+          });
+        const annotations = annotationObjectIds.length ? ` /Annots [${annotationObjectIds.map(id => `${id} 0 R`).join(' ')}]` : '';
 
-        objects[pageObjectId - 1] = `${pageObjectId} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im0 ${imageObjectId} 0 R >> >> /Contents ${contentObjectId} 0 R${annotationObjectId ? ` /Annots [${annotationObjectId} 0 R]` : ''} >>\nendobj\n`;
+        objects[pageObjectId - 1] = `${pageObjectId} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /XObject << /Im0 ${imageObjectId} 0 R >> >> /Contents ${contentObjectId} 0 R${annotations} >>\nendobj\n`;
       });
 
       objects[0] = '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n';
