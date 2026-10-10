@@ -468,8 +468,12 @@ button,
   text-transform: uppercase;
 }
 
-.menu-recipe-facts span:first-child {
+.menu-recipe-facts > div > span:first-child {
   color: #C2242E;
+}
+
+.menu-recipe-difficulty-muted {
+  opacity: 0.3;
 }
 
 .menu-subtitle.menu-recipe-subtitle {
