@@ -1085,6 +1085,71 @@
           return list.outerHTML;
         };
         const recipeListHtml = buildRecipeListHtml();
+        const colorRecipeNoteNumbers = (root) => {
+          if (!root) return;
+
+          root.querySelectorAll('[data-recipe-detail-panel] .menu-recipe-subtitle').forEach(subtitle => {
+            if (subtitle.textContent.trim() !== 'ПРИМЕЧАНИЯ') return;
+
+            const notesBlock = subtitle.nextElementSibling?.nextElementSibling;
+            if (!notesBlock?.classList.contains('menu-recipe-steps')) return;
+
+            notesBlock.querySelectorAll('p').forEach(item => {
+              if (item.firstElementChild?.classList.contains('menu-recipe-note-number')) return;
+
+              const firstNode = item.firstChild;
+              if (!firstNode || firstNode.nodeType !== Node.TEXT_NODE) return;
+
+              const match = firstNode.nodeValue.match(/^(\d+\.)\s*/);
+              if (!match) return;
+
+              const number = document.createElement('span');
+              number.className = 'menu-recipe-note-number';
+              number.textContent = match[1];
+
+              firstNode.nodeValue = firstNode.nodeValue.slice(match[0].length);
+              item.insertBefore(document.createTextNode(' '), firstNode);
+              item.insertBefore(number, item.firstChild);
+            });
+          });
+        };
+        const colorRecipeSuperscripts = (root) => {
+          if (!root) return;
+          const superscriptPattern = /[¹²³]/;
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+            acceptNode(node) {
+              if (!superscriptPattern.test(node.nodeValue || '')) {
+                return NodeFilter.FILTER_REJECT;
+              }
+
+              if (node.parentElement?.closest('.menu-recipe-sup, script, style')) {
+                return NodeFilter.FILTER_REJECT;
+              }
+
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          });
+          const nodes = [];
+          while (walker.nextNode()) {
+            nodes.push(walker.currentNode);
+          }
+
+          nodes.forEach(node => {
+            const fragment = document.createDocumentFragment();
+            node.nodeValue.split(/([¹²³])/g).forEach(part => {
+              if (!part) return;
+              if (superscriptPattern.test(part)) {
+                const sup = document.createElement('span');
+                sup.className = 'menu-recipe-sup';
+                sup.textContent = part;
+                fragment.appendChild(sup);
+                return;
+              }
+              fragment.appendChild(document.createTextNode(part));
+            });
+            node.parentNode?.replaceChild(fragment, node);
+          });
+        };
 
         recipesMenuContent.innerHTML = `
           <div class="menu-recipes-content">
@@ -1418,10 +1483,10 @@
                   <span class="menu-recipe-tag" data-recipe-tag="яйца"><img src="assets/icons/egg.png" alt="">яйца</span>
                 </div>
                 <div class="menu-recipe-facts" aria-label="Параметры рецепта">
-                  <div><span>ВРЕМЯ:</span> <span>40 МИНУТ ¹</span></div>
+                  <div><span>ВРЕМЯ:</span> <span>40 МИНУТ¹</span></div>
                   <div><span>ПОРЦИИ:</span> <span>10</span></div>
                   <div><span>СЛОЖНОСТЬ:</span> <span class="menu-recipe-difficulty" aria-label="3 из 5">👽👽👽<span class="menu-recipe-difficulty-muted">👽👽</span></span></div>
-                  <div><span>НУЖНО:</span> <span>ПЛИТА</span></div>
+                  <div><span>НУЖНО:</span> <span>ПЛИТА, КАСТРЮЛЯ, СОТЕЙНИК</span></div>
                 </div>
                 <div class="menu-recipe-caption">Настоящий мужчина должен знать две вещи про яйца: их надо мыть и мариновать.</div>
                 <div class="menu-recipe-download">
@@ -1455,7 +1520,7 @@
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
                 <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">30</span><span class="menu-recipe-ingredient-amount">гр</span></span><span class="menu-recipe-ingredient-name">ЗЕЛЁНЫЙ ЛУК</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">5</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">ВУСТЕРШИРСКИЙ СОУС</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">5</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">ВУСТЕРСКИЙ СОУС</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
                 <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">2</span><span class="menu-recipe-ingredient-amount">ст л</span></span><span class="menu-recipe-ingredient-name">РИСОВЫЙ УКСУС</span></div>
               </div>
@@ -1463,9 +1528,9 @@
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИГОТОВЛЕНИЕ</div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-recipe-steps">
-                <p class="menu-recipe-step">1. Сперва отвари яйца. Вскипяти воду и посоли в пропорции чайная ложка соли на литр. Аккуратно опусти яйца, вода должна полностью покрывать их. Сбавь огонь, чтобы не было бурного кипения. Для «кремового желтка» потребуется от 4 до 5 минут в зависимости от категории (размера) и температуры яиц.</p>
+                <p class="menu-recipe-step">1. Сперва отвари яйца. Вскипяти воду и посоли в пропорции чайная ложка соли на литр. Аккуратно опусти яйца, вода должна полностью покрывать их. Сбавь огонь, чтобы не было бурного кипения. Для «кремового желтка» потребуется от 5 до 8 минут² в зависимости от категории и температуры яиц.</p>
                 <p class="menu-recipe-step">2. Переложи яйца в ледяную воду, а через 5 минут смени её, чтобы остановить процесс варки внутри. Аккуратно почисти яйца и положи их в банку.</p>
-                <p class="menu-recipe-step">3. Для маринада почисти и нарежь свежий имбирь, чеснок и острый перец. Немного обжарь их, залей водой, соевым соусом и добавь сахар. Вари 10-15 минут.</p>
+                <p class="menu-recipe-step">3. Для маринада почисти и нарежь свежий имбирь, чеснок и острый перец. Малость обжарь их, залей водой, соевым соусом и добавь сахар. Вари 10–15 минут.</p>
                 <p class="menu-recipe-step">4. Нарежь зелёный лук и добавь к яйцам. Капни вустерский соус, залей маринадом и добавь рисовый уксус.</p>
                 <p class="menu-recipe-step">5. Плотно закрой банку и убери в холодильник на 24 часа.</p>
               </div>
@@ -1474,6 +1539,7 @@
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-recipe-steps">
                 <p>1. 40 минут — это активное время готовки. Требуется ещё минимум 24 часа на маринование.</p>
+                <p>2. Для идеальной варки используй мой <a class="menu-recipe-note-link" href="https://svarganil.github.io/koky/" target="_blank" rel="noopener">яичный сервис КОКИ</a>.</p>
               </div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
@@ -1523,7 +1589,7 @@
                   <div><span>СЛОЖНОСТЬ:</span> <span class="menu-recipe-difficulty" aria-label="3 из 5">👽👽👽<span class="menu-recipe-difficulty-muted">👽👽</span></span></div>
                   <div><span>НУЖНО:</span> <span>ДУХОВКА</span></div>
                 </div>
-                <div class="menu-recipe-caption">Рёбрышки без су-видов и прочих выебонов.</div>
+                <div class="menu-recipe-caption">Нежные рёбрышки без су-вида и прочих понтов.</div>
                 <div class="menu-recipe-download">
                   <a class="menu-button menu-recipe-download-button" href="https://t.me/slappetizer/550" target="_blank" rel="noopener">СМОТРЕТЬ ВИДЕО</a>
                   <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf="rebra-bbq-cola">СКАЧАТЬ РЕЦЕПТ</button>
@@ -1535,13 +1601,13 @@
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ИНГРЕДИЕНТЫ</div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-recipe-ingredients">
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">кг</span></span><span class="menu-recipe-ingredient-name">РЁБРА СВИНЫЕ</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">кг</span></span><span class="menu-recipe-ingredient-name">СВИНЫЕ РЁБРА</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">3</span><span class="menu-recipe-ingredient-amount">ст л</span></span><span class="menu-recipe-ingredient-name">АМЕРИКАНСКАЯ ГОРЧИЦА</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">3</span><span class="menu-recipe-ingredient-amount">ст л</span></span><span class="menu-recipe-ingredient-name">ЖЁЛТАЯ АМЕРИКАНСКАЯ ГОРЧИЦА</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
                 <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">40</span><span class="menu-recipe-ingredient-amount">гр</span></span><span class="menu-recipe-ingredient-name">ПРИПРАВА BBQ</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">100</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">СОУС BBQ СО ВКУСОМ КОЛЫ ¹</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">100</span><span class="menu-recipe-ingredient-amount">мл</span></span><span class="menu-recipe-ingredient-name">СОУС БАРБЕКЮ СО ВКУСОМ КОЛЫ¹</span></div>
               </div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИГОТОВЛЕНИЕ</div>
@@ -1551,7 +1617,7 @@
                 <p class="menu-recipe-step">2. Смажь горчицей и посыпь сухим BBQ.</p>
                 <p class="menu-recipe-step">3. Укутай рёбра в фольгу.</p>
                 <p class="menu-recipe-step">4. Запекай 2 часа при 180°C.</p>
-                <p class="menu-recipe-step">5. Сними фольгу и щедро намажь рёбра соусом.</p>
+                <p class="menu-recipe-step">5. Сними фольгу и щедро покрой рёбра соусом.</p>
                 <p class="menu-recipe-step">6. Запекай ещё 20 минут при 220°C.</p>
                 <p class="menu-recipe-step">7. Подавай с соусом и любимой закуской.</p>
               </div>
@@ -1559,7 +1625,7 @@
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИМЕЧАНИЯ</div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-recipe-steps">
-                <p>1. Любой другой соус BBQ тоже сойдёт.</p>
+                <p>1. Любой другой барбекю-соус тоже сойдёт.</p>
               </div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
@@ -1605,12 +1671,12 @@
                   <span class="menu-recipe-tag" data-recipe-tag="яйца"><img src="assets/icons/egg.png" alt="">яйца</span>
                 </div>
                 <div class="menu-recipe-facts" aria-label="Параметры рецепта">
-                  <div><span>ВРЕМЯ:</span> <span>20 МИНУТ</span></div>
+                  <div><span>ВРЕМЯ:</span> <span>25 МИНУТ</span></div>
                   <div><span>ПОРЦИИ:</span> <span>2</span></div>
                   <div><span>СЛОЖНОСТЬ:</span> <span class="menu-recipe-difficulty" aria-label="2 из 5">👽👽<span class="menu-recipe-difficulty-muted">👽👽👽</span></span></div>
                   <div><span>НУЖНО:</span> <span>ПЛИТА, КОВШИК, СОТЕЙНИК</span></div>
                 </div>
-                <div class="menu-recipe-caption">Отличный завтрак для тех, кого заебали избитые способы готовить яйца.</div>
+                <div class="menu-recipe-caption">Отличный завтрак для тех, кому надоели привычные блюда из яиц.</div>
                 <div class="menu-recipe-download">
                   <a class="menu-button menu-recipe-download-button" href="https://t.me/slappetizer/432" target="_blank" rel="noopener">СМОТРЕТЬ ВИДЕО</a>
                   <button class="menu-button menu-recipe-download-button" type="button" data-recipe-download-pdf="cilbir">СКАЧАТЬ РЕЦЕПТ</button>
@@ -1622,47 +1688,45 @@
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ИНГРЕДИЕНТЫ</div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-recipe-ingredients">
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">250</span><span class="menu-recipe-ingredient-amount">гр</span></span><span class="menu-recipe-ingredient-name">ГРЕЧЕСКИЙ ЙОГУРТ (ГУСТОЙ)</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">250</span><span class="menu-recipe-ingredient-amount">гр</span></span><span class="menu-recipe-ingredient-name">ГРЕЧЕСКИЙ ЙОГУРТ</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
                 <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">5</span><span class="menu-recipe-ingredient-amount">веточка</span></span><span class="menu-recipe-ingredient-name">УКРОП</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
                 <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">зубчик</span></span><span class="menu-recipe-ingredient-name">ЧЕСНОК</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">¼</span><span class="menu-recipe-ingredient-amount">ч л</span></span><span class="menu-recipe-ingredient-name">СОЛЬ</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1|2</span><span class="menu-recipe-ingredient-amount">ч л</span></span><span class="menu-recipe-ingredient-name">СОЛЬ</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">¼</span><span class="menu-recipe-ingredient-amount">ч л</span></span><span class="menu-recipe-ingredient-name">TABASCO JALAPENO ¹</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1|4</span><span class="menu-recipe-ingredient-amount">ч л</span></span><span class="menu-recipe-ingredient-name">СОУС TABASCO Jalapeño¹</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
                 <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">40</span><span class="menu-recipe-ingredient-amount">гр</span></span><span class="menu-recipe-ingredient-name">СЛИВОЧНОЕ МАСЛО</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
                 <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ст л</span></span><span class="menu-recipe-ingredient-name">ОЛИВКОВОЕ МАСЛО</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">2</span><span class="menu-recipe-ingredient-amount">ст л</span></span><span class="menu-recipe-ingredient-name">СОУС LAO GAN MA ²</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">2</span><span class="menu-recipe-ingredient-amount">ст л</span></span><span class="menu-recipe-ingredient-name">СОУС LAO GAN MA²</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ст л</span></span><span class="menu-recipe-ingredient-name">УКСУС (9%)</span></div>
-                <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">¼</span><span class="menu-recipe-ingredient-amount">ч л</span></span><span class="menu-recipe-ingredient-name">СОЛЬ</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">ст л</span></span><span class="menu-recipe-ingredient-name">УКСУС 9%</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
                 <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">4</span><span class="menu-recipe-ingredient-amount">шт</span></span><span class="menu-recipe-ingredient-name">ЯЙЦО</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">5</span><span class="menu-recipe-ingredient-amount">слайс</span></span><span class="menu-recipe-ingredient-name">ХАЛАПЕНЬО СВЕЖИЙ</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">5</span><span class="menu-recipe-ingredient-amount">слайс</span></span><span class="menu-recipe-ingredient-name">ПЕРЕЦ ХАЛАПЕНЬО</span></div>
                 <div class="menu-divider menu-divider-dash menu-recipe-ingredient-divider" aria-hidden="true"></div>
-                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">шт</span></span><span class="menu-recipe-ingredient-name">РОТИ</span></div>
+                <div class="menu-recipe-ingredient-row"><span class="menu-recipe-ingredient-measure"><span class="menu-recipe-ingredient-qty">1</span><span class="menu-recipe-ingredient-amount">шт</span></span><span class="menu-recipe-ingredient-name">ЛЕПЁШКА РОТИ</span></div>
               </div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИГОТОВЛЕНИЕ</div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-recipe-steps">
-                <p class="menu-recipe-step">1. Достань йогурт из холодильника заранее, чтобы он достиг комнатной температуры. Мелко нарежь укроп, чеснок раздави в прессе (или натри на мелкой тёрке). Смешай йогурт с укропом, чесноком, солью и соусом TABASCO Jalapeno. Выложи массу в две тарелки.</p>
-                <p class="menu-recipe-step">2. В маленьком сотейнике разогрей сливочное и оливковое масло, добавь соус Lao Gan Ma, перемешай и готовь 1 минуту на небольшом огне. Оставь настаиваться на 5–10 минут, слей в соусник.</p>
-                <p class="menu-recipe-step">3. В кастрюлю налей слой воды толщиной 8-10 сантиметров, добавь уксус и соль, доведи до кипения и убавь огонь на слабый. Яйцо комнатной температуры разбей в маленькую миску, наклони её над водой и осторожно опусти яйцо в кастрюлю, вари 2–3 минуты по 2 яйца за раз. Аккуратно достань яйца с помощью шумовки, промокни бумажным полотенцем и выложи на йогуртовый соус.</p>
+                <p class="menu-recipe-step">1. Достань йогурт из холодильника заранее, чтобы он достиг комнатной температуры. Мелко нарежь укроп и чеснок. Смешай йогурт с укропом, чесноком, солью и TABASCO. Выложи массу в две тарелки.</p>
+                <p class="menu-recipe-step">2. В сотейнике разогрей сливочное и оливковое масло, добавь Lao Gan Ma, перемешай и готовь одну минуту на небольшом огне. Оставь настаиваться на 5–10 минут, а затем слей в соусник.</p>
+                <p class="menu-recipe-step">3. В кастрюлю налей слой воды толщиной 8–10 сантиметров, добавь уксус и соль, доведи до кипения и убавь огонь на слабый. Яйцо комнатной температуры разбей в маленькую миску, наклони её над водой и осторожно опусти яйцо в кастрюлю, вари 2–3 минуты по 2 яйца за раз. Аккуратно достань яйца с помощью шумовки, промокни бумажным полотенцем и выложи на йогуртовый соус.</p>
                 <p class="menu-recipe-step">4. Полей пряным маслом, укрась тонкими слайсами халапеньо и укропом. Подавай с роти.</p>
               </div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-subtitle menu-recipe-subtitle" aria-hidden="true">ПРИМЕЧАНИЯ</div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-recipe-steps">
-                <p>1. Можно заменить небольшим количеством любой пряной сухой приправы.</p>
-                <p>2. Можно заменить миксом молотой копчёной паприки и хлопьев перца чили.</p>
+                <p>1. Можно заменить другим острым соусом или небольшим количеством пряной сухой приправы.</p>
+                <p>2. Можно заменить хлопьями перца чили.</p>
               </div>
               <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
               <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
@@ -1698,6 +1762,9 @@
             </div>
           </div>
         `;
+        const recipesContent = recipesMenuContent.querySelector('.menu-recipes-content');
+        colorRecipeNoteNumbers(recipesContent);
+        colorRecipeSuperscripts(recipesContent);
       }
       menuCardStage.appendChild(recipesMenuCard);
       updateMusicCreditSymbol(Boolean(pizzaBox?.classList.contains('open')));
@@ -2239,7 +2306,7 @@
           'ВРЕМЯ: 40 МИНУТ¹',
           'ПОРЦИИ: 10',
           'СЛОЖНОСТЬ: СРЕДНЕ',
-          'НУЖНО: ПЛИТА'
+          'НУЖНО: ПЛИТА, КАСТРЮЛЯ, СОТЕЙНИК'
         ],
         ingredients: [
           'ЯЙЦО СО — 10 ШТ',
@@ -2252,24 +2319,25 @@
           'СОЕВЫЙ СОУС — 300 МЛ',
           'ТРОСТНИКОВЫЙ САХАР — 2 СТ Л',
           'ЗЕЛЁНЫЙ ЛУК — 30 ГР',
-          'ВУСТЕРШИРСКИЙ СОУС — 5 МЛ',
+          'ВУСТЕРСКИЙ СОУС — 5 МЛ',
           'РИСОВЫЙ УКСУС — 2 СТ Л'
         ],
         steps: [
-          '1. Сперва отвари яйца. Вскипяти воду и посоли в пропорции чайная ложка соли на литр. Аккуратно опусти яйца, вода должна полностью покрывать их. Сбавь огонь, чтобы не было бурного кипения. Для «кремового желтка» потребуется от 4 до 5 минут в зависимости от категории (размера) и температуры яиц.',
+          '1. Сперва отвари яйца. Вскипяти воду и посоли в пропорции чайная ложка соли на литр. Аккуратно опусти яйца, вода должна полностью покрывать их. Сбавь огонь, чтобы не было бурного кипения. Для «кремового желтка» потребуется от 5 до 8 минут² в зависимости от категории и температуры яиц.',
           '2. Переложи яйца в ледяную воду, а через 5 минут смени её, чтобы остановить процесс варки внутри. Аккуратно почисти яйца и положи их в банку.',
-          '3. Для маринада почисти и нарежь свежий имбирь, чеснок и острый перец. Немного обжарь их, залей водой, соевым соусом и добавь сахар. Вари 10-15 минут.',
+          '3. Для маринада почисти и нарежь свежий имбирь, чеснок и острый перец. Малость обжарь их, залей водой, соевым соусом и добавь сахар. Вари 10–15 минут.',
           '4. Нарежь зелёный лук и добавь к яйцам. Капни вустерский соус, залей маринадом и добавь рисовый уксус.',
           '5. Плотно закрой банку и убери в холодильник на 24 часа.'
         ],
         notes: [
-          '1. 40 минут — это активное время готовки. Требуется ещё минимум 24 часа на маринование.'
+          '1. 40 минут — это активное время готовки. Требуется ещё минимум 24 часа на маринование.',
+          '2. Для идеальной варки используй мой яичный сервис КОКИ.'
         ]
       },
       'rebra-bbq-cola': {
         filename: 'rebra-bbq-cola.pdf',
         title: 'РЁБРА BBQ COLA',
-        description: 'Рёбрышки без су-видов и прочих выебонов.',
+        description: 'Нежные рёбрышки без су-вида и прочих понтов.',
         info: [
           'ВРЕМЯ: 150 МИНУТ',
           'ПОРЦИИ: 4',
@@ -2277,58 +2345,57 @@
           'НУЖНО: ДУХОВКА'
         ],
         ingredients: [
-          'РЁБРА СВИНЫЕ — 1 КГ',
-          'АМЕРИКАНСКАЯ ГОРЧИЦА — 3 СТ Л',
+          'СВИНЫЕ РЁБРА — 1 КГ',
+          'ЖЁЛТАЯ АМЕРИКАНСКАЯ ГОРЧИЦА — 3 СТ Л',
           'ПРИПРАВА BBQ — 40 ГР',
-          'СОУС BBQ СО ВКУСОМ КОЛЫ¹ — 100 МЛ'
+          'СОУС БАРБЕКЮ СО ВКУСОМ КОЛЫ¹ — 100 МЛ'
         ],
         steps: [
           '1. Сними плёнку с рёбер.',
           '2. Смажь горчицей и посыпь сухим BBQ.',
           '3. Укутай рёбра в фольгу.',
           '4. Запекай 2 часа при 180°C.',
-          '5. Сними фольгу и щедро намажь рёбра соусом.',
+          '5. Сними фольгу и щедро покрой рёбра соусом.',
           '6. Запекай ещё 20 минут при 220°C.',
           '7. Подавай с соусом и любимой закуской.'
         ],
         notes: [
-          '1. Любой другой соус BBQ тоже сойдёт.'
+          '1. Любой другой барбекю-соус тоже сойдёт.'
         ]
       },
       cilbir: {
         filename: 'cilbir.pdf',
         title: 'ЧЫЛБЫР — ЯЙЦА ПО-ТУРЕЦКИ',
-        description: 'Отличный завтрак для тех, кого заебали избитые способы готовить яйца.',
+        description: 'Отличный завтрак для тех, кому надоели привычные блюда из яиц.',
         info: [
-          'ВРЕМЯ: 20 МИНУТ',
+          'ВРЕМЯ: 25 МИНУТ',
           'ПОРЦИИ: 2',
           'СЛОЖНОСТЬ: ПРОСТО',
           'НУЖНО: ПЛИТА, КОВШИК, СОТЕЙНИК'
         ],
         ingredients: [
-          'ГРЕЧЕСКИЙ ЙОГУРТ (ГУСТОЙ) — 250 ГР',
+          'ГРЕЧЕСКИЙ ЙОГУРТ — 250 ГР',
           'УКРОП — 5 ВЕТОЧКА',
           'ЧЕСНОК — 1 ЗУБЧИК',
-          'СОЛЬ — ¼ Ч Л',
-          'TABASCO JALAPENO¹ — ¼ Ч Л',
+          'СОЛЬ — 1|2 Ч Л',
+          'СОУС TABASCO Jalapeño¹ — 1|4 Ч Л',
           'СЛИВОЧНОЕ МАСЛО — 40 ГР',
           'ОЛИВКОВОЕ МАСЛО — 1 СТ Л',
           'СОУС LAO GAN MA² — 2 СТ Л',
-          'УКСУС (9%) — 1 СТ Л',
-          'СОЛЬ — ¼ Ч Л',
+          'УКСУС 9% — 1 СТ Л',
           'ЯЙЦО — 4 ШТ',
-          'ХАЛАПЕНЬО СВЕЖИЙ — 5 СЛАЙС',
-          'РОТИ — 1 ШТ'
+          'ПЕРЕЦ ХАЛАПЕНЬО — 5 СЛАЙС',
+          'ЛЕПЁШКА РОТИ — 1 ШТ'
         ],
         steps: [
-          '1. Достань йогурт из холодильника заранее, чтобы он достиг комнатной температуры. Мелко нарежь укроп, чеснок раздави в прессе (или натри на мелкой тёрке). Смешай йогурт с укропом, чесноком, солью и соусом TABASCO Jalapeno. Выложи массу в две тарелки.',
-          '2. В маленьком сотейнике разогрей сливочное и оливковое масло, добавь соус Lao Gan Ma, перемешай и готовь 1 минуту на небольшом огне. Оставь настаиваться на 5–10 минут, слей в соусник.',
-          '3. В кастрюлю налей слой воды толщиной 8-10 сантиметров, добавь уксус и соль, доведи до кипения и убавь огонь на слабый. Яйцо комнатной температуры разбей в маленькую миску, наклони её над водой и осторожно опусти яйцо в кастрюлю, вари 2–3 минуты по 2 яйца за раз. Аккуратно достань яйца с помощью шумовки, промокни бумажным полотенцем и выложи на йогуртовый соус.',
+          '1. Достань йогурт из холодильника заранее, чтобы он достиг комнатной температуры. Мелко нарежь укроп и чеснок. Смешай йогурт с укропом, чесноком, солью и TABASCO. Выложи массу в две тарелки.',
+          '2. В сотейнике разогрей сливочное и оливковое масло, добавь Lao Gan Ma, перемешай и готовь одну минуту на небольшом огне. Оставь настаиваться на 5–10 минут, а затем слей в соусник.',
+          '3. В кастрюлю налей слой воды толщиной 8–10 сантиметров, добавь уксус и соль, доведи до кипения и убавь огонь на слабый. Яйцо комнатной температуры разбей в маленькую миску, наклони её над водой и осторожно опусти яйцо в кастрюлю, вари 2–3 минуты по 2 яйца за раз. Аккуратно достань яйца с помощью шумовки, промокни бумажным полотенцем и выложи на йогуртовый соус.',
           '4. Полей пряным маслом, укрась тонкими слайсами халапеньо и укропом. Подавай с роти.'
         ],
         notes: [
-          '1. Можно заменить небольшим количеством любой пряной сухой приправы.',
-          '2. Можно заменить миксом молотой копчёной паприки и хлопьев перца чили.'
+          '1. Можно заменить другим острым соусом или небольшим количеством пряной сухой приправы.',
+          '2. Можно заменить хлопьями перца чили.'
         ]
       }
     };

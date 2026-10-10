@@ -615,6 +615,14 @@ button,
   color: #C2242E;
 }
 
+.menu-recipe-sup {
+  color: #C2242E;
+}
+
+.menu-recipe-note-number {
+  color: #C2242E;
+}
+
 .menu-recipe-step {
   cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
   transition: color 0.16s ease;
