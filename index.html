@@ -2494,6 +2494,42 @@
         y += lineHeight;
       };
 
+      const drawPdfIngredients = (ingredients) => {
+        const lineHeight = scalePdfText(28);
+        if (ingredients.length <= 10) {
+          ingredients.forEach(line => {
+            y = drawWrappedPaginatedText(line, margin, textWidth, lineHeight);
+          });
+          return;
+        }
+
+        const columnGap = scalePdfText(44);
+        const columnWidth = (textWidth - columnGap) / 2;
+        const splitIndex = Math.ceil(ingredients.length / 2);
+        const columns = [
+          ingredients.slice(0, splitIndex),
+          ingredients.slice(splitIndex)
+        ];
+        const columnHeights = columns.map(column => column.reduce((total, line) => (
+          total + wrapCanvasText(context, line, columnWidth).length * lineHeight
+        ), 0));
+        const requiredHeight = Math.max(...columnHeights);
+
+        ensureSpace(requiredHeight);
+
+        const startY = y;
+        const columnBottoms = columns.map((column, columnIndex) => {
+          const columnX = columnIndex === 0 ? margin : margin + columnWidth + columnGap;
+          let columnY = startY;
+          column.forEach(line => {
+            columnY = drawWrappedCanvasText(context, line, columnX, columnY, columnWidth, lineHeight);
+          });
+          return columnY;
+        });
+
+        y = Math.max(...columnBottoms);
+      };
+
       const drawRule = (bottomLimit = contentBottom, advance = dividerAdvance) => {
         ensureSpace(advance, bottomLimit);
         const square = 6;
@@ -2581,9 +2617,7 @@
       drawSectionTitle('ИНГРЕДИЕНТЫ');
       setFont(23);
       setFillStyle('#000000');
-      recipePdfContent.ingredients.forEach(line => {
-        y = drawWrappedPaginatedText(line, margin, textWidth, scalePdfText(28));
-      });
+      drawPdfIngredients(recipePdfContent.ingredients);
       y += scalePdfText(18);
 
       drawSectionTitle('ПРИГОТОВЛЕНИЕ');
