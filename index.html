@@ -1056,11 +1056,29 @@
           const footer = source.querySelector('.menu-footer')?.cloneNode(true);
           if (tagLegend && footer) {
             footer.querySelectorAll('[id]').forEach(item => item.removeAttribute('id'));
-            const footerDivider = document.createElement('div');
-            footerDivider.className = 'menu-divider';
-            footerDivider.setAttribute('aria-hidden', 'true');
-            footerDivider.textContent = '========================================================================================================================';
-            list.appendChild(footerDivider);
+            list.insertAdjacentHTML('beforeend', `
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-marquee menu-marquee-recipe" aria-hidden="true">
+                <div class="menu-marquee-track">
+                  <div class="menu-marquee-group">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ BON APPÉTIT ⌘ ENJOY YOUR MEAL ⌘ QǏNG MÀN YÒNG ⌘ SMACZNEGO ⌘ САЙХАН ХООЛЛООРОЙ ⌘ ITADAKIMASU ⌘ ПРИЈАТНО ⌘ SMAKLIG MÅLTID ⌘ AFIYET OLSUN ⌘ СМАЧНА ЕСЬЦІ ⌘ BUEN PROVECHO&nbsp;</span>
+                  </div>
+                  <div class="menu-marquee-group" aria-hidden="true">
+                    <span class="menu-marquee-copy">⌘ ПРИЯТНОГО АППЕТИТА ⌘ BON APPÉTIT ⌘ ENJOY YOUR MEAL ⌘ QǏNG MÀN YÒNG ⌘ SMACZNEGO ⌘ САЙХАН ХООЛЛООРОЙ ⌘ ITADAKIMASU ⌘ ПРИЈАТНО ⌘ SMAKLIG MÅLTID ⌘ AFIYET OLSUN ⌘ СМАЧНА ЕСЬЦІ ⌘ BUEN PROVECHO&nbsp;</span>
+                  </div>
+                </div>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-subtitle" aria-hidden="true">ПОВАРГАНИМ?</div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+              <div class="menu-bio menu-note">
+                Разработка меню, кейтеринг, личный шеф или просто побухать — могу всё и сразу.
+              </div>
+              <div class="menu-action">
+                <a class="menu-button" href="https://t.me/slaycid" target="_blank" rel="noopener">НАПИСАТЬ</a>
+              </div>
+              <div class="menu-divider" aria-hidden="true">========================================================================================================================</div>
+            `);
             list.appendChild(footer);
           }
 
