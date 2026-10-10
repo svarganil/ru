@@ -610,6 +610,11 @@ button,
   margin-bottom: 0;
 }
 
+.menu-recipe-note-link,
+.menu-recipe-note-link:visited {
+  color: #C2242E;
+}
+
 .menu-recipe-step {
   cursor: url('assets/cursor/cursor_hover.png') 8 8, pointer;
   transition: color 0.16s ease;
